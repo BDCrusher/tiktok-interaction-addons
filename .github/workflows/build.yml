@@ -35,6 +35,7 @@ jobs:
           git -C build-tools/morphe-patches-gradle-plugin checkout --detach a230c33f7eca1e18b07bf1114ca850421520f98d
           git clone https://github.com/MorpheApp/morphe-patcher.git build-tools/morphe-patcher
           git -C build-tools/morphe-patcher checkout --detach 524b9d8de5c2ec8f8cea0022cbce9a026d098679
+      - uses: android-actions/setup-android@9fc6c4e9069bf8d3d10b2204b1fb8f6ef7065407 # v3
       - name: Ensure Android SDK packages
         run: sdkmanager 'platforms;android-36' 'build-tools;36.0.0'
       - name: Test release helpers
