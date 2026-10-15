@@ -1,0 +1,18 @@
+{
+  "selection": "sound-minimal",
+  "order": "addon-first",
+  "hushPatches": [
+    "Settings"
+  ],
+  "apkSha256": "4226ed5d3031b68208c29f62d80ac421b281fc74201bc4163d98e442d0991a40",
+  "hushBundleSha256": "2d25ddeceb9abf469116d1c23688dc822079e53b755e8bd84cf2088e4b222b20",
+  "addonSha256": "e605211763e9ea56cef031290b3e27fae8fe0a560d0790f0c62db15a27170e78",
+  "androidDeviceTested": false,
+  "settingsHub": "BDCrusher\u0027s Settings",
+  "result": "PASS: patch execution and compiled DEX/resources",
+  "classCount": 477518,
+  "ownClassCount": 27,
+  "duplicateClasses": false,
+  "unresolvedHostReferences": false,
+  "settingsEntryHooks": 1
+}

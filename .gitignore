@@ -1,0 +1,17 @@
+.gradle/
+.kotlin/
+**/build/
+local.properties
+verification/inputs/
+dist/
+build-tools/
+__pycache__/
+**/__pycache__/
+*.pyc
+.env
+.env.*
+*.keystore
+*.jks
+*.apk
+*.apkm
+*.aab

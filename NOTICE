@@ -1,0 +1,29 @@
+TikTok Interaction Add-ons (Collections and Sound button actions), 2026. GPL-3.0.
+Scaffold derived from MorpheApp/morphe-patches-template (GPL-3.0).
+HushFeed integration uses SysAdminDoc/HushFeed public settings and styling hooks; HushFeed is not included.
+UI inspiration and external header/card helpers: HushFeed contributors and
+icysymmetra/tiktok-patches-for-morphe contributors (GPL-3.0).
+Compile-only declarations describe upstream public signatures, not upstream implementations.
+TikTok belongs to its respective owners. No TikTok APK or decompiled code is distributed.
+
+Morphe NOTICE (retained from the template)
+=========================================
+
+7c. Project Name Restriction
+----------------------------
+
+This license does not grant permission to use the name "Morphe", or any
+name, logo, or branding that is confusingly similar, as the name or
+primary identifying mark of any modified version, fork, or derivative work.
+
+Any redistribution or derivative work must adopt a distinct name and
+branding that clearly differentiates it from the Morphe project and does
+not cause confusion as to source or origin.
+
+References to Morphe are permitted solely for descriptive compatibility
+purposes (e.g., "compatible with Morphe" or "XYZ patches for use with Morphe"),
+provided that such references:
+
+- Are accurate, factual, and non-misleading;
+- Do not suggest authorship by the Morphe project; and
+- Appear only in a secondary or descriptive context, not as part of the product or project name.

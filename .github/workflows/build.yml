@@ -1,0 +1,85 @@
+name: Build, test and optionally release
+on:
+  push:
+    branches: [main, dev]
+    paths-ignore: ['patches-bundle.json']
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      publish:
+        description: Publish this source version after all checks pass (never replace an existing release)
+        type: boolean
+        required: true
+        default: false
+permissions:
+  contents: read
+concurrency:
+  group: build-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-java@cf277c60eb25467037889841efdb72551f06f6c3 # v4
+        with:
+          distribution: temurin
+          java-version: '17'
+          cache: gradle
+      - name: Fetch pinned public build tools
+        run: |
+          git clone https://github.com/MorpheApp/morphe-patches-gradle-plugin.git build-tools/morphe-patches-gradle-plugin
+          git -C build-tools/morphe-patches-gradle-plugin checkout --detach a230c33f7eca1e18b07bf1114ca850421520f98d
+          git clone https://github.com/MorpheApp/morphe-patcher.git build-tools/morphe-patcher
+          git -C build-tools/morphe-patcher checkout --detach 524b9d8de5c2ec8f8cea0022cbce9a026d098679
+      - name: Ensure Android SDK packages
+        run: sdkmanager 'platforms;android-36' 'build-tools;36.0.0'
+      - name: Test release helpers
+        run: python3 -m unittest discover -s scripts/tests -v
+      - name: Build, unit tests, API lint and isolated-payload audit
+        run: >-
+          bash ./gradlew :patches:generateMetadata :patches:test
+          :extensions:collections:testDebugUnitTest :extensions:collections:lintDebug
+          :extensions:sound:testDebugUnitTest :extensions:sound:lintDebug
+          :extensions:settings:testDebugUnitTest :extensions:settings:lintDebug
+          :patches:packageSource --no-daemon --console=plain
+      - name: Prepare public release assets and Morphe metadata
+        run: python3 scripts/release.py prepare --repository "$GITHUB_REPOSITORY" --dist dist
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: public-release
+          retention-days: 7
+          if-no-files-found: error
+          path: |
+            dist/TikTok-Interaction-Addons-*.mpp
+            dist/TikTok-Interaction-Addons-*-source.zip
+            dist/patches-list.json
+            dist/patches-bundle.json
+            dist/payload-audit.json
+            dist/SHA256SUMS.txt
+            dist/RELEASE-NOTES.md
+  publish:
+    if: github.event_name == 'workflow_dispatch' && inputs.publish && github.repository == 'BDCrusher/tiktok-interaction-addons' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/dev')
+    needs: verify
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    concurrency:
+      group: release-publication
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+        with:
+          name: public-release
+          path: dist
+      - name: Publish immutable release, verify download and advance source feed
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python3 scripts/release.py publish --repository "$GITHUB_REPOSITORY" --dist dist --commit "$GITHUB_SHA"

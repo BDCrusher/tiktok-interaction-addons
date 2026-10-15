@@ -1,0 +1,24 @@
+{
+  "selection": "both-extended",
+  "order": "hush-first",
+  "hushPatches": [
+    "AMOLED dark theme",
+    "Change app name",
+    "Hide feed save button",
+    "Keep the Favorites tab",
+    "Long-press controls",
+    "Look like the store app",
+    "Remember clear display",
+    "Settings"
+  ],
+  "apkSha256": "4226ed5d3031b68208c29f62d80ac421b281fc74201bc4163d98e442d0991a40",
+  "hushBundleSha256": "2d25ddeceb9abf469116d1c23688dc822079e53b755e8bd84cf2088e4b222b20",
+  "addonSha256": "bf3ec02f0bb76812a346949d8159dbc933de824add319a0b2b7b712bbaa213ae",
+  "androidDeviceTested": false,
+  "result": "PASS: patch execution and compiled DEX/resources",
+  "classCount": 477537,
+  "ownClassCount": 46,
+  "duplicateClasses": false,
+  "unresolvedHostReferences": false,
+  "settingsEntryHooks": 1
+}
