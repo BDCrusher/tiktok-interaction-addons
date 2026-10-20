@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.6.0-beta.1] - 2026-10-19
+
+- Port both independent add-ons to original global TikTok 47.4.3 / 2024704030 and external HushFeed 0.76.0.
+- Bind collection rendering in the new inlined response consumer; keep native collection order, callbacks and pagination.
+- Abort a failed enhanced construction before show and retry stock exactly once in a separate argument-preserving frame.
+- Update native disc containers, lifecycle, edge-speed guard, song-service forwarding and Favorites haptics; keep the inline slider and existing preferences.
+- Preserve the existing BDCrusher's Settings home placement and five-argument UI contracts.
+- Published HushFeed and unreleased main are distinguished. Device acceptance and any public publication are separate steps; see COMPATIBILITY.md.
+
 ## [0.5.1-beta.1] - 2026-10-15
 
 - Initial GitHub-hosted Morphe source with automatic source update checks and a one-tap add link.

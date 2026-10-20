@@ -16,15 +16,15 @@ public final class NativeHookAudit {
     private static final String COVER = "Lcom/ss/android/ugc/aweme/feed/assem/music/VideoMusicCoverAssem;";
     private static final String TITLE = "Lcom/ss/android/ugc/aweme/feed/assem/music/VideoMusicTitleAssem;";
     private static final Map<String, String> HOOKS = Map.of(
-        COVER + "->z4", "bindDisc",
+        COVER + "->l4", "bindDisc",
         COVER + "->unBind", "unbindDisc",
         COVER + "->onViewCreated", "viewsCreated",
-        TITLE + "->z4", "bindTitle",
+        TITLE + "->l4", "bindTitle",
         TITLE + "->unBind", "unbindTitle",
-        "LX/07pb;->onTouch", "touch",
-        "LX/0ANF;->onTouch", "skipEdgeTouch",
+        "LX/07oo;->onTouch", "touch",
         "LX/03uJ;->dispatchTouchEvent", "dispatchDiscTouch",
-        "LX/0yck;->Qk", "observeFavorites");
+        "LX/0xe4;->accept", "observeFavorites",
+        "LX/0xe4;->bdcrusherRenderResponse", "observeFavorites");
 
     public static void main(String[] args) throws Exception {
         if (args.length != 1) throw new IllegalArgumentException("Expected compiled DEX directory");
@@ -36,9 +36,11 @@ public final class NativeHookAudit {
                 for (ClassDef clazz : dex.getClasses()) for (Method method : clazz.getMethods()) {
                     String key = clazz.getType() + "->" + method.getName();
                     String hook = HOOKS.get(key);
+                    if (method.getName().equals("onTouch") && hasEdgeAbility(clazz))
+                        hook = "skipEdgeTouch";
                     if (hook == null || method.getImplementation() == null) continue;
                     var parameters = method.getParameterTypes().stream().map(Object::toString).toList();
-                    var expectedParameters = hook.equals("observeFavorites") ? java.util.List.of("Ljava/util/List;")
+                    var expectedParameters = hook.equals("observeFavorites") ? java.util.List.of("Ljava/lang/Object;")
                         : hook.equals("viewsCreated") ? java.util.List.of("Landroid/view/View;")
                         : hook.equals("dispatchDiscTouch") ? java.util.List.of("Landroid/view/MotionEvent;")
                         : (hook.equals("touch") || hook.equals("skipEdgeTouch")) ? java.util.List.of("Landroid/view/View;", "Landroid/view/MotionEvent;")
@@ -50,14 +52,21 @@ public final class NativeHookAudit {
                         if (instruction instanceof ReferenceInstruction ref && ref.getReference() instanceof MethodReference call
                             && call.getDefiningClass().equals(SOUND) && call.getName().equals(hook)) hooks++;
                     }
-                    int expected = hook.startsWith("unbind") || hook.equals("skipEdgeTouch") || hook.equals("dispatchDiscTouch") ? 1 : returns;
-                    if (returns == 0 || hooks != expected || evidence.put(key, hooks + " hooks / " + returns + " returns") != null)
+                    // Collections moves construction out of accept into its safe native frame.
+                    if (hook.equals("observeFavorites") && hooks == 0 && key.endsWith("->accept")) continue;
+                    int expected = hook.startsWith("unbind") || hook.equals("skipEdgeTouch") || hook.equals("dispatchDiscTouch") || hook.equals("observeFavorites") ? 1 : returns;
+                    if (returns == 0 || hooks != expected || evidence.put(hook, key + ": " + hooks + " hooks / " + returns + " returns") != null)
                         throw new IllegalStateException("Missing/duplicate/overwritten sound hook: " + key + ": " + hooks + "/" + expected);
                 }
             }
         }
-        if (evidence.size() != HOOKS.size()) throw new IllegalStateException("Missing native methods: " + evidence.keySet());
+        if (evidence.size() != 9) throw new IllegalStateException("Missing native methods: " + evidence.keySet());
         evidence.forEach((key, value) -> System.out.println(key + ": PASS " + value));
         System.out.println("PASS: all nine Sound lifecycle/touch/priority/width hooks survived combined compilation. Not a device test.");
+    }
+    private static boolean hasEdgeAbility(ClassDef clazz) {
+        for (var field : clazz.getFields()) if (field.getType().equals(
+                "Lcom/ss/android/ugc/aweme/feed/longvideo/edgespeedup/EdgeSpeedupAbility;")) return true;
+        return false;
     }
 }

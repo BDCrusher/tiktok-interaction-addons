@@ -1,4 +1,24 @@
-# Compatibility report — 0.5.1-beta.1
+# Compatibility report — 0.6.0-beta.1
+
+## Current target: TikTok 47.4.3 and HushFeed 0.76.0
+
+This bundle targets **original global TikTok 47.4.3 / 2024704030 only** (`com.zhiliaoapp.musically`, minSDK 23, ARM64/ARMv7). The supplied APK is 474,921,201 bytes, SHA-256 `af7cbe2b00d33ff1339730f6abb8ed7e387a83b27ff2b16748b8f41e6fc87e0b`, original signer SHA-256 `9041803e91bcb814b4b4399fb5c85a91640b755e5e8ba76813814bf4cf2ab5ba`. It matches the published HushFeed fixture identity. No vendor APK is distributed.
+
+External requirement: [HushFeed 0.76.0](https://github.com/SysAdminDoc/HushFeed/releases/tag/v0.76.0), source `b68741ca02898c2003751da75df34b44b8943daa`, published bundle SHA-256 `da75bf32fc0c8f2839657a16975b31a0a5a3b142b7e3bf9970c58657df27f0c0`. GitHub asset digest, checksum file and receipt agree. This upstream release has 135 TikTok patches and drops TikTok 47.1.4. Its separate PineDrama support does **not** extend to these add-ons. Keep older add-on bundles only for their historical input/upstream combinations; do not select two add-on versions together.
+
+Candidate bundle: `TikTok-Interaction-Addons-0.6.0-beta.1.mpp`, 141,201 bytes, SHA-256 `c65ae77f2f1add0dcdd6ca9462e204717b0a860639b9b5c68029e59ce7891d10`. Exactly two selectable patches, with one unnamed common dependency. Payload: 78 unique own classes (33 Collections / 33 Sound / 12 common); no HushFeed, compile-only stub or test classes. **83 unit/simulated tests and all three API lint tasks pass**, plus seven publication-helper tests.
+
+This is a native binding port, not an expanded version label. TikTok inlined collection construction into `X.0xe4.accept(Object)`, retired `X.0yck.Qk(List)`, renamed the collection loader/Rx types and moved cover bindings to `l4`. Both engines now use inspected 47.4.3 references. The collection wrapper preserves incoming arguments, retains native rows/callbacks, and retries stock once after an enhanced installation failure aborts the old frame before show. Sound observes Favorites width at the new content-install boundary, reads `ReusedAssem.getItem()`, binds both native disc containers, and forwards to the updated native music-service facade. Existing inline slider, native feedback, per-song lookup, short-tap replay and preference files remain.
+
+HushFeed's published five-argument settings API and flat home routes remain compatible. Find **HushFeed → Your feed → BDCrusher's Settings**, after Feed screen; with no feed routes, use Personal add-ons. The new upstream disc-spacing adjustment is respected because hit testing follows current visible view bounds rather than fixed screen coordinates.
+
+See the [47.4.3 verification record](verification/reports/hushfeed-076-tiktok-4743-verification.md) and matching final-hash `port8-patches-0.76.0-*.json` records. A `preliminary-` record uses earlier development bytes and is not final-candidate evidence. Exact selections/source orders matter: all-patches/default-options runs are stress checks, not recommended settings or universal option compatibility.
+
+GitHub main was also inspected at `7d2ecc5eeb8a489a55f79f1d2e6604a8c83084db`, 20 commits ahead of the published release. Its settings diff refreshes search summaries without changing our public constructor/hook signatures. Those unreleased source changes are **not** the tested published bundle and are not separately claimed supported.
+
+**Physical-device acceptance remains pending.** No TikTok APK was signed or installed here. Real sound-page navigation, account/provider eligibility and saving, drag/scroll cancellation, AMOLED/custom themes, fonts/RTL/accessibility, haptic strength and Android 17 ART loading need phone testing. Favorites hold-speed remapping still conflicts with the collection hold; leave that remapping off. Hidden controls, pause/safe mode and Turn off haptics remain authoritative. Compiled reference resolution is not proof that a provider will offer a song or that every runtime option combination works. Local diagnostics use pinned patcher 1.15.0; HushFeed's published patcher is 1.15.1.
+
+## Historical 0.5.1-beta.1 — TikTok 47.1.4 / HushFeed 0.74.0
 
 ## Current HushFeed 0.74.0 settings repair
 

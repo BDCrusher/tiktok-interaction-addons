@@ -2,6 +2,7 @@ package app.collectionsaddon.patches
 
 import app.morphe.patcher.patch.*
 import app.bdcrusher.patches.settingsHubPatch
+import app.bdcrusher.patches.wrapHostMethod
 import app.morphe.patcher.extensions.InstructionExtensions.addInstructions
 import app.morphe.patcher.extensions.InstructionExtensions.addInstructionsWithLabels
 import app.morphe.patcher.extensions.InstructionExtensions.replaceInstruction
@@ -19,8 +20,8 @@ private const val B = "Lapp/collectionsaddon/runtime/HostBridge;"
 private const val CALLBACK = "Lapp/collectionsaddon/runtime/NativeCallback;"
 private const val RESPONSE = "Lcom/ss/android/ugc/aweme/favorites/business/collection/CollectionListResponse;"
 private const val DETAIL = "Lcom/ss/android/ugc/aweme/favorites/business/collection/CollectionDetail;"
-private const val OWNER = "LX/0ycl;"
-private const val PANEL = "LX/0yck;"
+private const val OWNER = "LX/0xe4;"
+private const val PANEL = "LX/0xe6;"
 private const val HUSH = "Lapp/morphe/extension/tiktok/settings/preference/TikTokPreferenceFragment;"
 
 private fun Instruction.ref() = (this as? ReferenceInstruction)?.reference
@@ -100,14 +101,13 @@ private fun BytecodePatchContext.bindBridge() {
         return-void
     """)
     body("cancel", 1, """
-        check-cast p0, LX/02tk;
-        invoke-interface {p0}, LX/02tk;->dispose()V
+        check-cast p0, LX/02ty;
+        invoke-interface {p0}, LX/02ty;->dispose()V
         return-void
     """)
-    body("rerender", 2, """
-        check-cast p0, $PANEL
-        iget-object v0, p0, $PANEL->LLJLILLLLZIIL:Ljava/util/List;
-        invoke-virtual {p0, v0}, $PANEL->Qk(Ljava/util/List;)V
+    body("render", 2, """
+        check-cast p0, $OWNER
+        invoke-virtual {p0, p1}, $OWNER->bdcrusherRenderResponse(Ljava/lang/Object;)V
         return-void
     """)
     body("tint", 2, """
@@ -116,23 +116,23 @@ private fun BytecodePatchContext.bindBridge() {
         return-void
     """)
     body("highlight", 2, """
-        instance-of v0, p0, LX/0vAj;
+        instance-of v0, p0, LX/0xcR;
         if-eqz v0, :plain
-        check-cast p0, LX/0vAj;
-        iget-object p0, p0, LX/0vAj;->LLJJIJIL:Landroid/view/View;
+        check-cast p0, LX/0xcR;
+        iget-object p0, p0, LX/0xcR;->LLJJIJI:Landroid/view/View;
         :plain
         return-object p0
     """)
     body("clearPending", 1, """
         const/4 v0, 0
-        sput-boolean v0, LX/0BE1;->LIZJ:Z
-        sput-object v0, LX/0BE1;->LIZIZ:LX/0ycc;
+        sput-boolean v0, LX/0BCo;->LIZJ:Z
+        sput-object v0, LX/0BCo;->LIZIZ:LX/0xe6;
         return-void
     """)
     body("load", 20, """
-        new-instance v10, LX/0I1m;
-        invoke-direct {v10}, LX/0I1m;-><init>()V
-        iget-object v0, v10, LX/0I1m;->LLJJIJIIJIL:LX/0I1r;
+        new-instance v10, LX/0HxR;
+        invoke-direct {v10}, LX/0HxR;-><init>()V
+        iget-object v0, v10, LX/0HxR;->LLJJIII:LX/0HxW;
         move-wide/from16 v1, p1
         const/4 v3, 0
         const/4 v4, 0x1
@@ -141,25 +141,25 @@ private fun BytecodePatchContext.bindBridge() {
         const/4 v7, 0x1
         move-object/from16 v10, p0
         check-cast v10, $OWNER
-        iget-boolean v8, v10, $OWNER->LLJJIJIL:Z
+        iget-boolean v8, v10, $OWNER->LLJJIJI:Z
         const/4 v9, 0x1
-        invoke-virtual/range {v0 .. v9}, LX/0I1r;->i0(JLjava/lang/String;ZLjava/lang/String;Ljava/lang/String;ZZZ)LX/09lQ;
+        invoke-virtual/range {v0 .. v9}, LX/0HxW;->h0(JLjava/lang/String;ZLjava/lang/String;Ljava/lang/String;ZZZ)LX/09kI;
         move-result-object v0
-        invoke-static {}, LX/03Oz;->LIZ()LX/03PR;
+        invoke-static {}, LX/03P2;->LIZ()LX/03PU;
         move-result-object v1
-        invoke-virtual {v0, v1}, LX/02tX;->LJLI(LX/03PR;)LX/04Es;
+        invoke-virtual {v0, v1}, LX/02tl;->LJLI(LX/03PU;)LX/04En;
         move-result-object v0
-        invoke-static {}, LX/04EV;->LIZIZ()LX/03PR;
+        invoke-static {}, LX/04EQ;->LIZIZ()LX/03PU;
         move-result-object v1
-        invoke-virtual {v0, v1}, LX/02tX;->LJJJZ(LX/03PR;)LX/056h;
+        invoke-virtual {v0, v1}, LX/02tl;->LJJJZ(LX/03PU;)LX/056V;
         move-result-object v0
         move-object/from16 v1, p3
         move-object/from16 v2, p4
-        invoke-virtual {v0, v1, v2}, LX/02tX;->LJJZ(LX/02uH;LX/02uH;)LX/02tk;
+        invoke-virtual {v0, v1, v2}, LX/02tl;->LJJZ(LX/02uV;LX/02uV;)LX/02ty;
         move-result-object v0
         return-object v0
     """)
-    mutableClassDefBy(CALLBACK).interfaces.add("LX/02uH;")
+    mutableClassDefBy(CALLBACK).interfaces.add("LX/02uV;")
 }
 
 @Suppress("unused")
@@ -172,77 +172,79 @@ val enhancedCollectionsPatch = bytecodePatch(
     compatibleWith(Compatibility(
         name = "TikTok", packageName = "com.zhiliaoapp.musically", appIconColor = 0xFE2C55,
         signatures = setOf("9041803e91bcb814b4b4399fb5c85a91640b755e5e8ba76813814bf4cf2ab5ba"),
-        targets = listOf(AppTarget(version = "47.1.4", versionCodes = mapOf(
-            SupportedAbi.ARM64_V8A to 2024701040, SupportedAbi.ARMEABI_V7A to 2024701040),
+        targets = listOf(AppTarget(version = "47.4.3", versionCodes = mapOf(
+            SupportedAbi.ARM64_V8A to 2024704030, SupportedAbi.ARMEABI_V7A to 2024704030),
             isExperimental = true, minSdk = 23)),
     ))
     extendWith("extensions/collections.mpe")
     dependsOn(settingsHubPatch)
     execute {
-        if (packageMetadata.versionName != "47.1.4" || packageMetadata.versionCode != "2024701040")
-            throw PatchException("Collections add-on supports original TikTok 47.1.4 (2024701040) only.")
+        if (packageMetadata.versionName != "47.4.3" || packageMetadata.versionCode != "2024704030")
+            throw PatchException("Collections add-on supports original TikTok 47.4.3 (2024704030) only.")
+        // The native trace/cap moved out of accept into our rendering frame. Detect that
+        // frame before original-body fingerprints, so duplicate selection has a useful error.
+        if (mutableClassDefBy(OWNER).methods.any { it.name == "bdcrusherRenderResponse" })
+            throw PatchException("Collections add-on is already applied or selected twice. Use the original APK and select only one copy of the add-on.")
         field(OWNER, "LL", "Landroid/content/Context;")
-        field(OWNER, "LLJJIJIL", "Z")
+        field(OWNER, "LLJJIJI", "Z")
         field(PANEL, "LLJLILLLLZIIL", "Ljava/util/List;")
         field(RESPONSE, "items", "Ljava/util/List;")
         field(RESPONSE, "cursor", "Ljava/lang/Long;")
         field(RESPONSE, "hasMore", "Ljava/lang/Boolean;")
         field(RESPONSE, "pinSection", "Ljava/util/List;")
         field(RESPONSE, "total", "Ljava/lang/Long;")
-        field("LX/0I1m;", "LLJJIJIIJIL", "LX/0I1r;")
-        field("LX/0BE1;", "LIZJ", "Z")
-        field("LX/0BE1;", "LIZIZ", "LX/0ycc;")
+        field("LX/0HxR;", "LLJJIII", "LX/0HxW;")
+        field("LX/0BCo;", "LIZJ", "Z")
+        field("LX/0BCo;", "LIZIZ", PANEL)
         field(DETAIL, "id", "Ljava/lang/String;")
-        field("LX/0vAj;", "LLJJIJIL", "Landroid/view/View;")
+        field("LX/0xcR;", "LLJJIJI", "Landroid/view/View;")
         val response = method(OWNER, "accept", listOf("Ljava/lang/Object;"))
         if (!response.hasString("QuickFavoriteManager@2914.showQuickFavoriteDialog\$1")) throw PatchException("Collections response fingerprint failed")
-        val render = method(PANEL, "Qk", listOf("Ljava/util/List;"))
-        if (!render.calls("LX/035o;", "LLF")) throw PatchException("Collections list-cap fingerprint failed")
-        if (response.calls(R, "beforeResponse") || render.calls(R, "install"))
+        if (!response.calls("LX/035u;", "LLFF")) throw PatchException("Collections inlined list-cap fingerprint failed")
+        if (response.calls(R, "response") || response.calls(R, "install"))
             throw PatchException("Collections add-on is already applied or selected twice. Use the original APK and select only one copy of the add-on.")
         bindBridge()
-        // Add only at the response/popup layers. Never compete with HushFeed's rail gesture hook.
+        // 47.4.3 inlines native row construction in accept; the vertical route is already
+        // selected by a constant. Keep native callbacks and patch only its count/threshold.
         response.apply {
-            val original = implementation!!.instructions.first()
-            addInstructionsWithLabels(0, """
-                invoke-static/range {p0 .. p1}, $R->beforeResponse(Ljava/lang/Object;Ljava/lang/Object;)Z
-                move-result v0
-                if-eqz v0, :stock_response
-                return-void
-            """, ExternalLabel("stock_response", original))
-            val results = implementation!!.instructions.withIndex().filter {
-                (it.value.ref() as? MethodReference)?.let { ref -> ref.definingClass == "Ljava/lang/Number;" && ref.name == "intValue" } == true
-            }.map { it.index + 1 }.reversed()
-            if (results.size != 2) throw PatchException("Collections layout fingerprint failed")
-            for (index in results) {
-                val register = (implementation!!.instructions[index] as OneRegisterInstruction).registerA
-                addInstructions(index + 1, """
-                    move-object/from16 v16, p0
-                    move/from16 v17, v$register
-                    invoke-static/range {v16 .. v17}, $R->layout(Ljava/lang/Object;I)I
-                    move-result v$register
-                """)
-            }
-        }
-        render.apply {
             // All anchors are checked before replacing any instruction in this method.
             val instructions = implementation!!.instructions.toList()
-            val take = instructions.withIndex().single { (it.value.ref() as? MethodReference)?.let { ref -> ref.definingClass == "LX/035o;" && ref.name == "LLF" } == true }
+            if (implementation!!.registerCount != 25) throw PatchException("Collections inlined register frame changed")
+            val take = instructions.withIndex().single { (it.value.ref() as? MethodReference)?.let { ref -> ref.definingClass == "LX/035u;" && ref.name == "LLFF" } == true }
             val takeRegister = (take.value as FiveRegisterInstruction).registerD
-            val compare = instructions.withIndex().filter { it.value.opcode == Opcode.IF_LT && (it.value as TwoRegisterInstruction).registerB == 6 }.singleOrNull()
+            if (takeRegister != 10) throw PatchException("Collections native count register changed")
+            val compare = instructions.withIndex().filter { it.value.opcode == Opcode.IF_LT && (it.value as TwoRegisterInstruction).registerB == 1 }.singleOrNull()
                 ?: throw PatchException("Collections More threshold fingerprint failed")
+            val previous = instructions[compare.index - 1] as? NarrowLiteralInstruction
+            if (previous?.narrowLiteral != 4) throw PatchException("Collections native More constant changed")
             val content = instructions.withIndex().single { (it.value.ref() as? MethodReference)?.name == "setContentView" }
             val contentCall = content.value as FiveRegisterInstruction
+            if (contentCall.registerC != 6 || contentCall.registerD != 5)
+                throw PatchException("Collections content registers changed")
+            val assign = instructions.withIndex().single { (it.value.ref() as? FieldReference)?.let { ref ->
+                ref.definingClass == PANEL && ref.name == "LLJLILLLLZIIL" && it.value.opcode == Opcode.IPUT_OBJECT
+            } == true }
+            val list = assign.value as TwoRegisterInstruction
+            if (list.registerA != 4 || list.registerB != 6) throw PatchException("Collections native list registers changed")
             replaceInstruction(content.index, "invoke-static {v${contentCall.registerC}, v${contentCall.registerD}}, $R->install(Landroid/app/Dialog;Landroid/view/View;)V")
             // Insert highest offsets first so the original instruction positions remain valid.
             val edits = listOf(compare.index to """
-                invoke-static/range {p0 .. p1}, $R->threshold(Landroid/app/Dialog;Ljava/util/List;)I
-                move-result v6
+                invoke-static {v6, v4}, $R->threshold(Landroid/app/Dialog;Ljava/util/List;)I
+                move-result v1
             """, take.index to """
-                invoke-static/range {p0 .. p0}, $R->count(Landroid/app/Dialog;)I
+                invoke-static {v6}, $R->count(Landroid/app/Dialog;)I
                 move-result v$takeRegister
             """)
             for ((index, text) in edits.sortedByDescending { it.first }) addInstructions(index, text)
+        }
+        // Preserve argument registers across D8's inlined native frame. Runtime owns a single
+        // stock retry if enhanced installation throws before the popup is shown.
+        wrapHostMethod(mutableClassDefBy(OWNER), response, "bdcrusherRenderResponse", 0, """
+            invoke-static/range {p0 .. p1}, $R->response(Ljava/lang/Object;Ljava/lang/Object;)V
+            return-void
+        """)
+        mutableClassDefBy(OWNER).methods.single { it.name == "bdcrusherRenderResponse" }.apply {
+            accessFlags = (accessFlags and 2.inv()) or 1
         }
         method(PANEL, "LJJZ", listOf("Landroid/view/MotionEvent;")).apply {
             val original = implementation!!.instructions.first()
@@ -255,7 +257,7 @@ val enhancedCollectionsPatch = bytecodePatch(
             """, ExternalLabel("stock_touch", original))
         }
         method(PANEL, "dismiss", emptyList()).addInstructions(0, "invoke-static/range {p0 .. p0}, $R->release(Landroid/app/Dialog;)V")
-        method(PANEL, "LJJLL", listOf("Landroid/view/View;", "Z")).apply {
+        method(PANEL, "LJJLJLI", listOf("Landroid/view/View;", "Z")).apply {
             if (implementation!!.registerCount < 4) throw PatchException("Collections pressed-state fingerprint failed")
             val original = implementation!!.instructions.first()
             addInstructionsWithLabels(0, """
@@ -265,7 +267,7 @@ val enhancedCollectionsPatch = bytecodePatch(
                 return-void
             """, ExternalLabel("stock_pressed", original))
         }
-        method(PANEL, "LJJZZIII", listOf("I", "I", "Landroid/view/View;")).addInstructions(0, """
+        method(PANEL, "LJJZZI", listOf("I", "I", "Landroid/view/View;")).addInstructions(0, """
             invoke-static/range {p0 .. p2}, $R->hit(IILandroid/view/View;)Z
             move-result v0
             return v0

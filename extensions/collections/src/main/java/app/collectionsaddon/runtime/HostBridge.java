@@ -15,7 +15,7 @@ public final class HostBridge {
     public static void replay(Object handler, Object response) { throw new IllegalStateException("Unbound host bridge"); }
     public static Object load(Object handler, long cursor, NativeCallback success, NativeCallback error) { throw new IllegalStateException("Unbound host bridge"); }
     public static void cancel(Object subscription) { throw new IllegalStateException("Unbound host bridge"); }
-    public static void rerender(Dialog dialog) { throw new IllegalStateException("Unbound host bridge"); }
+    public static void render(Object handler, Object response) { throw new IllegalStateException("Unbound host bridge"); }
     public static void tint(View view, int color) { throw new IllegalStateException("Unbound host bridge"); }
     public static View highlight(View view) { throw new IllegalStateException("Unbound host bridge"); }
     public static void clearPending() { throw new IllegalStateException("Unbound host bridge"); }

@@ -1,0 +1,31 @@
+{
+  "selection": "sound-minimal",
+  "order": "addon-first",
+  "hushPatches": [
+    "Settings"
+  ],
+  "apkSha256": "af7cbe2b00d33ff1339730f6abb8ed7e387a83b27ff2b16748b8f41e6fc87e0b",
+  "hushBundleSha256": "da75bf32fc0c8f2839657a16975b31a0a5a3b142b7e3bf9970c58657df27f0c0",
+  "addonSha256": "c65ae77f2f1add0dcdd6ca9462e204717b0a860639b9b5c68029e59ce7891d10",
+  "androidDeviceTested": false,
+  "settingsArgumentsPreserved": true,
+  "fiveArgumentMenuConstructorBound": true,
+  "removedBadgeApiNotReferenced": true,
+  "nativeFavoritesHapticBound": true,
+  "soundBindingsArgumentsPreserved": true,
+  "soundDiscPriorityBeforeNativeTimer": true,
+  "soundEdgeListener": "LX/0AM7;",
+  "soundWindowDispatchBeforeFeedParents": true,
+  "soundAlternateDiscBound": true,
+  "soundBindBeforeInflationCovered": true,
+  "nativeMusicDetailFutureBound": true,
+  "nativeDetailStatusAndMatchedIdChecked": true,
+  "nativeFavoritesWidthObservedWithoutReplacingMenu": true,
+  "settingsHub": "BDCrusher\u0027s Settings",
+  "result": "PASS: patch execution and compiled DEX/resources",
+  "classCount": 479015,
+  "ownClassCount": 45,
+  "duplicateClasses": false,
+  "unresolvedHostReferences": false,
+  "settingsEntryHooks": 1
+}

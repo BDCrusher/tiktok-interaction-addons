@@ -34,6 +34,20 @@ public final class CollectionsRuntime {
         public void cancel(Object o) { HostBridge.cancel(o); }
         public void clearPending() { HostBridge.clearPending(); }
     };
+    interface Renderer { void render(Object owner, Object response); }
+    static Renderer renderer = HostBridge::render;
+    static final class StockFallback extends RuntimeException { }
+    /** One native construction attempt, then at most one unmodified stock attempt. */
+    public static void response(Object owner, Object response) {
+        if (beforeResponse(owner, response)) return;
+        try { renderer.render(owner, response); }
+        catch (StockFallback failure) {
+            Boolean previous = STOCK.get();
+            STOCK.set(true);
+            try { renderer.render(owner, response); }
+            finally { if (previous == null) STOCK.remove(); else STOCK.set(previous); }
+        }
+    }
     private static final ThreadLocal<Boolean> STOCK = new ThreadLocal<>();
     private static final Map<Object, Session> SESSIONS = new IdentityHashMap<>();
     private static final List<PageState> MORE = new ArrayList<>();
@@ -169,9 +183,9 @@ public final class CollectionsRuntime {
         catch (RuntimeException | LinkageError failure) {
             Panels.release(dialog);
             FAILED.add(dialog);
-            try { STOCK.set(true); HostBridge.rerender(dialog); }
-            catch (RuntimeException | LinkageError stockFailure) { access.clearPending(); }
-            finally { STOCK.remove(); }
+            // Abort the inlined native construction before show(), then reconstruct stock
+            // from its original response. Continuing this frame could show two popups.
+            throw new StockFallback();
         }
     }
     public static boolean touch(Dialog dialog, android.view.MotionEvent event) {

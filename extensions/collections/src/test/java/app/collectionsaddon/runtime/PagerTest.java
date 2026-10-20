@@ -112,4 +112,47 @@ public class PagerTest {
         assertTrue(CollectionsRuntime.beforeResponse(new Object(), original));
         assertSame(original, fake.replayed); assertTrue(fake.stock);
     }
+    @Test public void inlinedInstallFailureAbortsAndRetriesStockExactlyOnce() {
+        CollectionsRuntime.Renderer saved = CollectionsRuntime.renderer;
+        List<Boolean> states = new ArrayList<>(); Object owner = new Object();
+        Response response = new Response(0, false, "A");
+        try {
+            CollectionsRuntime.renderer = (o, r) -> {
+                assertSame(owner, o); assertSame(response, r);
+                states.add(CollectionsRuntime.enabled(activity));
+                if (states.size() == 1) throw new CollectionsRuntime.StockFallback();
+            };
+            CollectionsRuntime.response(owner, response);
+            assertEquals(Arrays.asList(true, false), states);
+            assertTrue(CollectionsRuntime.enabled(activity));
+        } finally { CollectionsRuntime.renderer = saved; }
+    }
+    @Test public void ordinaryHostExceptionsAreNotRetriedAsEnhancedFailures() {
+        CollectionsRuntime.Renderer saved = CollectionsRuntime.renderer;
+        int[] calls = {0};
+        try {
+            CollectionsRuntime.renderer = (o, r) -> { calls[0]++; throw new IllegalArgumentException("native"); };
+            assertThrows(IllegalArgumentException.class, () -> CollectionsRuntime.response(new Object(), new Response(0, false)));
+            assertEquals(1, calls[0]); assertTrue(CollectionsRuntime.enabled(activity));
+        } finally { CollectionsRuntime.renderer = saved; }
+    }
+    @Test public void actualInstallationFailureDoesNotContinueTheOldShowFrame() {
+        CollectionsRuntime.Renderer saved = CollectionsRuntime.renderer;
+        List<Boolean> attempts = new ArrayList<>();
+        android.app.Dialog broken = new android.app.Dialog(activity) {
+            @Override public android.view.Window getWindow() { return null; }
+        };
+        try {
+            CollectionsRuntime.renderer = (o, r) -> {
+                boolean enhanced = CollectionsRuntime.enabled(activity); attempts.add(enhanced);
+                if (enhanced) {
+                    CollectionsRuntime.install(broken, new android.view.View(activity));
+                    fail("The failed enhanced construction must not continue into native show()");
+                }
+            };
+            CollectionsRuntime.response(new Object(), new Response(0, false, "A"));
+            assertEquals(Arrays.asList(true, false), attempts);
+            assertTrue(CollectionsRuntime.enabled(activity));
+        } finally { CollectionsRuntime.renderer = saved; }
+    }
 }

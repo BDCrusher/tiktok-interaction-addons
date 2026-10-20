@@ -10,7 +10,7 @@ Morphe reads root `patches-bundle.json` on main/dev. Its required fields are ver
 
 This source is beta-only initially: main and dev both advertise the same first beta so the repository link works before any stable release exists. Enable **Pre-release patches**, then **Experimental app versions** on its Morphe source card. Future beta publications advance dev; stable publications advance main. Manager's prerelease mode compares both feeds so a newer stable release is not missed.
 
-Remove/disable the old local source rather than selecting it alongside the remote one. Keep HushFeed as its own external source. Repatch the original TikTok 47.1.4 with HushFeed 0.74.0 Settings and your selected add-ons in one Expert-mode run. Source updates do not patch/reinstall TikTok automatically and do not automatically repair compatibility with future HushFeed versions.
+Remove/disable the old local source rather than selecting it alongside the remote one. Keep HushFeed as its own external source. For 0.6.0-beta.1, repatch original TikTok 47.4.3 with HushFeed 0.76.0 Settings and your selected add-ons in one Expert-mode run. Source updates do not patch/reinstall TikTok automatically and do not automatically repair compatibility with future HushFeed versions.
 
 ## Maintainer workflow
 
@@ -20,7 +20,7 @@ Remove/disable the old local source rather than selecting it alongside the remot
 4. In GitHub Actions, run **Build, test and optionally release** on the intended main/dev revision, explicitly enabling **publish**. The write-enabled job runs only after verification succeeds and only in the canonical repository. It uses GitHub's repository-scoped built-in token, no private credentials stored in source.
 5. Publication creates a versioned release, verifies the publicly downloaded .mpp SHA-256, then advances that channel's feed through GitHub's contents API with an expected-file-SHA check. It refuses a feed downgrade and never replaces release assets. A failed feed update can leave an unadvertised release; inspect it instead of overwriting a version.
 
-The initial publication uses the already combined-build-verified 0.5.1-beta.1 bundle without rebuilding/changing its bytes. Subsequent workflow builds are identified by their own hashes. The current published local bundle hash is recorded in COMPATIBILITY.md; local cross-source evidence applies only to that hash.
+The initial publication used the already combined-build-verified 0.5.1-beta.1 bundle. For the 0.6.0-beta.1 beta update, publish the exact locally combined-build-verified bundle after public-source CI passes, using `release.py prepare` and explicit `publish`. CI rebuilds have their own hashes and must not be substituted while claiming the local APK-combination evidence. The current candidate/published hash is recorded in COMPATIBILITY.md and the publication record; local cross-source evidence applies only to that hash. The immutable release source archive comes from the reviewed public Git revision, not this private workspace.
 
 ## Local private workspace versus public snapshot
 
