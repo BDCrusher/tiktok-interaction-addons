@@ -1,0 +1,24 @@
+{
+  "selection": "collections-minimal",
+  "order": "hush-first",
+  "hushPatches": [
+    "Settings"
+  ],
+  "apkSha256": "6670ca3f93bfea379658cad3c27f05d3a380b23a0d82569cce684b7453e8ff3e",
+  "hushBundleSha256": "d87ec98c85d5870c0604bf972372436d7ff20d282c1f8ad6c46614e6e9046417",
+  "addonSha256": "5e2a1d7c77320c4066bf17268a98e59539721baa3f5353e5bc2ac47b17e629ae",
+  "androidDeviceTested": false,
+  "dexAuditScope": "complete compiled directory (including unchanged originals)",
+  "settingsArgumentsPreserved": true,
+  "fiveArgumentMenuConstructorBound": true,
+  "removedBadgeApiNotReferenced": true,
+  "nativeFavoritesHapticBound": true,
+  "inlinedCollectionRendererAndStockRetryBound": true,
+  "settingsHub": "BDCrusher\u0027s Settings",
+  "result": "PASS: patch execution and compiled DEX/resources",
+  "classCount": 483742,
+  "ownClassCount": 45,
+  "duplicateClasses": false,
+  "unresolvedHostReferences": false,
+  "settingsEntryHooks": 1
+}

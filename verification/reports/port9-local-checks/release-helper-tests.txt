@@ -1,0 +1,12 @@
+test_export_redacts_personal_home_and_excludes_private_inputs (test_release.ReleaseTests.test_export_redacts_personal_home_and_excludes_private_inputs) ... ok
+test_export_refuses_credentials (test_release.ReleaseTests.test_export_refuses_credentials) ... ok
+test_manifest_matches_morphe_required_schema_and_immutable_url (test_release.ReleaseTests.test_manifest_matches_morphe_required_schema_and_immutable_url) ... ok
+test_prepare_checksums_and_remote_metadata (test_release.ReleaseTests.test_prepare_checksums_and_remote_metadata) ... ok
+test_rejects_invalid_versions_repository_and_timestamp (test_release.ReleaseTests.test_rejects_invalid_versions_repository_and_timestamp) ... ok
+test_semver_channels_and_numeric_prereleases (test_release.ReleaseTests.test_semver_channels_and_numeric_prereleases) ... ok
+test_source_audit_rejects_vendor_and_cache_entries (test_release.ReleaseTests.test_source_audit_rejects_vendor_and_cache_entries) ... ok
+
+----------------------------------------------------------------------
+Ran 7 tests in 0.070s
+
+OK

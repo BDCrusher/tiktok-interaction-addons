@@ -1,0 +1,102 @@
+{
+  "version": "0.7.0-beta.1",
+  "bundleSha256": "5e2a1d7c77320c4066bf17268a98e59539721baa3f5353e5bc2ac47b17e629ae",
+  "bundleBytes": 141232,
+  "toolchainPins": {
+    "patcher": "8c7ff9f29d4cf6395fcbe42a4ceddd034d71fecf",
+    "patchGradlePlugin": "a230c33f7eca1e18b07bf1114ca850421520f98d",
+    "hushfeedRelease": "3b6254c304b52136633606037f4cda74c2371a88"
+  },
+  "unitSimulatedTests": 83,
+  "releaseHelperTests": 7,
+  "lintModules": [
+    "collections",
+    "sound",
+    "settings"
+  ],
+  "androidDeviceTested": false,
+  "published": false,
+  "runs": [
+    {
+      "selection": "both-all",
+      "order": "hush-first",
+      "scratch": "C:\\Morphe\\App's\\TikTok\\Add-ons\\build\\verification\\both-all-hush-first-9589375786549418480",
+      "nativeAudit": true,
+      "report": "port9-patches-0.78.0-both-all-hush-first.json",
+      "result": "PASS: patch execution and compiled DEX/resources",
+      "selectedHushPatchCount": 138,
+      "ownClassCount": 78
+    },
+    {
+      "selection": "both-all",
+      "order": "addon-first",
+      "scratch": "C:\\Morphe\\App's\\TikTok\\Add-ons\\build\\verification\\both-all-addon-first-8710722525342743854",
+      "nativeAudit": true,
+      "report": "port9-patches-0.78.0-both-all-addon-first.json",
+      "result": "PASS: patch execution and compiled DEX/resources",
+      "selectedHushPatchCount": 138,
+      "ownClassCount": 78
+    },
+    {
+      "selection": "collections-minimal",
+      "order": "hush-first",
+      "scratch": "C:\\Morphe\\App's\\TikTok\\Add-ons\\build\\verification\\collections-minimal-hush-first-11284310948437338037",
+      "nativeAudit": false,
+      "report": "port9-patches-0.78.0-collections-minimal-hush-first.json",
+      "result": "PASS: patch execution and compiled DEX/resources",
+      "selectedHushPatchCount": 1,
+      "ownClassCount": 45
+    },
+    {
+      "selection": "sound-minimal",
+      "order": "addon-first",
+      "scratch": "C:\\Morphe\\App's\\TikTok\\Add-ons\\build\\verification\\sound-minimal-addon-first-15982028602754533887",
+      "nativeAudit": true,
+      "report": "port9-patches-0.78.0-sound-minimal-addon-first.json",
+      "result": "PASS: patch execution and compiled DEX/resources",
+      "selectedHushPatchCount": 1,
+      "ownClassCount": 45
+    },
+    {
+      "selection": "missing",
+      "order": "hush-first",
+      "scratch": "C:\\Morphe\\App's\\TikTok\\Add-ons\\build\\verification\\missing-hush-first-15224124985002479667",
+      "nativeAudit": false,
+      "report": "port9-patches-0.78.0-missing-hush-first.json",
+      "result": "PASS: missing dependency rejected",
+      "selectedHushPatchCount": 0,
+      "ownClassCount": null
+    },
+    {
+      "selection": "sound-missing",
+      "order": "addon-first",
+      "scratch": "C:\\Morphe\\App's\\TikTok\\Add-ons\\build\\verification\\sound-missing-addon-first-14304171636905933701",
+      "nativeAudit": false,
+      "report": "port9-patches-0.78.0-sound-missing-addon-first.json",
+      "result": "PASS: missing dependency rejected",
+      "selectedHushPatchCount": 0,
+      "ownClassCount": null
+    },
+    {
+      "selection": "duplicate",
+      "order": "addon-first",
+      "scratch": "C:\\Morphe\\App's\\TikTok\\Add-ons\\build\\verification\\duplicate-addon-first-15167748887352560750",
+      "nativeAudit": false,
+      "report": "port9-patches-0.78.0-duplicate-addon-first.json",
+      "result": "PASS: duplicate add-on rejected",
+      "selectedHushPatchCount": 4,
+      "ownClassCount": null
+    },
+    {
+      "selection": "sound-duplicate",
+      "order": "hush-first",
+      "scratch": "C:\\Morphe\\App's\\TikTok\\Add-ons\\build\\verification\\sound-duplicate-hush-first-5861961529893254964",
+      "nativeAudit": false,
+      "report": "port9-patches-0.78.0-sound-duplicate-hush-first.json",
+      "result": "PASS: duplicate add-on rejected",
+      "selectedHushPatchCount": 4,
+      "ownClassCount": null
+    }
+  ],
+  "prePortSourceBackupSha256": "7045524be846dd23432b8af57dda2bb4b07126e5fe480656146751717da74344"
+}

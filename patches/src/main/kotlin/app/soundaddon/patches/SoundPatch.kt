@@ -24,14 +24,14 @@ private const val MUSIC = "Lcom/ss/android/ugc/aweme/music/model/Music;"
 private const val PLATFORM = "Lcom/ss/android/ugc/aweme/music/model/DspPlatform;"
 private const val INFO = "Lcom/ss/android/ugc/aweme/music/model/TT2DSPSongInfo;"
 private const val CONTEXT = "Lcom/ss/android/ugc/aweme/music/model/AddSongContextData;"
-private const val SERVICE = "LX/0Ady;"
+private const val SERVICE = "LX/09AS;"
 private const val HUSH = "Lapp/morphe/extension/tiktok/settings/preference/TikTokPreferenceFragment;"
 private const val EDGE_ABILITY = "Lcom/ss/android/ugc/aweme/feed/longvideo/edgespeedup/EdgeSpeedupAbility;"
-private const val DISPATCH_ACTIVITY = "LX/03uJ;"
-private const val FAVORITES = "LX/0xe6;"
+private const val DISPATCH_ACTIVITY = "LX/03dx;"
+private const val FAVORITES = "LX/0rl3;"
 private fun BytecodePatchContext.find(type: String, name: String, params: List<String>): MutableMethod =
     mutableClassDefByOrNull(type)?.methods?.singleOrNull { it.name == name && it.parameterTypes.map(CharSequence::toString) == params }
-        ?: throw PatchException("Sound actions add-on: unsupported $type->$name; requires original TikTok 47.4.3 and compatible HushFeed Settings (targeted against 0.76.0).")
+        ?: throw PatchException("Sound actions add-on: unsupported $type->$name; requires original TikTok 47.5.3 and compatible HushFeed Settings (targeted against 0.78.0).")
 private fun MutableMethod.calls(type: String, name: String) = implementation!!.instructions.any {
     ((it as? ReferenceInstruction)?.reference as? MethodReference)?.let { ref -> ref.definingClass == type && ref.name == name } == true
 }
@@ -52,25 +52,25 @@ val soundButtonActionsPatch = bytecodePatch(
     category("Interaction")
     compatibleWith(Compatibility(name = "TikTok", packageName = "com.zhiliaoapp.musically", appIconColor = 0xFE2C55,
         signatures = setOf("9041803e91bcb814b4b4399fb5c85a91640b755e5e8ba76813814bf4cf2ab5ba"),
-        targets = listOf(AppTarget(version = "47.4.3", versionCodes = mapOf(SupportedAbi.ARM64_V8A to 2024704030,
-            SupportedAbi.ARMEABI_V7A to 2024704030), isExperimental = true, minSdk = 23))))
+        targets = listOf(AppTarget(version = "47.5.3", versionCodes = mapOf(SupportedAbi.ARM64_V8A to 2024705030,
+            SupportedAbi.ARMEABI_V7A to 2024705030), isExperimental = true, minSdk = 23))))
     extendWith("extensions/sound.mpe")
     dependsOn(settingsHubPatch)
     execute {
-        if (packageMetadata.versionName != "47.4.3" || packageMetadata.versionCode != "2024704030")
-            throw PatchException("Sound button actions supports original TikTok 47.4.3 (2024704030) only.")
-        val cover = find(COVER, "l4", listOf("Ljava/lang/Object;"))
-        val title = find(TITLE, "l4", listOf("Ljava/lang/Object;"))
+        if (packageMetadata.versionName != "47.5.3" || packageMetadata.versionCode != "2024705030")
+            throw PatchException("Sound button actions supports original TikTok 47.5.3 (2024705030) only.")
+        val cover = find(COVER, "j4", listOf("Ljava/lang/Object;"))
+        val title = find(TITLE, "j4", listOf("Ljava/lang/Object;"))
         if (cover.calls(R, "bindDisc") || title.calls(R, "bindTitle"))
             throw PatchException("Sound actions add-on is already applied or selected twice. Use the original APK.")
         if (listOf("LLLILZLLLI","LLLIZZ").any { field -> classDefBy(COVER).fields.none {
                 it.name == field && it.type == "Landroid/widget/FrameLayout;" } })
             throw PatchException("Music disc binding fingerprint failed")
-        if (!cover.calls("Lcom/ss/android/ugc/aweme/feed/assem/music/BaseMusicCoverAssem;", "kq"))
+        if (!cover.calls("Lcom/ss/android/ugc/aweme/feed/assem/music/BaseMusicCoverAssem;", "lq"))
             throw PatchException("Music disc lifecycle fingerprint failed")
         val created = find(COVER, "onViewCreated", listOf("Landroid/view/View;"))
         if (created.implementation!!.instructions.none {
-            ((it as? ReferenceInstruction)?.reference as? TypeReference)?.type == "LX/07oo;"
+            ((it as? ReferenceInstruction)?.reference as? TypeReference)?.type == "LX/07Hy;"
         }) throw PatchException("Music disc touch listener fingerprint failed")
         body("disc", 1, """
             check-cast p0, $COVER
@@ -116,7 +116,7 @@ val soundButtonActionsPatch = bytecodePatch(
         """)
         body("titleActivity",1,"""
             check-cast p0, $TITLE
-            invoke-static {p0}, LX/05G4;->LIZ(Landroidx/lifecycle/LifecycleOwner;)LX/02Hm;
+            invoke-static {p0}, LX/058M;->LIZ(Landroidx/lifecycle/LifecycleOwner;)LX/02HR;
             move-result-object p0
             return-object p0
         """)
@@ -185,7 +185,7 @@ val soundButtonActionsPatch = bytecodePatch(
         """)
         body("label", 1, """
             check-cast p0, $PLATFORM
-            invoke-static {p0}, LX/0yJL;->LIZIZ($PLATFORM)Ljava/lang/String;
+            invoke-static {p0}, LX/0lRJ;->LIZIZ($PLATFORM)Ljava/lang/String;
             move-result-object p0
             return-object p0
         """)
@@ -196,17 +196,17 @@ val soundButtonActionsPatch = bytecodePatch(
             check-cast v1, $PARAMS
             move-object/from16 v2, p2
             check-cast v2, $MUSIC
-            invoke-static {v1}, LX/09IJ;->LIZ($PARAMS)LX/09IP;
+            invoke-static {v1}, LX/09AI;->LIZ($PARAMS)LX/09AJ;
             move-result-object v3
             sget-object v6, $SERVICE->LIZIZ:$SERVICE
-            invoke-virtual {v6, v2}, $SERVICE->LJIIJJI($MUSIC)$PLATFORM
+            invoke-virtual {v6, v2}, $SERVICE->LJIIL($MUSIC)$PLATFORM
             move-result-object v4
             const/4 v5, 0x0
-            invoke-virtual/range {v0 .. v5}, $TITLE->mq(${PARAMS}${MUSIC}LX/09IP;${PLATFORM}Z)$CONTEXT
+            invoke-virtual/range {v0 .. v5}, $TITLE->mq(${PARAMS}${MUSIC}LX/09AJ;${PLATFORM}Z)$CONTEXT
             move-result-object v3
-            invoke-static {v0}, LX/05G4;->LIZ(Landroidx/lifecycle/LifecycleOwner;)LX/02Hm;
+            invoke-static {v0}, LX/058M;->LIZ(Landroidx/lifecycle/LifecycleOwner;)LX/02HR;
             move-result-object v1
-            invoke-static {v0}, LX/05G4;->LJI(Landroidx/lifecycle/LifecycleOwner;)Landroidx/fragment/app/Fragment;
+            invoke-static {v0}, LX/058M;->LJI(Landroidx/lifecycle/LifecycleOwner;)Landroidx/fragment/app/Fragment;
             move-result-object v2
             move-object/from16 v4, p3
             check-cast v4, $PLATFORM
@@ -214,7 +214,7 @@ val soundButtonActionsPatch = bytecodePatch(
             const/4 v7, 0x0
             move-object v0, v6
             move v6, v7
-            invoke-virtual/range {v0 .. v6}, $SERVICE->LJJIJ(Landroid/app/Activity;Landroidx/fragment/app/Fragment;${CONTEXT}${PLATFORM}Ljava/util/List;Z)V
+            invoke-virtual/range {v0 .. v6}, $SERVICE->LJJIIZI(Landroid/app/Activity;Landroidx/fragment/app/Fragment;${CONTEXT}${PLATFORM}Ljava/util/List;Z)V
             return-void
         """)
         body("collect", 2, """
@@ -224,7 +224,7 @@ val soundButtonActionsPatch = bytecodePatch(
             new-instance v0, Lcom/ss/android/ugc/aweme/music/v2/viewmodel/MusicCollectViewModel;
             invoke-direct {v0}, Lcom/ss/android/ugc/aweme/music/v2/viewmodel/MusicCollectViewModel;-><init>()V
             iput-object p0, v0, Lcom/ss/android/ugc/aweme/music/v2/viewmodel/MusicCollectViewModel;->LL:Ljava/lang/String;
-            invoke-virtual {v0}, Lcom/ss/android/ugc/aweme/music/v2/viewmodel/MusicCollectViewModel;->LP2()V
+            invoke-virtual {v0}, Lcom/ss/android/ugc/aweme/music/v2/viewmodel/MusicCollectViewModel;->hP2()V
             return-void
         """)
         fun bindWrapper(type:String,method:MutableMethod,callback:String) {
@@ -257,9 +257,9 @@ val soundButtonActionsPatch = bytecodePatch(
             coverClass.methods.add(override)
         }
         find(TITLE, "unBind", emptyList()).addInstructions(0, "invoke-static/range {p0 .. p0}, $R->unbindTitle(Ljava/lang/Object;)V")
-        val discTouch=find("LX/07oo;", "onTouch", listOf("Landroid/view/View;", "Landroid/view/MotionEvent;"))
-        wrapHostMethod(mutableClassDefBy("LX/07oo;"),discTouch,"bdcrusherNativeDiscTouch",2,"""
-            invoke-direct/range {p0 .. p2}, LX/07oo;->bdcrusherNativeDiscTouch(Landroid/view/View;Landroid/view/MotionEvent;)Z
+        val discTouch=find("LX/07Hy;", "onTouch", listOf("Landroid/view/View;", "Landroid/view/MotionEvent;"))
+        wrapHostMethod(mutableClassDefBy("LX/07Hy;"),discTouch,"bdcrusherNativeDiscTouch",2,"""
+            invoke-direct/range {p0 .. p2}, LX/07Hy;->bdcrusherNativeDiscTouch(Landroid/view/View;Landroid/view/MotionEvent;)Z
             move-result v0
             invoke-static/range {p1 .. p2}, $R->touch(Landroid/view/View;Landroid/view/MotionEvent;)Z
             move-result v1
@@ -305,7 +305,7 @@ val soundButtonActionsPatch = bytecodePatch(
         val dispatch=find(DISPATCH_ACTIVITY,"dispatchTouchEvent",listOf("Landroid/view/MotionEvent;"))
         if(dispatch.returnType!="Z" || dispatch.implementation!!.registerCount<3
             || !dispatch.calls("Landroid/app/Activity;","dispatchTouchEvent")
-            || !dispatch.calls("LX/04UE;","dispatchTouchEvent") || dispatch.calls(R,"dispatchDiscTouch"))
+            || !dispatch.calls("LX/04Tz;","dispatchTouchEvent") || dispatch.calls(R,"dispatchDiscTouch"))
             throw PatchException("Sound window dispatch fingerprint failed or add-on already applied")
         dispatch.addInstructionsWithLabels(0,"""
             invoke-static/range {p0 .. p1}, $R->dispatchDiscTouch(Landroid/app/Activity;Landroid/view/MotionEvent;)Z
@@ -324,9 +324,9 @@ val soundButtonActionsPatch = bytecodePatch(
             invoke-static/range {p0 .. p0}, $R->viewsCreated(Ljava/lang/Object;)V
             return-void
         """)
-        // 47.4.3 inlines popup construction into this consumer. Observe immediately after
+        // 47.5.3 inlines popup construction into this consumer. Observe immediately after
         // content installation, whether stock or Collections-enhanced, in either source order.
-        val owner = mutableClassDefBy("LX/0xe4;")
+        val owner = mutableClassDefBy("LX/0rky;")
         val favorites = owner.methods.singleOrNull { it.name == "bdcrusherRenderResponse" }
             ?: find(owner.type,"accept",listOf("Ljava/lang/Object;"))
         val content = favorites.implementation!!.instructions.withIndex().singleOrNull {

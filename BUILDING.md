@@ -1,59 +1,62 @@
 # Build and reproduce
 
-## Toolchain
+## Current toolchain
 
-Use JDK 17, an Android SDK containing platform 36 and build-tools 36.0.0, and the included Gradle 9.7.1 wrapper. Its distribution checksum is pinned. Initial builds need network access for Maven/Google dependencies. No provider/API keys are used.
+The local 0.7.0-beta.1 port targets original global TikTok 47.5.3 / 2024705030 and external HushFeed 0.78.0. Use Morphe Manager 2.0.0 or newer with patcher 2.0.0. No device installation is performed by these diagnostics.
 
-The composite builds use unmodified upstream tools:
+Use JDK 17, Android SDK platform 36/build-tools 36.0.0 and the included checksum-pinned Gradle 9.7.1 wrapper. Initial dependency resolution needs network access. No provider/API keys are used.
 
-| Tool | Commit/version |
+| Dependency | Exact pin |
 | --- | --- |
-| Morphe patch Gradle plugin | `a230c33f7eca1e18b07bf1114ca850421520f98d` / 1.3.4 |
-| Morphe patcher | `524b9d8de5c2ec8f8cea0022cbce9a026d098679` / v1.15.0 |
+| Morphe patches Gradle plugin 1.3.4 | `a230c33f7eca1e18b07bf1114ca850421520f98d` |
+| Morphe patcher v2.0.0 | `8c7ff9f29d4cf6395fcbe42a4ceddd034d71fecf` |
+| Smali | `4220ae75f7` |
 | Scaffold/wrapper origin | template `5ec391b94cc6cb099a638576db0ba72fb0a921ae` |
-| Smali | `d856bad65f` |
 
-`build-tools/` is intentionally ignored, not distributed as patch payload. On this workstation its checkouts are already present. For a fresh source checkout, run these from the project directory:
+Composite checkouts are ignored `build-tools/morphe-patches-gradle-plugin` and `build-tools/morphe-patcher-2.0.0`. The historical 1.15.0 checkout is retained unchanged. Fresh checkouts must use the pins above. `-PmorphePluginDir=...` and `-PmorphePatcherDir=...` override their locations. The local Maven placeholders are not credentials; do not put private tokens in this project.
 
-```powershell
-git clone https://github.com/MorpheApp/morphe-patches-gradle-plugin.git build-tools/morphe-patches-gradle-plugin
-git -C build-tools/morphe-patches-gradle-plugin checkout --detach a230c33f7eca1e18b07bf1114ca850421520f98d
-git clone https://github.com/MorpheApp/morphe-patcher.git build-tools/morphe-patcher
-git -C build-tools/morphe-patcher checkout --detach 524b9d8de5c2ec8f8cea0022cbce9a026d098679
-$env:ANDROID_HOME = 'USER_HOME\AppData\Local\Android\Sdk' # Replace for your machine.
-.\gradlew.bat :patches:test :patches:generateMetadata :extensions:collections:testDebugUnitTest :extensions:collections:lintDebug :extensions:sound:testDebugUnitTest :extensions:sound:lintDebug :extensions:settings:testDebugUnitTest :extensions:settings:lintDebug --console=plain
-```
+## Local build and tests
 
-The local composite replaces the GitHub Maven patcher dependency. `gpr.user/key=local-build` are placeholders, not real credentials; they satisfy the plugin's configuration for an unused authenticated repository. Do not put private tokens in this project. `-PmorphePluginDir=...` can override the plugin checkout path. Set `ANDROID_HOME` even when passing `-PandroidSdkDir=...` for integration-stub compilation.
-
-`generateMetadata` builds the two-independent-patch bundle, checks both patch names, audits each isolated payload and verifies there are no duplicate payload classes, then produces the delivery files under `dist/`. Compile-only integration stubs and Kotlin dependencies are excluded from the injected runtime. Kotlin classes in the **patch bundle itself** are build/patcher code, not host payload. Each feature module is injected only when selected. Both depend on one unnamed shared settings patch; its `settings.mpe` is injected once. `integrationClassesJar` exposes the hub API to feature compilation/tests only, without copying it into their payloads.
-
-## Combination verification
-
-Acquire HushFeed separately from [v0.76.0](https://github.com/SysAdminDoc/HushFeed/releases/tag/v0.76.0), verify its release checksum/receipt, and place it under ignored `verification/inputs/`. It requires Manager 1.34.0+ and was published with patcher 1.15.1; our diagnostic remains pinned to 1.15.0. The user's Manager 1.36.0-dev.5 / patcher 1.15.2-dev.1 / Android 17 are not represented as local device verification. Never redistribute HushFeed or vendor APKs in this add-on. Supply the original TikTok 47.4.3 APK; record its package, version, code, signer and SHA-256. The inspected 47.4.3 fixture identity is in the current compatibility report.
+Run from this repository:
 
 ```powershell
-.\gradlew.bat :patches:verifyCombination "-Papk=C:\path\to\original-47.4.3.apk" "-Phushfeed=C:\path\to\hushfeed-0.76.0.mpp" -Pselection=both-defaults -Porder=hush-first --console=plain
+python -B scripts/local_build.py :patches:generateMetadata :extensions:collections:lintDebug :extensions:sound:lintDebug :extensions:settings:lintDebug
+python -B scripts/local_tests.py
+python -B scripts/local_build.py :patches:packageSource
 ```
 
-Collections-only selections: `core`, `amoled`, `extended`, `defaults`, `missing` (negative dependency), `duplicate` (negative double-selection), or `collections-minimal` (HushFeed Settings only). Sound-only: `sound-minimal`, `sound-extended`, `sound-defaults`, `sound-missing`, `sound-duplicate`. Both: `both-extended`, `both-defaults`, `both-all` (all 135 named external patches/default options; stress test, not an installation recommendation). Orders: `hush-first` / `addon-first`. Isolated scratch goes under `build/verification/`; no signing/install/publishing. Checks include payload isolation, DEX/resources, native references, argument wrappers, five-argument menu constructor, absence of the retired badge call, and native haptic/detail/width bindings. Current reports use `flat7-<external-bundle-name>-<selection>-<order>.json`; historical prefixes remain unchanged. An isolated classloader loads actual bundle code/resources. Check disk space first; retain debugging scratch as requested.
+`local_build.py` confines Gradle, Android and Java writable homes, caches and temporary files to ignored `build/local-build/`. It reads the existing JDK/SDK in place and disables automatic JDK downloads. Set JAVA_HOME and ANDROID_HOME for another workstation. Dependencies may be seeded from an existing cache; do not relocate or mutate a shared cache. All task output stays in the app repository.
 
-`extended` selects core plus AMOLED, Remember clear display, Change app name, and Look like the store app. Options use upstream defaults unless a report explicitly says otherwise. `defaults` selects exactly the external bundle's default patches. Do not equate this with all HushFeed patches.
+Gradle 9.7.1's Windows test-worker argument file mishandles the apostrophe in this workspace path. `local_tests.py` exports actual Gradle test classpaths, dependencies, system properties and working directories using `local_test_runtime.init.gradle`, then runs JUnitCore directly without a Java argument file. It runs the same compiled JUnit/Robolectric tests and seven Python release-helper tests; results are retained in module `build/local-junit.log` files and `build/local-build/junit-results.json`. The current 83 JVM tests simulate API 28; they do not establish Android 17 device behavior.
 
-After a completed combination containing Sound, run the supplemental read-only audit against that run's compiled DEX directory:
+`generateMetadata` builds the two independently selectable patches and checks their names and isolated payloads. Compile-only host stubs, test classes and foreign implementations are excluded. Both features depend on one unnamed common settings patch; common infrastructure is injected once. Kotlin patcher code in the bundle is separate from injected host runtime code.
+
+## Exact combination verification
+
+Acquire the external [HushFeed v0.78.0 release](https://github.com/SysAdminDoc/HushFeed/releases/tag/v0.78.0) separately, verify its published checksums/receipt, and keep it in ignored inputs. Supply the original TikTok 47.5.3 APK. Exact fixture identities and current results are in [the verification report](verification/reports/hushfeed-078-tiktok-4753-verification.md). Never distribute vendor or prepatched APKs with this add-on.
 
 ```powershell
-.\gradlew.bat :patches:verifyNativeHooks "-PcompiledDex=C:\path\to\build\verification\<exact-run>\scratch\patched\dex" --console=plain
+python -B scripts/local_build.py :patches:verifyCombination "-Papk=C:\path\to\original-47.5.3.apk" "-Phushfeed=C:\path\to\patches-0.78.0.mpp" -Pselection=both-all -Porder=hush-first
 ```
 
-`verification/NativeHookAudit.java` checks nine hook sites: cover/title bind and unbind, cover view creation, native disc touch, edge-timer guard, early Activity window dispatch and Favorites width observation. Its classes remain under ignored `build/`, never in the payload. It does not execute TikTok. `probeDex` supports `-PprobeMethod=@annotations` to inspect native method/parameter annotations, useful for validating endpoint signatures without executing requests.
+Collections selections: `core`, `amoled`, `extended`, `defaults`, `collections-minimal`, `missing`, `duplicate`. Sound selections: `sound-minimal`, `sound-extended`, `sound-defaults`, `sound-missing`, `sound-duplicate`. Both: `both-extended`, `both-defaults`, `both-all`. `both-all` selects all 138 named external patches with default options as a stress check, not an installation recommendation. `defaults` selects the external defaults, not all patches. `extended` adds AMOLED, Remember clear display, Change app name and Look like the store app to core. Orders are `hush-first` and `addon-first`.
 
-## Repeatability
+The four negative selections must explicitly reject missing Settings or duplicate add-on selection. Positive checks compile DEX/resources, check duplicate classes and injected references, audit settings argument preservation and native bindings. Patcher 2 STRIP_FAST returns changed entries only; the verifier reads the complete compiled DEX directory, including unchanged originals. No signing or installation is performed.
 
-Archive entry order and timestamps, including the manifest Timestamp, are fixed. A forced `--rerun-tasks` rebuild can be compared by hash; local repeatability is not a cross-platform guarantee. The GitHub workflow verifies source on ordinary pushes/PRs and publishes only after an explicit workflow-dispatch choice. See [PUBLISHING.md](PUBLISHING.md) for public snapshot/privacy checks, immutable releases and main/dev update feeds. Local source ZIPs may contain historical paths; publish only an audited public snapshot/archive.
+Current machine reports use `verification/reports/port9-patches-0.78.0-<selection>-<order>.json`. A repeated identical selection overwrites that report; preserve earlier evidence before reruns. Historical reports remain separate. Scratch is retained under `build/verification/`; check free space before full APK runs. Do not delete retained scratch without cleanup authorization.
 
-After updating compatibility reports, run `gradlew.bat :patches:packageSource` to generate the source ZIP and checksums for every delivered `.mpp`, JSON and ZIP. The source archive excludes tool checkouts, build caches, input bundles/APKs, generated host scratch files, Git internals and local SDK settings. It contains the build instructions, source, notices, wrapper and verification reports.
+After a completed selection containing Sound:
 
-## Remaining acceptance
+```powershell
+python -B scripts/local_build.py :patches:verifyNativeHooks "-PcompiledDex=C:\path\to\exact-run\scratch\patched\dex"
+```
 
-Use COMPATIBILITY.md and SOUND_BUTTON.md device checklists before promoting beyond beta. Compiled checks cannot prove ART execution, coordinates, native detail/account eligibility, real vibration, accessibility or server-side saves. Bounded native detail loading is implemented but needs phone validation. A TalkBack-specific disc long-click action is still not implemented.
+`verification/NativeHookAudit.java` checks nine roles: cover/title bind/unbind, cover view creation, native disc touch, edge-timer guard, early Activity dispatch and Favorites width observation. Audit classes stay under ignored build output. `probeDex` supports `-PprobeMethod=@annotations` for inspecting native contracts without executing requests.
+
+## Delivery and acceptance
+
+`packageSource` writes a local source ZIP and checksums beside the bundle and metadata in `dist/`. It excludes tool checkouts, caches, input APKs/bundles, host scratch, Git internals and SDK settings, while retaining source, notices, wrapper and verification reports. This private source ZIP can contain historical local paths; it is not a privacy-approved public export. Publication is a separate explicitly authorized action; see PUBLISHING.md. The local 0.7 build does not advance the existing GitHub feeds.
+
+Archive order/timestamps are fixed. A forced rebuild can assess local repeatability; it is not a cross-platform guarantee. Source updates do not automatically repatch or reinstall TikTok.
+
+Physical-device acceptance remains pending: ART loading, short taps/holds/cancellation, native account/provider eligibility and saving, haptics, themes, rotation, fonts/RTL and accessibility. Favorites hold-speed remapping conflicts with the collection hold; keep it off when using that gesture. Hidden controls, HushFeed pause/safe mode and Turn off haptics remain authoritative. A dedicated TalkBack sound-disc long-click action is still not implemented.

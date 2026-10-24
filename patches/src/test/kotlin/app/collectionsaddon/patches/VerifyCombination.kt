@@ -82,7 +82,7 @@ fun main(args: Array<String>) = runBlocking {
         "hushBundleSha256" to hash(hush), "addonSha256" to hash(addon), "androidDeviceTested" to false)
     fun save() {
         val output = root.parentFile.parentFile.resolve("verification/reports").apply { mkdirs() }
-        output.resolve("port8-${hush.nameWithoutExtension}-$mode-$order.json").writeText(GsonBuilder().setPrettyPrinting().create().toJson(report))
+        output.resolve("port9-${hush.nameWithoutExtension}-$mode-$order.json").writeText(GsonBuilder().setPrettyPrinting().create().toJson(report))
     }
     Patcher(PatcherConfig(input.canonicalFile, temporaryFilesPath = scratch)).use { patcher ->
         patcher += ordered
@@ -112,8 +112,16 @@ fun main(args: Array<String>) = runBlocking {
         }
         val result = patcher.get()
         val classes = HashMap<String, ClassDef>()
-        for (dex in result.dexFiles) {
-            val bytes = dex.stream.use { it.readBytes() }
+        // Patcher 2 STRIP_FAST returns only changed entries. Audit its complete
+        // compiled directory, including untouched original DEX files, so minimal
+        // selections receive the same reference/duplicate checks as all-patches.
+        result.dexFiles.forEach { it.stream.close() }
+        val compiledDex = scratch.resolve("patched/dex").listFiles { file -> file.isFile && file.extension == "dex" }
+            ?.sortedBy { it.name } ?: error("Missing complete compiled DEX directory")
+        check(compiledDex.isNotEmpty())
+        report["dexAuditScope"] = "complete compiled directory (including unchanged originals)"
+        for (dex in compiledDex) {
+            val bytes = dex.readBytes()
             val parsed = DexBackedDexFile(Opcodes.getDefault(), ByteBuffer.wrap(bytes))
             for (clazz in parsed.classes) check(classes.put(clazz.type, clazz) == null) { "Duplicate class ${clazz.type}" }
             println("Compiled ${dex.name}: ${parsed.classes.size} classes")
@@ -144,7 +152,7 @@ fun main(args: Array<String>) = runBlocking {
         }
         if (mode.startsWith("sound")) check(classes.keys.none { it.startsWith("Lapp/collectionsaddon/") })
         if (!mode.startsWith("sound") && !mode.startsWith("both")) check(classes.keys.none { it.startsWith("Lapp/soundaddon/") })
-        if (!mode.startsWith("sound")) check(classes["Lapp/collectionsaddon/runtime/NativeCallback;"]!!.interfaces.contains("LX/02uV;"))
+        if (!mode.startsWith("sound")) check(classes["Lapp/collectionsaddon/runtime/NativeCallback;"]!!.interfaces.contains("LX/02sd;"))
         val hostMenu = classes["Lapp/morphe/extension/tiktok/settings/preference/TikTokPreferenceFragment;"]!!.methods.single { it.name == "createMasterMenu" }
         val entryCalls = hostMenu.implementation!!.instructions.count {
             ((it as? ReferenceInstruction)?.reference as? MethodReference)?.definingClass == "Lapp/bdcrusher/runtime/SettingsHub;"
@@ -193,12 +201,12 @@ fun main(args: Array<String>) = runBlocking {
         fun references(type:String,name:String):List<Any> = classes[type]!!.methods.single {it.name==name}
             .implementation!!.instructions.mapNotNull {(it as? ReferenceInstruction)?.reference}.toList()
         val haptic=references("Lapp/bdcrusher/runtime/NativeUiBridge;","haptic").filterIsInstance<MethodReference>()
-        check(haptic.any {it.definingClass=="LX/0hUu;" && it.name=="<init>" && it.parameterTypes==listOf("Landroid/content/Context;")})
-        check(haptic.any {it.definingClass=="LX/0hUu;" && it.name=="LIZ" && it.parameterTypes==listOf("I")})
+        check(haptic.any {it.definingClass=="LX/0kMm;" && it.name=="<init>" && it.parameterTypes==listOf("Landroid/content/Context;")})
+        check(haptic.any {it.definingClass=="LX/0kMm;" && it.name=="LIZ" && it.parameterTypes==listOf("I")})
         report["nativeFavoritesHapticBound"]=true
         if(mode.startsWith("sound") || mode.startsWith("both")) {
-            wrapper("Lcom/ss/android/ugc/aweme/feed/assem/music/VideoMusicCoverAssem;","l4","bdcrusherNativeBind",2)
-            wrapper("Lcom/ss/android/ugc/aweme/feed/assem/music/VideoMusicTitleAssem;","l4","bdcrusherNativeBind",2)
+            wrapper("Lcom/ss/android/ugc/aweme/feed/assem/music/VideoMusicCoverAssem;","j4","bdcrusherNativeBind",2)
+            wrapper("Lcom/ss/android/ugc/aweme/feed/assem/music/VideoMusicTitleAssem;","j4","bdcrusherNativeBind",2)
             val guarded=classes.values.flatMap {clazz->clazz.methods.toList()}.filter {method->
                 method.implementation?.instructions?.any {
                     ((it as? ReferenceInstruction)?.reference as? MethodReference)?.let {ref->
@@ -216,7 +224,7 @@ fun main(args: Array<String>) = runBlocking {
             report["soundBindingsArgumentsPreserved"]=true
             report["soundDiscPriorityBeforeNativeTimer"]=true
             report["soundEdgeListener"]=guarded.single().definingClass
-            val window=classes["LX/03uJ;"]!!.methods.single {it.name=="dispatchTouchEvent"}
+            val window=classes["LX/03dx;"]!!.methods.single {it.name=="dispatchTouchEvent"}
             val windowCode=window.implementation!!.instructions.toList()
             check(windowCode.take(5).map {it.opcode}==listOf(com.android.tools.smali.dexlib2.Opcode.INVOKE_STATIC_RANGE,
                 com.android.tools.smali.dexlib2.Opcode.MOVE_RESULT,com.android.tools.smali.dexlib2.Opcode.IF_EQZ,
@@ -241,7 +249,7 @@ fun main(args: Array<String>) = runBlocking {
             check(((creationCode[1] as ReferenceInstruction).reference as MethodReference).name=="viewsCreated")
             check((creationCode[1] as RegisterRangeInstruction).registerCount==1)
             report["soundBindBeforeInflationCovered"]=true
-            val favorites=classes["LX/0xe4;"]!!.methods.single {it.name==if(mode.startsWith("both")) "bdcrusherRenderResponse" else "accept"}
+            val favorites=classes["LX/0rky;"]!!.methods.single {it.name==if(mode.startsWith("both")) "bdcrusherRenderResponse" else "accept"}
             val favoriteCode=favorites.implementation!!.instructions.toList()
             val observer=favoriteCode.indexOfFirst {
                 ((it as? ReferenceInstruction)?.reference as? MethodReference)?.let {ref->
@@ -267,9 +275,9 @@ fun main(args: Array<String>) = runBlocking {
             report["nativeFavoritesWidthObservedWithoutReplacingMenu"]=true
         }
         if (!mode.startsWith("sound")) {
-            val consumer=classes["LX/0xe4;"]!!.methods.single {it.name=="accept"}
+            val consumer=classes["LX/0rky;"]!!.methods.single {it.name=="accept"}
             check(consumer.implementation!!.registerCount==2)
-            val native=classes["LX/0xe4;"]!!.methods.single {it.name=="bdcrusherRenderResponse"}
+            val native=classes["LX/0rky;"]!!.methods.single {it.name=="bdcrusherRenderResponse"}
             check(native.accessFlags and 1 != 0 && native.implementation!!.registerCount==25)
             val nativeRefs=native.implementation!!.instructions.mapNotNull {(it as? ReferenceInstruction)?.reference as? MethodReference}.toList()
             check(listOf("count","threshold","install").all {name->nativeRefs.count {

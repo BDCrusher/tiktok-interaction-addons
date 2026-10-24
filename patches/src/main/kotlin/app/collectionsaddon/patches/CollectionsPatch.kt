@@ -20,8 +20,8 @@ private const val B = "Lapp/collectionsaddon/runtime/HostBridge;"
 private const val CALLBACK = "Lapp/collectionsaddon/runtime/NativeCallback;"
 private const val RESPONSE = "Lcom/ss/android/ugc/aweme/favorites/business/collection/CollectionListResponse;"
 private const val DETAIL = "Lcom/ss/android/ugc/aweme/favorites/business/collection/CollectionDetail;"
-private const val OWNER = "LX/0xe4;"
-private const val PANEL = "LX/0xe6;"
+private const val OWNER = "LX/0rky;"
+private const val PANEL = "LX/0rl3;"
 private const val HUSH = "Lapp/morphe/extension/tiktok/settings/preference/TikTokPreferenceFragment;"
 
 private fun Instruction.ref() = (this as? ReferenceInstruction)?.reference
@@ -101,8 +101,8 @@ private fun BytecodePatchContext.bindBridge() {
         return-void
     """)
     body("cancel", 1, """
-        check-cast p0, LX/02ty;
-        invoke-interface {p0}, LX/02ty;->dispose()V
+        check-cast p0, LX/02sU;
+        invoke-interface {p0}, LX/02sU;->dispose()V
         return-void
     """)
     body("render", 2, """
@@ -116,23 +116,23 @@ private fun BytecodePatchContext.bindBridge() {
         return-void
     """)
     body("highlight", 2, """
-        instance-of v0, p0, LX/0xcR;
+        instance-of v0, p0, LX/0rj7;
         if-eqz v0, :plain
-        check-cast p0, LX/0xcR;
-        iget-object p0, p0, LX/0xcR;->LLJJIJI:Landroid/view/View;
+        check-cast p0, LX/0rj7;
+        iget-object p0, p0, LX/0rj7;->LLJJIJI:Landroid/view/View;
         :plain
         return-object p0
     """)
     body("clearPending", 1, """
         const/4 v0, 0
-        sput-boolean v0, LX/0BCo;->LIZJ:Z
-        sput-object v0, LX/0BCo;->LIZIZ:LX/0xe6;
+        sput-boolean v0, LX/0AwQ;->LIZJ:Z
+        sput-object v0, LX/0AwQ;->LIZIZ:LX/0rl3;
         return-void
     """)
     body("load", 20, """
-        new-instance v10, LX/0HxR;
-        invoke-direct {v10}, LX/0HxR;-><init>()V
-        iget-object v0, v10, LX/0HxR;->LLJJIII:LX/0HxW;
+        new-instance v10, LX/0Fgc;
+        invoke-direct {v10}, LX/0Fgc;-><init>()V
+        iget-object v0, v10, LX/0Fgc;->LLJJIII:LX/0Fgg;
         move-wide/from16 v1, p1
         const/4 v3, 0
         const/4 v4, 0x1
@@ -143,23 +143,23 @@ private fun BytecodePatchContext.bindBridge() {
         check-cast v10, $OWNER
         iget-boolean v8, v10, $OWNER->LLJJIJI:Z
         const/4 v9, 0x1
-        invoke-virtual/range {v0 .. v9}, LX/0HxW;->h0(JLjava/lang/String;ZLjava/lang/String;Ljava/lang/String;ZZZ)LX/09kI;
+        invoke-virtual/range {v0 .. v9}, LX/0Fgg;->d0(JLjava/lang/String;ZLjava/lang/String;Ljava/lang/String;ZZZ)LX/09wH;
         move-result-object v0
-        invoke-static {}, LX/03P2;->LIZ()LX/03PU;
+        invoke-static {}, LX/03SU;->LIZ()LX/03SY;
         move-result-object v1
-        invoke-virtual {v0, v1}, LX/02tl;->LJLI(LX/03PU;)LX/04En;
+        invoke-virtual {v0, v1}, LX/02sL;->LJLIIIL(LX/03SY;)LX/04IG;
         move-result-object v0
-        invoke-static {}, LX/04EQ;->LIZIZ()LX/03PU;
+        invoke-static {}, LX/04I7;->LIZIZ()LX/03SY;
         move-result-object v1
-        invoke-virtual {v0, v1}, LX/02tl;->LJJJZ(LX/03PU;)LX/056V;
+        invoke-virtual {v0, v1}, LX/02sL;->LJJL(LX/03SY;)LX/0570;
         move-result-object v0
         move-object/from16 v1, p3
         move-object/from16 v2, p4
-        invoke-virtual {v0, v1, v2}, LX/02tl;->LJJZ(LX/02uV;LX/02uV;)LX/02ty;
+        invoke-virtual {v0, v1, v2}, LX/02sL;->LJJZZI(LX/02sd;LX/02sd;)LX/02sU;
         move-result-object v0
         return-object v0
     """)
-    mutableClassDefBy(CALLBACK).interfaces.add("LX/02uV;")
+    mutableClassDefBy(CALLBACK).interfaces.add("LX/02sd;")
 }
 
 @Suppress("unused")
@@ -172,15 +172,15 @@ val enhancedCollectionsPatch = bytecodePatch(
     compatibleWith(Compatibility(
         name = "TikTok", packageName = "com.zhiliaoapp.musically", appIconColor = 0xFE2C55,
         signatures = setOf("9041803e91bcb814b4b4399fb5c85a91640b755e5e8ba76813814bf4cf2ab5ba"),
-        targets = listOf(AppTarget(version = "47.4.3", versionCodes = mapOf(
-            SupportedAbi.ARM64_V8A to 2024704030, SupportedAbi.ARMEABI_V7A to 2024704030),
+        targets = listOf(AppTarget(version = "47.5.3", versionCodes = mapOf(
+            SupportedAbi.ARM64_V8A to 2024705030, SupportedAbi.ARMEABI_V7A to 2024705030),
             isExperimental = true, minSdk = 23)),
     ))
     extendWith("extensions/collections.mpe")
     dependsOn(settingsHubPatch)
     execute {
-        if (packageMetadata.versionName != "47.4.3" || packageMetadata.versionCode != "2024704030")
-            throw PatchException("Collections add-on supports original TikTok 47.4.3 (2024704030) only.")
+        if (packageMetadata.versionName != "47.5.3" || packageMetadata.versionCode != "2024705030")
+            throw PatchException("Collections add-on supports original TikTok 47.5.3 (2024705030) only.")
         // The native trace/cap moved out of accept into our rendering frame. Detect that
         // frame before original-body fingerprints, so duplicate selection has a useful error.
         if (mutableClassDefBy(OWNER).methods.any { it.name == "bdcrusherRenderResponse" })
@@ -193,24 +193,24 @@ val enhancedCollectionsPatch = bytecodePatch(
         field(RESPONSE, "hasMore", "Ljava/lang/Boolean;")
         field(RESPONSE, "pinSection", "Ljava/util/List;")
         field(RESPONSE, "total", "Ljava/lang/Long;")
-        field("LX/0HxR;", "LLJJIII", "LX/0HxW;")
-        field("LX/0BCo;", "LIZJ", "Z")
-        field("LX/0BCo;", "LIZIZ", PANEL)
+        field("LX/0Fgc;", "LLJJIII", "LX/0Fgg;")
+        field("LX/0AwQ;", "LIZJ", "Z")
+        field("LX/0AwQ;", "LIZIZ", PANEL)
         field(DETAIL, "id", "Ljava/lang/String;")
-        field("LX/0xcR;", "LLJJIJI", "Landroid/view/View;")
+        field("LX/0rj7;", "LLJJIJI", "Landroid/view/View;")
         val response = method(OWNER, "accept", listOf("Ljava/lang/Object;"))
         if (!response.hasString("QuickFavoriteManager@2914.showQuickFavoriteDialog\$1")) throw PatchException("Collections response fingerprint failed")
-        if (!response.calls("LX/035u;", "LLFF")) throw PatchException("Collections inlined list-cap fingerprint failed")
+        if (!response.calls("LX/035Z;", "LLFF")) throw PatchException("Collections inlined list-cap fingerprint failed")
         if (response.calls(R, "response") || response.calls(R, "install"))
             throw PatchException("Collections add-on is already applied or selected twice. Use the original APK and select only one copy of the add-on.")
         bindBridge()
-        // 47.4.3 inlines native row construction in accept; the vertical route is already
+        // 47.5.3 inlines native row construction in accept; the vertical route is already
         // selected by a constant. Keep native callbacks and patch only its count/threshold.
         response.apply {
             // All anchors are checked before replacing any instruction in this method.
             val instructions = implementation!!.instructions.toList()
             if (implementation!!.registerCount != 25) throw PatchException("Collections inlined register frame changed")
-            val take = instructions.withIndex().single { (it.value.ref() as? MethodReference)?.let { ref -> ref.definingClass == "LX/035u;" && ref.name == "LLFF" } == true }
+            val take = instructions.withIndex().single { (it.value.ref() as? MethodReference)?.let { ref -> ref.definingClass == "LX/035Z;" && ref.name == "LLFF" } == true }
             val takeRegister = (take.value as FiveRegisterInstruction).registerD
             if (takeRegister != 10) throw PatchException("Collections native count register changed")
             val compare = instructions.withIndex().filter { it.value.opcode == Opcode.IF_LT && (it.value as TwoRegisterInstruction).registerB == 1 }.singleOrNull()
@@ -246,7 +246,7 @@ val enhancedCollectionsPatch = bytecodePatch(
         mutableClassDefBy(OWNER).methods.single { it.name == "bdcrusherRenderResponse" }.apply {
             accessFlags = (accessFlags and 2.inv()) or 1
         }
-        method(PANEL, "LJJZ", listOf("Landroid/view/MotionEvent;")).apply {
+        method(PANEL, "LJJLL", listOf("Landroid/view/MotionEvent;")).apply {
             val original = implementation!!.instructions.first()
             addInstructionsWithLabels(0, """
                 invoke-static/range {p0 .. p1}, $R->touch(Landroid/app/Dialog;Landroid/view/MotionEvent;)Z

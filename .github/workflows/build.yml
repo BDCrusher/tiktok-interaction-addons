@@ -33,8 +33,8 @@ jobs:
         run: |
           git clone https://github.com/MorpheApp/morphe-patches-gradle-plugin.git build-tools/morphe-patches-gradle-plugin
           git -C build-tools/morphe-patches-gradle-plugin checkout --detach a230c33f7eca1e18b07bf1114ca850421520f98d
-          git clone https://github.com/MorpheApp/morphe-patcher.git build-tools/morphe-patcher
-          git -C build-tools/morphe-patcher checkout --detach 524b9d8de5c2ec8f8cea0022cbce9a026d098679
+          git clone https://github.com/MorpheApp/morphe-patcher.git build-tools/morphe-patcher-2.0.0
+          git -C build-tools/morphe-patcher-2.0.0 checkout --detach 8c7ff9f29d4cf6395fcbe42a4ceddd034d71fecf
       - uses: android-actions/setup-android@9fc6c4e9069bf8d3d10b2204b1fb8f6ef7065407 # v3
         with:
           packages: platform-tools

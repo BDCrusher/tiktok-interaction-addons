@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.7.0-beta.1] - 2026-10-23
+
+- Port both independent add-ons to original global TikTok 47.5.3 / 2024705030 and HushFeed 0.78.0.
+- Update inspected native collections, loader/Rx, sound binding, Activity, music-service, save-action and haptic contracts.
+- Use pinned Morphe patcher 2.0.0; preserve settings, gestures, preferences and isolated payloads.
+- Audit complete DEX output under STRIP_FAST and provide confined local builds plus direct JVM test execution for Windows apostrophe paths.
+- Local beta only; device acceptance and publication remain separate.
+
 ## [0.6.0-beta.1] - 2026-10-19
 
 - Port both independent add-ons to original global TikTok 47.4.3 / 2024704030 and external HushFeed 0.76.0.

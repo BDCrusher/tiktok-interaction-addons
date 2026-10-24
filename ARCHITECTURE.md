@@ -8,22 +8,22 @@ In patch finalization, after every source's extension merge, the patches require
 
 The BDCrusher's Settings page discovers only the two fixed optional adapter class names in its own classloader. Absent classes mean unselected modules and produce no row; a present broken adapter produces a disabled recovery row. No global static registry or last-opened Activity is needed, so restored fragments work even before the root has been reopened. Each adapter supplies its independent page and preference-change count. Full pages use the same fragment container/back stack and public HushFeed header/card/palette helpers. The hub retains scroll position and refreshes counts on return. Preferences are not reset or migrated.
 
-HushFeed 0.76.0's SettingsMenuPreference constructor has five arguments; its integer count argument and setActiveCount method are gone. Compile-only stubs and patch-time validation match the new signature; runtime root counts use ordinary summary text and refresh on return. No upstream badge implementation is copied or reintroduced.
+HushFeed 0.78.0's SettingsMenuPreference constructor has five arguments; its integer count argument and setActiveCount method are gone. Compile-only stubs and patch-time validation match the new signature; runtime root counts use ordinary summary text and refresh on return. No upstream badge implementation is copied or reintroduced.
 
 The flat home entry goes immediately after section_interface. If absent, it follows the last available Your feed route (feed_filter/feed_navigation/playback/screen_time), using untranslated keys. With no feed routes, a compact Personal add-ons heading and entry precede Hushfeed's own heading, or append safely if that heading is absent. Existing row identities/order and negative header/search/quick-setup orders are preserved. New headings are inserted only after assigning row orders so PreferenceGroup's binary insertion never sees an unsorted list. The old Customize/hub_* placement is not used. Other HushFeed versions are not claimed compatible; preferences/defaults are unchanged.
 
 `CollectionSettingsFragment` uses HushFeed's existing fragment container/back stack and public header/card/palette helpers. CountSlider lives directly inside its Popup card, saves each user change immediately and pulses native Favorites feedback. Silent refresh/reset does not pulse. Reset/About remain restorable DialogFragments; a legacy count-dialog branch can restore an already-open old dialog but no current setting opens it. View references are released on destruction; preference names and defaults are unchanged.
 
-## Native hooks for 47.4.3
+## Native hooks for 47.5.3
 
 | Host boundary | Change |
 | --- | --- |
-| `X.0xe4.accept(Object)` | Observe native collection response and optionally await more pages. The new native body already selects the vertical layout. |
-| `X.0xe4.bdcrusherRenderResponse(Object)` | Extract the original inlined consumer, replace take(3)/More threshold and install bounded themed content. A two-register accept wrapper routes pagination and a single stock rendering retry. |
-| `X.0xe6.LJJZ(MotionEvent)` | Intercept only actual scrolling; native tap/short drag selection otherwise continues. |
-| `X.0xe6.LJJLJLI(View, boolean)` | Use a contrasting pressed overlay on the native row's highlight view. |
-| `X.0xe6.LJJZZI(int, int, View)` | Clip enhanced hit testing to the visible portion of a row. |
-| `X.0xe6.dismiss()` | Release per-dialog scrolling state. |
+| `X.0rky.accept(Object)` | Observe native collection response and optionally await more pages. The new native body already selects the vertical layout. |
+| `X.0rky.bdcrusherRenderResponse(Object)` | Extract the original inlined consumer, replace take(3)/More threshold and install bounded themed content. A two-register accept wrapper routes pagination and a single stock rendering retry. |
+| `X.0rl3.LJJLL(MotionEvent)` | Intercept only actual scrolling; native tap/short drag selection otherwise continues. |
+| `X.0rl3.LJJLJLI(View, boolean)` | Use a contrasting pressed overlay on the native row's highlight view. |
+| `X.0rl3.LJJZZI(int, int, View)` | Clip enhanced hit testing to the visible portion of a row. |
+| `X.0rl3.dismiss()` | Release per-dialog scrolling state. |
 | HushFeed `createMasterMenu` | Add the independent settings entry after merge. |
 
 Exact descriptors, fields and structural anchors are checked. The initial target is deliberately not an obfuscation-agnostic patch. APK version name/code must match. The compatibility metadata also specifies the original signer SHA-256. No upstream source files are edited.
@@ -52,7 +52,7 @@ HushFeed owns rail visibility and the Favorites long-press speed remapping. The 
 
 ## Sound native forwarding and touch ownership
 
-Actual bound-disc sequences are reserved at the shared Main/Detail Activity dispatch boundary (`X.03uJ`), before parent timers. Other touches reach the original body. During the hold decision, events are translated into disc-local coordinates for native feedback. In 0.5 a valid short tap cancels that direct target, then replays the copied original DOWN and UP through Activity dispatch with a depth guard. This reaches both native custom/window delegates and the normal child click path exactly once instead of assuming the placeholder disc is the clickable target. Native edge handling is not suppressed during that synchronous replay; its UP cancels timers. Successful holds and cancelled/scroll/multitouch/disabled/changed-track sequences never replay. Copied events are recycled; weak window ownership is retained.
+Actual bound-disc sequences are reserved at the shared Main/Detail Activity dispatch boundary (`X.03dx`), before parent timers. Other touches reach the original body. During the hold decision, events are translated into disc-local coordinates for native feedback. In 0.5 a valid short tap cancels that direct target, then replays the copied original DOWN and UP through Activity dispatch with a depth guard. This reaches both native custom/window delegates and the normal child click path exactly once instead of assuming the placeholder disc is the clickable target. Native edge handling is not suppressed during that synchronous replay; its UP cancels timers. Successful holds and cancelled/scroll/multitouch/disabled/changed-track sequences never replay. Copied events are recycled; weak window ownership is retained.
 
 Both native cover containers are registered. A finalization-time argument-preserving onViewCreated wrapper calls the native body, then registers the current `ReusedAssem.getItem()` data after inflation. This covers bind-before-view-creation and recreated views without guessing a last song. Finalization keeps execute-time HushFeed fingerprints able to inspect their original method. Owner cleanup only removes its own bindings, not a newer owner's recycled view. Session-only diagnostics count window events, captured disc presses, menu openings and visible eligible bindings, with no song IDs or credentials.
 

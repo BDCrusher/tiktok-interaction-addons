@@ -1,0 +1,22 @@
+import groovy.json.JsonOutput
+import org.gradle.api.tasks.testing.Test
+
+gradle.projectsEvaluated {
+gradle.rootProject.allprojects.each { project ->
+    project.tasks.withType(Test).each { testTask ->
+        project.tasks.register(testTask.name + 'Runtime') {
+            dependsOn { testTask.taskDependencies.getDependencies(testTask) }
+            doLast {
+                def output = new File(project.layout.buildDirectory.get().asFile, testTask.name + '-runtime.json')
+                output.text = JsonOutput.prettyPrint(JsonOutput.toJson([
+                    classpath: testTask.classpath.asPath,
+                    classes: testTask.testClassesDirs.files.collect { it.absolutePath },
+                    cwd: testTask.workingDir.absolutePath,
+                    systemProperties: testTask.systemProperties,
+                    jvmArgs: testTask.jvmArgs
+                ]))
+            }
+        }
+    }
+}
+}

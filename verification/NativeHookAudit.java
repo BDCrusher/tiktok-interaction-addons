@@ -16,15 +16,15 @@ public final class NativeHookAudit {
     private static final String COVER = "Lcom/ss/android/ugc/aweme/feed/assem/music/VideoMusicCoverAssem;";
     private static final String TITLE = "Lcom/ss/android/ugc/aweme/feed/assem/music/VideoMusicTitleAssem;";
     private static final Map<String, String> HOOKS = Map.of(
-        COVER + "->l4", "bindDisc",
+        COVER + "->j4", "bindDisc",
         COVER + "->unBind", "unbindDisc",
         COVER + "->onViewCreated", "viewsCreated",
-        TITLE + "->l4", "bindTitle",
+        TITLE + "->j4", "bindTitle",
         TITLE + "->unBind", "unbindTitle",
-        "LX/07oo;->onTouch", "touch",
-        "LX/03uJ;->dispatchTouchEvent", "dispatchDiscTouch",
-        "LX/0xe4;->accept", "observeFavorites",
-        "LX/0xe4;->bdcrusherRenderResponse", "observeFavorites");
+        "LX/07Hy;->onTouch", "touch",
+        "LX/03dx;->dispatchTouchEvent", "dispatchDiscTouch",
+        "LX/0rky;->accept", "observeFavorites",
+        "LX/0rky;->bdcrusherRenderResponse", "observeFavorites");
 
     public static void main(String[] args) throws Exception {
         if (args.length != 1) throw new IllegalArgumentException("Expected compiled DEX directory");

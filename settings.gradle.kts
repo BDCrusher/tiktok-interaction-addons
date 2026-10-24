@@ -14,8 +14,9 @@ pluginManagement {
         maven { url = uri("https://jitpack.io") }
     }
 }
-if (file("build-tools/morphe-patcher").exists()) {
-    includeBuild("build-tools/morphe-patcher") {
+val patcherDir = providers.gradleProperty("morphePatcherDir").orNull ?: "build-tools/morphe-patcher-2.0.0"
+if (file(patcherDir).exists()) {
+    includeBuild(patcherDir) {
         dependencySubstitution { substitute(module("app.morphe:morphe-patcher")).using(project(":")) }
     }
 }

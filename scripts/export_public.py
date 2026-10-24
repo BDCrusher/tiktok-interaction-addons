@@ -11,7 +11,7 @@ FILES = {".gitignore", ".gitattributes", "LICENSE", "NOTICE", "README.md", "BUIL
          "gradlew", "gradlew.bat"}
 TREES = {"patches", "extensions", "integration-stubs", "gradle", "verification", "scripts", ".github"}
 SKIP = {"build", "build-tools", "dist", "inputs", ".git", ".gradle", ".kotlin", "__pycache__"}
-TEXT = {".md", ".java", ".kt", ".kts", ".json", ".yml", ".yaml", ".properties", ".toml", ".xml", ".py", ".sh", ".bat"}
+TEXT = {".md", ".txt", ".java", ".kt", ".kts", ".gradle", ".json", ".yml", ".yaml", ".properties", ".toml", ".xml", ".py", ".sh", ".bat"}
 PRIVATE_HOME = re.compile(r"(?i)[a-z]:[\\/]+Users[\\/]+[^\\/\s\"'<>]+")
 SECRET = re.compile(r"gh[pousr]_[A-Za-z0-9]{20,}|github_pat_[A-Za-z0-9_]{20,}|-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY")
 

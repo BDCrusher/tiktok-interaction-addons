@@ -12,9 +12,9 @@ import app.morphe.patcher.util.proxy.mutableTypes.MutableMethod
 internal val settingsHubPatch = bytecodePatch {
     extendWith("extensions/settings.mpe")
     execute {
-        if (packageMetadata.versionName != "47.4.3" || packageMetadata.versionCode != "2024704030")
-            throw PatchException("TikTok Interaction Add-ons requires original TikTok 47.4.3 (2024704030); use the older bundle for 47.1.4.")
-        val native="LX/0hUu;"
+        if (packageMetadata.versionName != "47.5.3" || packageMetadata.versionCode != "2024705030")
+            throw PatchException("TikTok Interaction Add-ons requires original TikTok 47.5.3 (2024705030); use the older bundle for 47.1.4.")
+        val native="LX/0kMm;"
         val haptic=classDefByOrNull(native) ?: throw PatchException("Native Favorites feedback class missing")
         if(haptic.methods.none {it.name=="<init>" && it.parameterTypes==listOf("Landroid/content/Context;")}
             || haptic.methods.none {it.name=="LIZ" && it.parameterTypes==listOf("I") && it.returnType=="V"})

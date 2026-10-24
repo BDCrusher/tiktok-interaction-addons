@@ -6,9 +6,11 @@ Repository: [BDCrusher/tiktok-interaction-addons](https://github.com/BDCrusher/t
 
 Morphe reads root `patches-bundle.json` on main/dev. Its required fields are version, download_url, created_at and description; signature_download_url is empty because no separate bundle signature is claimed. Timestamps are UTC ISO local-date-time strings (no trailing zone) as accepted by the current Manager. Release downloads are immutable version-tag URLs, not moving latest URLs.
 
+The local **0.7.0-beta.1** port targets original TikTok 47.5.3 / 2024705030 and HushFeed 0.78.0 with Manager/patcher 2.0.0. It has not been published. The observed public dev feed remains 0.6.0-beta.1, and main remains 0.5.1-beta.1. Import the local bundle for this port; advancing feeds requires separate authorization.
+
 ## Channels and installation
 
-This source is beta-only initially: main and dev both advertise the same first beta so the repository link works before any stable release exists. Enable **Pre-release patches**, then **Experimental app versions** on its Morphe source card. Future beta publications advance dev; stable publications advance main. Manager's prerelease mode compares both feeds so a newer stable release is not missed.
+This source began with the same beta on main/dev; the channels have since advanced separately. Enable **Pre-release patches**, then **Experimental app versions** on its Morphe source card. Future beta publications advance dev; stable publications advance main. Manager's prerelease mode compares both feeds so a newer stable release is not missed.
 
 Remove/disable the old local source rather than selecting it alongside the remote one. Keep HushFeed as its own external source. For 0.6.0-beta.1, repatch original TikTok 47.4.3 with HushFeed 0.76.0 Settings and your selected add-ons in one Expert-mode run. Source updates do not patch/reinstall TikTok automatically and do not automatically repair compatibility with future HushFeed versions.
 

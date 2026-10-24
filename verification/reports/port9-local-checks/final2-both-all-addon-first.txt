@@ -1,0 +1,396 @@
+Picked up JAVA_TOOL_OPTIONS: -Duser.home="C:\Morphe\App's\TikTok\Add-ons\build\local-build\home" -Djava.io.tmpdir="C:\Morphe\App's\TikTok\Add-ons\build\local-build\temp" -XX:-UsePerfData
+To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/9.7.1/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
+Daemon will be stopped at the end of the build 
+> Task :morphe-patches-gradle-plugin:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :morphe-patches-gradle-plugin:compileKotlin UP-TO-DATE
+> Task :morphe-patches-gradle-plugin:compileJava NO-SOURCE
+> Task :morphe-patches-gradle-plugin:pluginDescriptors UP-TO-DATE
+> Task :morphe-patches-gradle-plugin:processResources UP-TO-DATE
+> Task :morphe-patches-gradle-plugin:classes UP-TO-DATE
+> Task :morphe-patches-gradle-plugin:jar UP-TO-DATE
+> Task :extensions:sound:preBuild UP-TO-DATE
+> Task :extensions:settings:preBuild UP-TO-DATE
+> Task :extensions:collections:preBuild UP-TO-DATE
+> Task :patches:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :morphe-patcher-2.0.0:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :extensions:sound:preReleaseBuild UP-TO-DATE
+> Task :extensions:settings:preReleaseBuild UP-TO-DATE
+> Task :extensions:collections:preReleaseBuild UP-TO-DATE
+> Task :extensions:sound:checkReleaseDuplicateClasses UP-TO-DATE
+> Task :patches:processTestResources NO-SOURCE
+> Task :extensions:settings:generateReleaseResources UP-TO-DATE
+> Task :extensions:sound:generateReleaseResources UP-TO-DATE
+> Task :extensions:settings:packageReleaseResources UP-TO-DATE
+> Task :extensions:sound:packageReleaseResources UP-TO-DATE
+> Task :extensions:collections:checkReleaseDuplicateClasses UP-TO-DATE
+> Task :integration-stubs:compileJava UP-TO-DATE
+> Task :extensions:collections:generateReleaseResources UP-TO-DATE
+> Task :integration-stubs:processResources NO-SOURCE
+> Task :integration-stubs:classes UP-TO-DATE
+> Task :extensions:settings:processReleaseNavigationResources UP-TO-DATE
+> Task :extensions:sound:processReleaseNavigationResources UP-TO-DATE
+> Task :extensions:collections:packageReleaseResources UP-TO-DATE
+> Task :integration-stubs:jar UP-TO-DATE
+> Task :extensions:collections:processReleaseNavigationResources UP-TO-DATE
+> Task :extensions:collections:parseReleaseLocalResources UP-TO-DATE
+> Task :extensions:settings:parseReleaseLocalResources UP-TO-DATE
+> Task :extensions:sound:parseReleaseLocalResources UP-TO-DATE
+> Task :extensions:collections:generateReleaseRFile UP-TO-DATE
+> Task :extensions:settings:generateReleaseRFile UP-TO-DATE
+> Task :extensions:sound:generateReleaseRFile UP-TO-DATE
+> Task :extensions:collections:compileReleaseKotlin NO-SOURCE
+> Task :extensions:settings:compileReleaseKotlin NO-SOURCE
+> Task :extensions:sound:compileReleaseKotlin NO-SOURCE
+> Task :extensions:collections:javaPreCompileRelease UP-TO-DATE
+> Task :extensions:settings:javaPreCompileRelease UP-TO-DATE
+> Task :extensions:sound:javaPreCompileRelease UP-TO-DATE
+> Task :extensions:collections:checkReleaseAarMetadata UP-TO-DATE
+> Task :extensions:sound:checkReleaseAarMetadata UP-TO-DATE
+> Task :extensions:collections:mapReleaseSourceSetPaths UP-TO-DATE
+> Task :extensions:sound:mapReleaseSourceSetPaths UP-TO-DATE
+> Task :extensions:collections:compileReleaseNavigationResources UP-TO-DATE
+> Task :extensions:sound:compileReleaseNavigationResources UP-TO-DATE
+> Task :extensions:sound:mergeReleaseResources UP-TO-DATE
+> Task :extensions:collections:mergeReleaseResources UP-TO-DATE
+> Task :extensions:settings:compileReleaseJavaWithJavac UP-TO-DATE
+> Task :extensions:settings:integrationClassesJar UP-TO-DATE
+> Task :extensions:settings:checkReleaseDuplicateClasses UP-TO-DATE
+> Task :extensions:settings:checkReleaseAarMetadata UP-TO-DATE
+> Task :extensions:settings:mapReleaseSourceSetPaths UP-TO-DATE
+> Task :extensions:settings:compileReleaseNavigationResources UP-TO-DATE
+> Task :extensions:collections:createReleaseCompatibleScreenManifests UP-TO-DATE
+> Task :extensions:sound:createReleaseCompatibleScreenManifests UP-TO-DATE
+> Task :extensions:settings:mergeReleaseResources UP-TO-DATE
+> Task :extensions:settings:createReleaseCompatibleScreenManifests UP-TO-DATE
+> Task :extensions:settings:extractDeepLinksRelease UP-TO-DATE
+> Task :extensions:sound:compileReleaseJavaWithJavac UP-TO-DATE
+> Task :extensions:collections:compileReleaseJavaWithJavac UP-TO-DATE
+> Task :extensions:sound:extractDeepLinksRelease UP-TO-DATE
+> Task :extensions:collections:extractDeepLinksRelease UP-TO-DATE
+> Task :extensions:settings:processReleaseMainManifest UP-TO-DATE
+> Task :morphe-patcher-2.0.0:compileKotlin UP-TO-DATE
+> Task :extensions:settings:processReleaseManifest UP-TO-DATE
+> Task :extensions:collections:processReleaseMainManifest UP-TO-DATE
+> Task :extensions:sound:processReleaseMainManifest UP-TO-DATE
+> Task :extensions:settings:processReleaseManifestForPackage UP-TO-DATE
+> Task :morphe-patcher-2.0.0:compileJava NO-SOURCE
+> Task :extensions:sound:processReleaseManifest UP-TO-DATE
+> Task :extensions:collections:processReleaseManifest UP-TO-DATE
+> Task :extensions:sound:processReleaseManifestForPackage UP-TO-DATE
+> Task :extensions:collections:processReleaseManifestForPackage UP-TO-DATE
+> Task :morphe-patcher-2.0.0:processResources UP-TO-DATE
+> Task :morphe-patcher-2.0.0:classes UP-TO-DATE
+> Task :morphe-patcher-2.0.0:jar UP-TO-DATE
+> Task :extensions:settings:processReleaseResources UP-TO-DATE
+> Task :extensions:collections:processReleaseResources UP-TO-DATE
+> Task :extensions:sound:processReleaseResources UP-TO-DATE
+> Task :patches:compileKotlin UP-TO-DATE
+> Task :patches:compileJava NO-SOURCE
+> Task :extensions:settings:dexBuilderRelease UP-TO-DATE
+> Task :extensions:sound:dexBuilderRelease UP-TO-DATE
+> Task :extensions:collections:dexBuilderRelease UP-TO-DATE
+> Task :extensions:settings:desugarReleaseFileDependencies UP-TO-DATE
+> Task :extensions:sound:desugarReleaseFileDependencies UP-TO-DATE
+> Task :extensions:collections:desugarReleaseFileDependencies UP-TO-DATE
+> Task :extensions:settings:mergeReleaseStartupProfile UP-TO-DATE
+> Task :extensions:collections:mergeReleaseStartupProfile UP-TO-DATE
+> Task :extensions:sound:mergeReleaseStartupProfile UP-TO-DATE
+> Task :extensions:settings:mergeExtDexRelease UP-TO-DATE
+> Task :extensions:sound:mergeExtDexRelease UP-TO-DATE
+> Task :extensions:collections:mergeExtDexRelease UP-TO-DATE
+> Task :extensions:sound:mergeDexRelease UP-TO-DATE
+> Task :extensions:collections:mergeDexRelease UP-TO-DATE
+> Task :extensions:settings:mergeDexRelease UP-TO-DATE
+> Task :extensions:sound:syncExtension UP-TO-DATE
+> Task :extensions:collections:syncExtension UP-TO-DATE
+> Task :extensions:settings:syncExtension UP-TO-DATE
+> Task :patches:processResources UP-TO-DATE
+> Task :patches:classes UP-TO-DATE
+> Task :patches:jar UP-TO-DATE
+> Task :patches:buildAndroid
+> Task :patches:compileTestKotlin UP-TO-DATE
+> Task :patches:compileTestJava NO-SOURCE
+> Task :patches:testClasses UP-TO-DATE
+
+> Task :patches:verifyCombination
+Picked up JAVA_TOOL_OPTIONS: -Duser.home="C:\Morphe\App's\TikTok\Add-ons\build\local-build\home" -Djava.io.tmpdir="C:\Morphe\App's\TikTok\Add-ons\build\local-build\temp" -XX:-UsePerfData
+Mode both-all / addon-first. Hush patches: [AMOLED dark theme, Accent color, Advanced downloads, Allow Duet and Stitch, Allow screenshots and Circle to Search, Always show publish date, Always upload in HD, App lock, Automatic video advance, Block P2P video relay, Block author button, Block contact list access, Block installed app scanning, Block popups, Block suggested video notifications, Camera and microphone indicator, Change app name, Comment publish diagnostics, Comment send fix, Comment sort controls, Comment tools, Confirm feed interactions, Copy bio and IDs, Copy comments without username, Custom launcher icon, Custom offline videos limit, Device privacy guard, Diagnostic tools, Disable login requirement, Disable screen capture detection, Disable telemetry, Disable the long press quick share, Disable the long press repost, Double-tap controls, Downloads, Drop the animated image cache, Enable voice comments, Expand activity list, Feature Gate Lab, Feature Gate Recorder, Feed filter, Feed tab navigation, Feed text sizes, Fit the video to the screen, Fix Google login, Foldable split comment view, Follow diagnostics, Ghost mode, Hide CAPTCHA popups, Hide Play Store update offer, Hide already seen videos, Hide comment popup ads, Hide comment typing suggestions, Hide feed LIVE button, Hide feed follow button, Hide feed save button, Hide feed search button, Hide floating promotions, Hide inbox items, Hide inbox stories, Hide profile shortcuts, Hide search suggestions, Hide suggested accounts, Hide the launcher shortcuts, Hide the risk control CAPTCHA, Hide video overlays, Hold-and-slide 2x lock, In-app browser privacy guard, Keep a streak going, Keep playing in the background, Keep pulled sounds, Keep the Favorites tab, Keep the app language, Keep the screen's brightness in the camera, Keep the screen's refresh rate, LIVE controls, Lift text length limits, Limit background traffic, Location access governor, Long-press controls, Look like the store app, Mute feed videos, Network proxy, Network request report, Not interested button, Notification controls, Open external links directly, Open the comments at full height, Picture-in-picture, Play SDR instead of HDR, Playback quality, Playback speed, Prefer H.264 playback, Profile background, Region spoof, Remember clear display, Remove LIVE extras, Remove avatar rings, Remove content credential and card scanner assets, Remove creation tools, Remove unused language packs, Remove voice tools, Repost diagnostics, Resource and battery governor, Resume videos after scrolling, Run beside the store app, SIM spoof, Sanitize sharing links, Settings, Share sheet tools, Show LIVE search, Show author region, Show commenter handle and region, Show engagement rate, Show exact counts, Show follow status, Show the progress bar, Show the progress bar thumbnail, Skip content warnings, Skip first-launch setup, Skip passkey sign-in, Skip the splash ad, Skip update checks, Stay on the video in full screen, Stop on-device AI profiling, Stop recording watch history, Stop saving search history, Stop search autoplay, Stop video looping, Story controls, Subtitle tools, Swipe-left controls, Translate comments, Trust user certificates, Turn off haptics, Turn off screen transitions, Use non-personalized search, Use system font]
+Oct 23, 2026 5:51:29 PM app.morphe.patcher.patch.ResourcePatchContext decodeResources$morphe_patcher
+INFO: Decoding the manifest
+Oct 23, 2026 5:51:30 PM app.morphe.patcher.resource.coder.ArsclibResourceCoder prepareDecodingOnRequest
+INFO: Decoding resources on request, 26515 files can be decoded
+Oct 23, 2026 5:51:33 PM app.morphe.patcher.Patcher$invoke$1 invokeSuspend
+INFO: Executing patches
+[P2P Relay Blocker] Emptied 4 reviewed files (9.83 MiB unpacked).
+[Contact list blocker] Intercepted 3 ContentResolver.query sites.
+[Installed apps blocker] Intercepted 1 package query sites.
+[Camera/mic indicator] Instrumented 3 camera opens, 2 camera releases, 1 recorder starts and 2 recorder stops.
+[Device privacy guard] Intercepted 4 clipboard read sites.
+[Device privacy guard] Intercepted 47 VPN and advertising-id sites and 15 network-interface sites.
+[Device privacy guard] Intercepted 2 Settings string reads for a new device identity.
+[Device privacy guard] Answered 4 direct advertising id service reads and 16 advertising id field reads.
+[Device privacy guard] Guarded 5 root results.
+[Browser privacy guard] Intercepted 22 bridge sites, 69 navigation sites, 13 interface reloads and 64 navigation callbacks across 12 WebView types.
+[Background play] Hooked the mode read, the scene and photo post checks, the page's claim on the sound, the end of a background video and 3 reads of the remembered switch.
+[Location governor] Intercepted 2 location access sites.
+[Notification controls] Took 5 wake lock calls.
+[LIVE Stream Suite Optimizer] Emptied 5 reviewed files (5.94 MiB unpacked).
+[Core Asset De-bloat] Emptied 19 reviewed files (15.99 MiB unpacked).
+[Studio & Creation De-bloat] Emptied 7 reviewed files (81.81 MiB unpacked).
+[Language Pack Purger] Kept every reviewed language pack.
+[Voice Tools De-bloat] Emptied 8 reviewed files (16.16 MiB unpacked).
+[Resource and battery governor] Intercepted 2 sensor registration sites.
+[Show follow status] Added five owned profile count presentation hooks.
+[Show follow status] Added owned nickname badges and both warning presentation hooks.
+AMOLED dark theme: PASS
+Accent color: PASS
+Advanced downloads: PASS
+Allow Duet and Stitch: PASS
+Allow screenshots and Circle to Search: PASS
+Always show publish date: PASS
+Always upload in HD: PASS
+App lock: PASS
+Automatic video advance: PASS
+Block P2P video relay: PASS
+Block author button: PASS
+Block contact list access: PASS
+Block installed app scanning: PASS
+Block popups: PASS
+Block suggested video notifications: PASS
+Camera and microphone indicator: PASS
+Change app name: PASS
+Comment publish diagnostics: PASS
+Comment send fix: PASS
+Comment sort controls: PASS
+Comment tools: PASS
+Confirm feed interactions: PASS
+Copy bio and IDs: PASS
+Copy comments without username: PASS
+Custom launcher icon: PASS
+Custom offline videos limit: PASS
+Device privacy guard: PASS
+Diagnostic tools: PASS
+Disable login requirement: PASS
+Disable screen capture detection: PASS
+Disable telemetry: PASS
+Disable the long press quick share: PASS
+Disable the long press repost: PASS
+Double-tap controls: PASS
+Oct 23, 2026 5:51:54 PM app.morphe.patcher.patch.BytecodePatchContext get
+Downloads: PASS
+Drop the animated image cache: PASS
+INFO: Compiling patched dex files (mode: STRIP_FAST)
+Enable voice comments: PASS
+Expand activity list: PASS
+Feature Gate Lab: PASS
+Feature Gate Recorder: PASS
+Feed filter: PASS
+Feed tab navigation: PASS
+Feed text sizes: PASS
+Fit the video to the screen: PASS
+Fix Google login: PASS
+Foldable split comment view: PASS
+Follow diagnostics: PASS
+Ghost mode: PASS
+Hide CAPTCHA popups: PASS
+Hide Play Store update offer: PASS
+Hide already seen videos: PASS
+Hide comment popup ads: PASS
+Hide comment typing suggestions: PASS
+Hide feed LIVE button: PASS
+Hide feed follow button: PASS
+Hide feed save button: PASS
+Hide feed search button: PASS
+Hide floating promotions: PASS
+Hide inbox items: PASS
+Hide inbox stories: PASS
+Hide profile shortcuts: PASS
+Hide search suggestions: PASS
+Hide suggested accounts: PASS
+Hide the launcher shortcuts: PASS
+Hide the risk control CAPTCHA: PASS
+Hide video overlays: PASS
+Hold-and-slide 2x lock: PASS
+In-app browser privacy guard: PASS
+Keep a streak going: PASS
+Keep playing in the background: PASS
+Keep pulled sounds: PASS
+Keep the Favorites tab: PASS
+Keep the app language: PASS
+Keep the screen's brightness in the camera: PASS
+Keep the screen's refresh rate: PASS
+LIVE controls: PASS
+Lift text length limits: PASS
+Limit background traffic: PASS
+Location access governor: PASS
+Long-press controls: PASS
+Look like the store app: PASS
+Mute feed videos: PASS
+Network proxy: PASS
+Network request report: PASS
+Not interested button: PASS
+Notification controls: PASS
+Open external links directly: PASS
+Open the comments at full height: PASS
+Picture-in-picture: PASS
+Play SDR instead of HDR: PASS
+Playback quality: PASS
+Playback speed: PASS
+Prefer H.264 playback: PASS
+Profile background: PASS
+Region spoof: PASS
+Remember clear display: PASS
+Remove LIVE extras: PASS
+Remove avatar rings: PASS
+Remove content credential and card scanner assets: PASS
+Remove creation tools: PASS
+Remove unused language packs: PASS
+Remove voice tools: PASS
+Repost diagnostics: PASS
+Resource and battery governor: PASS
+Resume videos after scrolling: PASS
+Run beside the store app: PASS
+SIM spoof: PASS
+Sanitize sharing links: PASS
+Settings: PASS
+Share sheet tools: PASS
+Show LIVE search: PASS
+Show author region: PASS
+Show commenter handle and region: PASS
+Show engagement rate: PASS
+Show exact counts: PASS
+Show follow status: PASS
+Show the progress bar: PASS
+Show the progress bar thumbnail: PASS
+Skip content warnings: PASS
+Skip first-launch setup: PASS
+Skip passkey sign-in: PASS
+Skip the splash ad: PASS
+Skip update checks: PASS
+Stay on the video in full screen: PASS
+Stop on-device AI profiling: PASS
+Stop recording watch history: PASS
+Stop saving search history: PASS
+Stop search autoplay: PASS
+Stop video looping: PASS
+Story controls: PASS
+Subtitle tools: PASS
+Swipe-left controls: PASS
+Translate comments: PASS
+Trust user certificates: PASS
+Turn off haptics: PASS
+Turn off screen transitions: PASS
+Use non-personalized search: PASS
+Use system font: PASS
+Sound button actions: PASS
+Enhanced collection popup: PASS
+Oct 23, 2026 5:51:54 PM app.morphe.patcher.patch.BytecodePatchContext copyUnchangedExtensionClasses
+INFO: Copied 3220 unchanged extension classes to 5 DEX files
+Oct 23, 2026 5:51:54 PM app.morphe.patcher.patch.BytecodePatchContext logMutableClassCount
+INFO: Changed 1981 of 483775 classes to mutable
+Oct 23, 2026 5:51:54 PM app.morphe.patcher.patch.BytecodePatchContext compileStripFast
+INFO: Writing 1981 new classes to new DEX files
+Oct 23, 2026 5:51:54 PM app.morphe.patcher.dex.DexReadWrite writeMultiDexFile$morphe_patcher
+INFO: Processing 1981 classes in parallel (4 threads)
+Oct 23, 2026 5:51:55 PM app.morphe.patcher.dex.DexReadWrite writeMultiDexFile$morphe_patcher
+INFO: Wrote 4 dex files to C:\Morphe\App's\TikTok\Add-ons\build\verification\both-all-addon-first-8710722525342743854\scratch\patched\newDex
+Oct 23, 2026 5:51:56 PM app.morphe.patcher.patch.BytecodePatchContext compileStripFast
+INFO: Stripped 1950 modified classes from 43 original DEX files
+Oct 23, 2026 5:51:57 PM app.morphe.patcher.patch.ResourcePatchContext get
+INFO: Compiling modified resources
+Oct 23, 2026 5:51:57 PM app.morphe.patcher.resource.coder.ArsclibResourceCoder prepareBookkeepingFiles
+INFO: Decoded 258 of 26515 files on request
+Oct 23, 2026 5:51:57 PM app.morphe.patcher.resource.processor.StringsXmlProcessor process
+INFO: Unescaping strings
+Oct 23, 2026 5:51:57 PM app.morphe.patcher.resource.processor.AaptMacroProcessor process
+INFO: Processing aapt macros
+Oct 23, 2026 5:51:57 PM app.morphe.patcher.resource.processor.ResourceIdProcessor process
+INFO: Generating new resource IDs
+Oct 23, 2026 5:51:58 PM app.morphe.patcher.resource.coder.ArsclibResourceCoder encodeResources
+INFO: Writing resource APK
+Oct 23, 2026 5:51:58 PM app.morphe.patcher.resource.coder.IncrementalResourceEncoder encode
+INFO: Encoded 2225 of 2225 values in 18 files, 2 resource files and 0 configurations of patches for com.zhiliaoapp.musically
+Oct 23, 2026 5:51:58 PM app.morphe.patcher.resource.coder.ArsclibResourceCoder encodeResourcesIncrementally
+INFO: Reusing 26564 unchanged archive entries, rebuilding 4 entries, dropping 43 entries, leaving out 46 replaced entries
+Oct 23, 2026 5:51:59 PM app.morphe.patcher.resource.coder.ArsclibResourceCoder encodeResourcesIncrementally
+INFO: Resource APK scan: 500ms write: 1.2s
+Oct 23, 2026 5:51:59 PM app.morphe.patcher.resource.coder.ArsclibResourceCoder getOtherResourceFiles
+INFO: Moving 44 resource files
+Compiled classes.dex: 13396 classes
+Compiled classes10.dex: 9632 classes
+Compiled classes11.dex: 9613 classes
+Compiled classes12.dex: 13793 classes
+Compiled classes13.dex: 22144 classes
+Compiled classes14.dex: 15537 classes
+Compiled classes15.dex: 12539 classes
+Compiled classes16.dex: 7 classes
+Compiled classes17.dex: 11406 classes
+Compiled classes18.dex: 11040 classes
+Compiled classes19.dex: 9309 classes
+Compiled classes2.dex: 6261 classes
+Compiled classes20.dex: 12688 classes
+Compiled classes21.dex: 13567 classes
+Compiled classes22.dex: 11027 classes
+Compiled classes23.dex: 11228 classes
+Compiled classes24.dex: 11033 classes
+Compiled classes25.dex: 9807 classes
+Compiled classes26.dex: 8331 classes
+Compiled classes27.dex: 7066 classes
+Compiled classes28.dex: 9095 classes
+Compiled classes29.dex: 10130 classes
+Compiled classes3.dex: 8175 classes
+Compiled classes30.dex: 14188 classes
+Compiled classes31.dex: 10695 classes
+Compiled classes32.dex: 10120 classes
+Compiled classes33.dex: 11263 classes
+Compiled classes34.dex: 10857 classes
+Compiled classes35.dex: 9615 classes
+Compiled classes36.dex: 10194 classes
+Compiled classes37.dex: 8835 classes
+Compiled classes38.dex: 11645 classes
+Compiled classes39.dex: 9449 classes
+Compiled classes4.dex: 9012 classes
+Compiled classes40.dex: 11238 classes
+Compiled classes41.dex: 10105 classes
+Compiled classes42.dex: 8753 classes
+Compiled classes43.dex: 9627 classes
+Compiled classes44.dex: 23588 classes
+Compiled classes45.dex: 955 classes
+Compiled classes46.dex: 4 classes
+Compiled classes47.dex: 7 classes
+Compiled classes48.dex: 10 classes
+Compiled classes49.dex: 19 classes
+Compiled classes5.dex: 10094 classes
+Compiled classes50.dex: 10 classes
+Compiled classes51.dex: 10 classes
+Compiled classes52.dex: 10 classes
+Compiled classes53.dex: 4 classes
+Compiled classes54.dex: 16 classes
+Compiled classes55.dex: 7 classes
+Compiled classes56.dex: 12 classes
+Compiled classes57.dex: 13 classes
+Compiled classes58.dex: 496 classes
+Compiled classes59.dex: 495 classes
+Compiled classes6.dex: 9474 classes
+Compiled classes60.dex: 495 classes
+Compiled classes61.dex: 495 classes
+Compiled classes62.dex: 208 classes
+Compiled classes63.dex: 2939 classes
+Compiled classes64.dex: 10 classes
+Compiled classes65.dex: 31 classes
+Compiled classes66.dex: 32 classes
+Compiled classes7.dex: 11672 classes
+Compiled classes8.dex: 10782 classes
+Compiled classes9.dex: 9467 classes
+PASS: compiled combined DEX, no duplicate classes, injected host references resolve. NOT an Android runtime test.
+
+[Incubating] Problems report is available at: file:///C:/Morphe/App's/TikTok/Add-ons/build/reports/problems/problems-report.html
+
+Deprecated Gradle features were used in this build, making it incompatible with Gradle 10.
+
+You can use '--warning-mode all' to show the individual deprecation warnings and determine if they come from your own scripts or plugins.
+
+For more on this, please refer to https://docs.gradle.org/9.7.1/userguide/command_line_interface.html#sec:command_line_warnings in the Gradle documentation.
+
+BUILD SUCCESSFUL in 48s
+88 actionable tasks: 2 executed, 86 up-to-date

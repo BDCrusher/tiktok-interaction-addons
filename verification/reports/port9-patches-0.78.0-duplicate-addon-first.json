@@ -1,0 +1,15 @@
+{
+  "selection": "duplicate",
+  "order": "addon-first",
+  "hushPatches": [
+    "Hide feed save button",
+    "Keep the Favorites tab",
+    "Long-press controls",
+    "Settings"
+  ],
+  "apkSha256": "6670ca3f93bfea379658cad3c27f05d3a380b23a0d82569cce684b7453e8ff3e",
+  "hushBundleSha256": "d87ec98c85d5870c0604bf972372436d7ff20d282c1f8ad6c46614e6e9046417",
+  "addonSha256": "5e2a1d7c77320c4066bf17268a98e59539721baa3f5353e5bc2ac47b17e629ae",
+  "androidDeviceTested": false,
+  "result": "PASS: duplicate add-on rejected"
+}

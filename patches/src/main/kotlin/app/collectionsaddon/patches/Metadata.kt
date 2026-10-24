@@ -35,7 +35,7 @@ fun main(args: Array<String>) {
                 "minSdk" to t.minSdk) }) },
         "options" to emptyList<Any>(), "dependencies" to emptyList<Any>()) })
     dist.resolve("patches-list.json").writeText(gson.toJson(list))
-    dist.resolve("patches-bundle.json").writeText(gson.toJson(mapOf("name" to "TikTok Interaction Add-ons", "version" to version, "file" to destination.name, "patcherVersion" to "1.15.0", "source" to "local; not publicly published")))
+    dist.resolve("patches-bundle.json").writeText(gson.toJson(mapOf("name" to "TikTok Interaction Add-ons", "version" to version, "file" to destination.name, "patcherVersion" to "2.0.0", "source" to "local; not publicly published")))
     val checksum = MessageDigest.getInstance("SHA-256").digest(destination.readBytes()).joinToString("") { "%02x".format(it) }
     dist.resolve("SHA256SUMS.txt").writeText("$checksum  ${destination.name}\n")
     dist.resolve("payload-audit.json").writeText(gson.toJson(mapOf("classCount" to payloadClasses.size,

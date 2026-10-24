@@ -1,0 +1,213 @@
+Picked up JAVA_TOOL_OPTIONS: -Duser.home="C:\Morphe\App's\TikTok\Add-ons\build\local-build\home" -Djava.io.tmpdir="C:\Morphe\App's\TikTok\Add-ons\build\local-build\temp" -XX:-UsePerfData
+To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/9.7.1/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
+Daemon will be stopped at the end of the build 
+> Task :morphe-patches-gradle-plugin:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :morphe-patches-gradle-plugin:compileKotlin UP-TO-DATE
+> Task :morphe-patches-gradle-plugin:compileJava NO-SOURCE
+> Task :morphe-patches-gradle-plugin:pluginDescriptors UP-TO-DATE
+> Task :morphe-patches-gradle-plugin:processResources UP-TO-DATE
+> Task :morphe-patches-gradle-plugin:classes UP-TO-DATE
+> Task :morphe-patches-gradle-plugin:jar UP-TO-DATE
+> Task :extensions:settings:preBuild UP-TO-DATE
+> Task :extensions:sound:preBuild UP-TO-DATE
+> Task :patches:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :extensions:collections:preBuild UP-TO-DATE
+> Task :morphe-patcher-2.0.0:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :extensions:settings:preReleaseBuild UP-TO-DATE
+> Task :extensions:collections:preReleaseBuild UP-TO-DATE
+> Task :extensions:sound:preReleaseBuild UP-TO-DATE
+> Task :patches:processTestResources NO-SOURCE
+> Task :extensions:sound:checkReleaseDuplicateClasses UP-TO-DATE
+> Task :extensions:collections:checkReleaseDuplicateClasses UP-TO-DATE
+> Task :extensions:settings:generateReleaseResources UP-TO-DATE
+> Task :extensions:collections:generateReleaseResources UP-TO-DATE
+> Task :extensions:sound:generateReleaseResources UP-TO-DATE
+> Task :extensions:collections:packageReleaseResources UP-TO-DATE
+> Task :extensions:sound:packageReleaseResources UP-TO-DATE
+> Task :extensions:settings:packageReleaseResources UP-TO-DATE
+> Task :integration-stubs:compileJava UP-TO-DATE
+> Task :integration-stubs:processResources NO-SOURCE
+> Task :integration-stubs:classes UP-TO-DATE
+> Task :extensions:settings:processReleaseNavigationResources UP-TO-DATE
+> Task :extensions:sound:processReleaseNavigationResources UP-TO-DATE
+> Task :extensions:collections:processReleaseNavigationResources UP-TO-DATE
+> Task :integration-stubs:jar UP-TO-DATE
+> Task :extensions:settings:parseReleaseLocalResources UP-TO-DATE
+> Task :extensions:collections:parseReleaseLocalResources UP-TO-DATE
+> Task :extensions:sound:parseReleaseLocalResources UP-TO-DATE
+> Task :extensions:settings:generateReleaseRFile UP-TO-DATE
+> Task :extensions:sound:generateReleaseRFile UP-TO-DATE
+> Task :extensions:collections:generateReleaseRFile UP-TO-DATE
+> Task :extensions:settings:compileReleaseKotlin NO-SOURCE
+> Task :extensions:sound:compileReleaseKotlin NO-SOURCE
+> Task :extensions:settings:javaPreCompileRelease UP-TO-DATE
+> Task :extensions:sound:javaPreCompileRelease UP-TO-DATE
+> Task :extensions:sound:checkReleaseAarMetadata UP-TO-DATE
+> Task :extensions:collections:compileReleaseKotlin NO-SOURCE
+> Task :extensions:sound:mapReleaseSourceSetPaths UP-TO-DATE
+> Task :extensions:collections:javaPreCompileRelease UP-TO-DATE
+> Task :extensions:collections:checkReleaseAarMetadata UP-TO-DATE
+> Task :extensions:sound:compileReleaseNavigationResources UP-TO-DATE
+> Task :extensions:collections:mapReleaseSourceSetPaths UP-TO-DATE
+> Task :extensions:collections:compileReleaseNavigationResources UP-TO-DATE
+> Task :extensions:sound:mergeReleaseResources UP-TO-DATE
+> Task :extensions:settings:compileReleaseJavaWithJavac UP-TO-DATE
+> Task :extensions:collections:mergeReleaseResources UP-TO-DATE
+> Task :extensions:settings:integrationClassesJar UP-TO-DATE
+> Task :extensions:settings:checkReleaseDuplicateClasses UP-TO-DATE
+> Task :extensions:settings:checkReleaseAarMetadata UP-TO-DATE
+> Task :extensions:settings:mapReleaseSourceSetPaths UP-TO-DATE
+> Task :extensions:settings:compileReleaseNavigationResources UP-TO-DATE
+> Task :extensions:sound:createReleaseCompatibleScreenManifests UP-TO-DATE
+> Task :extensions:collections:createReleaseCompatibleScreenManifests UP-TO-DATE
+> Task :extensions:settings:mergeReleaseResources UP-TO-DATE
+> Task :extensions:settings:createReleaseCompatibleScreenManifests UP-TO-DATE
+> Task :extensions:settings:extractDeepLinksRelease UP-TO-DATE
+> Task :extensions:settings:processReleaseMainManifest UP-TO-DATE
+> Task :extensions:collections:compileReleaseJavaWithJavac UP-TO-DATE
+> Task :extensions:sound:compileReleaseJavaWithJavac UP-TO-DATE
+> Task :extensions:settings:processReleaseManifest UP-TO-DATE
+> Task :extensions:sound:extractDeepLinksRelease UP-TO-DATE
+> Task :extensions:collections:extractDeepLinksRelease UP-TO-DATE
+> Task :extensions:settings:processReleaseManifestForPackage UP-TO-DATE
+> Task :extensions:sound:processReleaseMainManifest UP-TO-DATE
+> Task :extensions:collections:processReleaseMainManifest UP-TO-DATE
+> Task :extensions:sound:processReleaseManifest UP-TO-DATE
+> Task :morphe-patcher-2.0.0:compileKotlin UP-TO-DATE
+> Task :extensions:sound:processReleaseManifestForPackage UP-TO-DATE
+> Task :extensions:collections:processReleaseManifest UP-TO-DATE
+> Task :morphe-patcher-2.0.0:compileJava NO-SOURCE
+> Task :extensions:collections:processReleaseManifestForPackage UP-TO-DATE
+> Task :morphe-patcher-2.0.0:processResources UP-TO-DATE
+> Task :morphe-patcher-2.0.0:classes UP-TO-DATE
+> Task :extensions:sound:processReleaseResources UP-TO-DATE
+> Task :extensions:settings:processReleaseResources UP-TO-DATE
+> Task :extensions:collections:processReleaseResources UP-TO-DATE
+> Task :morphe-patcher-2.0.0:jar UP-TO-DATE
+> Task :patches:compileKotlin UP-TO-DATE
+> Task :patches:compileJava NO-SOURCE
+> Task :extensions:sound:dexBuilderRelease UP-TO-DATE
+> Task :extensions:collections:dexBuilderRelease UP-TO-DATE
+> Task :extensions:settings:dexBuilderRelease UP-TO-DATE
+> Task :extensions:sound:desugarReleaseFileDependencies UP-TO-DATE
+> Task :extensions:collections:desugarReleaseFileDependencies UP-TO-DATE
+> Task :extensions:settings:desugarReleaseFileDependencies UP-TO-DATE
+> Task :extensions:sound:mergeReleaseStartupProfile UP-TO-DATE
+> Task :extensions:collections:mergeReleaseStartupProfile UP-TO-DATE
+> Task :extensions:settings:mergeReleaseStartupProfile UP-TO-DATE
+> Task :extensions:collections:mergeExtDexRelease UP-TO-DATE
+> Task :extensions:sound:mergeExtDexRelease UP-TO-DATE
+> Task :extensions:settings:mergeExtDexRelease UP-TO-DATE
+> Task :extensions:collections:mergeDexRelease UP-TO-DATE
+> Task :extensions:settings:mergeDexRelease UP-TO-DATE
+> Task :extensions:sound:mergeDexRelease UP-TO-DATE
+> Task :extensions:collections:syncExtension UP-TO-DATE
+> Task :extensions:settings:syncExtension UP-TO-DATE
+> Task :extensions:sound:syncExtension UP-TO-DATE
+> Task :patches:processResources UP-TO-DATE
+> Task :patches:classes UP-TO-DATE
+> Task :patches:jar
+> Task :patches:buildAndroid
+> Task :patches:compileTestKotlin UP-TO-DATE
+> Task :patches:compileTestJava NO-SOURCE
+> Task :patches:testClasses UP-TO-DATE
+
+> Task :patches:verifyCombination
+Picked up JAVA_TOOL_OPTIONS: -Duser.home="C:\Morphe\App's\TikTok\Add-ons\build\local-build\home" -Djava.io.tmpdir="C:\Morphe\App's\TikTok\Add-ons\build\local-build\temp" -XX:-UsePerfData
+Mode sound-minimal / addon-first. Hush patches: [Settings]
+Oct 23, 2026 5:52:45 PM app.morphe.patcher.patch.ResourcePatchContext decodeResources$morphe_patcher
+INFO: Extracting raw resources on request
+Oct 23, 2026 5:52:48 PM app.morphe.patcher.Patcher$invoke$1 invokeSuspend
+INFO: Executing patches
+Settings: PASS
+Sound button actions: PASS
+Oct 23, 2026 5:52:51 PM app.morphe.patcher.patch.BytecodePatchContext get
+INFO: Compiling patched dex files (mode: STRIP_FAST)
+Oct 23, 2026 5:52:51 PM app.morphe.patcher.patch.BytecodePatchContext copyUnchangedExtensionClasses
+INFO: Copied 3210 unchanged extension classes to 4 DEX files
+Oct 23, 2026 5:52:51 PM app.morphe.patcher.patch.BytecodePatchContext logMutableClassCount
+INFO: Changed 35 of 483742 classes to mutable
+Oct 23, 2026 5:52:51 PM app.morphe.patcher.patch.BytecodePatchContext compileStripFast
+INFO: Writing 35 new classes to new DEX files
+Oct 23, 2026 5:52:51 PM app.morphe.patcher.dex.DexReadWrite writeMultiDexFile$morphe_patcher
+INFO: Processing 35 classes (single threaded mode)
+Oct 23, 2026 5:52:51 PM app.morphe.patcher.dex.DexReadWrite writeMultiDexFile$morphe_patcher
+INFO: Wrote 1 dex files to C:\Morphe\App's\TikTok\Add-ons\build\verification\sound-minimal-addon-first-15982028602754533887\scratch\patched\newDex
+Oct 23, 2026 5:52:51 PM app.morphe.patcher.patch.BytecodePatchContext compileStripFast
+INFO: Stripped 27 modified classes from 12 original DEX files
+Oct 23, 2026 5:52:52 PM app.morphe.patcher.resource.coder.ArsclibResourceCoder getOtherResourceFiles
+INFO: Moving 1 resource files
+Compiled classes.dex: 13453 classes
+Compiled classes10.dex: 9657 classes
+Compiled classes11.dex: 9659 classes
+Compiled classes12.dex: 13839 classes
+Compiled classes13.dex: 22154 classes
+Compiled classes14.dex: 15552 classes
+Compiled classes15.dex: 12553 classes
+Compiled classes16.dex: 7 classes
+Compiled classes17.dex: 11431 classes
+Compiled classes18.dex: 11078 classes
+Compiled classes19.dex: 9329 classes
+Compiled classes2.dex: 6328 classes
+Compiled classes20.dex: 12710 classes
+Compiled classes21.dex: 13633 classes
+Compiled classes22.dex: 11075 classes
+Compiled classes23.dex: 11247 classes
+Compiled classes24.dex: 11076 classes
+Compiled classes25.dex: 9841 classes
+Compiled classes26.dex: 8358 classes
+Compiled classes27.dex: 7088 classes
+Compiled classes28.dex: 9146 classes
+Compiled classes29.dex: 10197 classes
+Compiled classes3.dex: 8239 classes
+Compiled classes30.dex: 14248 classes
+Compiled classes31.dex: 10734 classes
+Compiled classes32.dex: 10171 classes
+Compiled classes33.dex: 11393 classes
+Compiled classes34.dex: 10896 classes
+Compiled classes35.dex: 9652 classes
+Compiled classes36.dex: 10231 classes
+Compiled classes37.dex: 8911 classes
+Compiled classes38.dex: 11674 classes
+Compiled classes39.dex: 9486 classes
+Compiled classes4.dex: 9092 classes
+Compiled classes40.dex: 11257 classes
+Compiled classes41.dex: 10146 classes
+Compiled classes42.dex: 8837 classes
+Compiled classes43.dex: 9649 classes
+Compiled classes44.dex: 23606 classes
+Compiled classes45.dex: 955 classes
+Compiled classes46.dex: 4 classes
+Compiled classes47.dex: 7 classes
+Compiled classes48.dex: 10 classes
+Compiled classes49.dex: 19 classes
+Compiled classes5.dex: 10177 classes
+Compiled classes50.dex: 10 classes
+Compiled classes51.dex: 10 classes
+Compiled classes52.dex: 10 classes
+Compiled classes53.dex: 4 classes
+Compiled classes54.dex: 16 classes
+Compiled classes55.dex: 7 classes
+Compiled classes56.dex: 12 classes
+Compiled classes57.dex: 13 classes
+Compiled classes58.dex: 35 classes
+Compiled classes59.dex: 208 classes
+Compiled classes6.dex: 9516 classes
+Compiled classes60.dex: 2959 classes
+Compiled classes61.dex: 11 classes
+Compiled classes62.dex: 32 classes
+Compiled classes7.dex: 11724 classes
+Compiled classes8.dex: 10863 classes
+Compiled classes9.dex: 9507 classes
+PASS: compiled combined DEX, no duplicate classes, injected host references resolve. NOT an Android runtime test.
+
+[Incubating] Problems report is available at: file:///C:/Morphe/App's/TikTok/Add-ons/build/reports/problems/problems-report.html
+
+Deprecated Gradle features were used in this build, making it incompatible with Gradle 10.
+
+You can use '--warning-mode all' to show the individual deprecation warnings and determine if they come from your own scripts or plugins.
+
+For more on this, please refer to https://docs.gradle.org/9.7.1/userguide/command_line_interface.html#sec:command_line_warnings in the Gradle documentation.
+
+BUILD SUCCESSFUL in 24s
+88 actionable tasks: 3 executed, 85 up-to-date
