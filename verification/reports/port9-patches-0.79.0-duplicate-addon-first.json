@@ -1,0 +1,19 @@
+{
+  "selection": "duplicate",
+  "order": "addon-first",
+  "hushPatches": [
+    "Hide feed save button",
+    "Keep the Favorites tab",
+    "Long-press controls",
+    "Settings"
+  ],
+  "apkSha256": "6670ca3f93bfea379658cad3c27f05d3a380b23a0d82569cce684b7453e8ff3e",
+  "hushBundleSha256": "a25056e58abb44ffcd49fd5fa38f9fa315ac9553a113f15c86ea4c9509b069da",
+  "addonSha256": "5e2a1d7c77320c4066bf17268a98e59539721baa3f5353e5bc2ac47b17e629ae",
+  "androidDeviceTested": false,
+  "externalPackageFilter": "com.zhiliaoapp.musically",
+  "excludedOtherPackagePatches": [
+    "Allow photo comments"
+  ],
+  "result": "PASS: duplicate add-on rejected"
+}

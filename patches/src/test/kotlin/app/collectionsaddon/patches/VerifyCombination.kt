@@ -23,7 +23,12 @@ import java.nio.file.Files
 fun main(args: Array<String>) = runBlocking {
     val input = File(args[0]); val hush = File(args[1]); val addon = File(args[2]); val root = File(args[3]).apply { mkdirs() }
     val mode = args[4]; val order = args[5]
-    val hushPatches = loadPatchesFromJar(setOf(hush))
+    val loadedHushPatches = loadPatchesFromJar(setOf(hush))
+    // External bundles can include PineDrama-only patches. This diagnostic targets
+    // the original global TikTok fixture; do not select patches for another app.
+    val hushPatches = loadedHushPatches.filter { patch ->
+        patch.compatibility?.any { it.packageName == null || it.packageName == "com.zhiliaoapp.musically" } ?: true
+    }.toSet()
     fun loadAddon(): Set<Patch<*>> {
         // Do not accidentally test the main-source classes on this diagnostic's own classpath.
         val loader = object : URLClassLoader(arrayOf(addon.toURI().toURL()), Patch::class.java.classLoader) {
@@ -79,7 +84,9 @@ fun main(args: Array<String>) = runBlocking {
     }
     val report = linkedMapOf<String, Any>("selection" to mode, "order" to order,
         "hushPatches" to selectedHush.mapNotNull { it.name }.sorted(), "apkSha256" to hash(input),
-        "hushBundleSha256" to hash(hush), "addonSha256" to hash(addon), "androidDeviceTested" to false)
+        "hushBundleSha256" to hash(hush), "addonSha256" to hash(addon), "androidDeviceTested" to false,
+        "externalPackageFilter" to "com.zhiliaoapp.musically",
+        "excludedOtherPackagePatches" to (loadedHushPatches - hushPatches).mapNotNull { it.name }.sorted())
     fun save() {
         val output = root.parentFile.parentFile.resolve("verification/reports").apply { mkdirs() }
         output.resolve("port9-${hush.nameWithoutExtension}-$mode-$order.json").writeText(GsonBuilder().setPrettyPrinting().create().toJson(report))

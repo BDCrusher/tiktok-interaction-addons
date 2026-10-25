@@ -1,10 +1,10 @@
-# Sound button actions â€” development beta
+# Sound button actions — development beta
 
-This is a separate selectable patch in TikTok Interaction Add-ons **0.7.0-beta.1**, not a HushFeed fork or part of Enhanced collection popup. Selection defaults off; runtime enable defaults on once selected. Target: original global TikTok 47.5.3 / 2024705030 with external **HushFeed 0.78.0 Settings**. This port updates native bindings for 47.5.3 and retains the existing gestures and settings; compiled/simulated checks are not phone acceptance. See [COMPATIBILITY.md](COMPATIBILITY.md). No APK is distributed or installed automatically.
+This is a separate selectable patch in TikTok Interaction Add-ons **0.7.0-beta.1**, not a HushFeed fork or part of Enhanced collection popup. Selection defaults off; runtime enable defaults on once selected. Target: original global TikTok 47.5.3 / 2024705030 with external **HushFeed 0.78.0 or 0.79.0 Settings**. This port updates native bindings for 47.5.3 and retains the existing gestures and settings; compiled/simulated checks are not phone acceptance. See [COMPATIBILITY.md](COMPATIBILITY.md). No APK is distributed or installed automatically.
 
 ## Behavior and settings
 
-Settings: **HushFeed â†’ Your feed â†’ BDCrusher's Settings â†’ Sound button actions**, after Feed screen when available. With no feed routes selected, find the root under Personal add-ons before Hushfeed's own group. Public native header/palette/card/switch helpers are used. Sound appears only when selected, including with its runtime toggle off; hidden controls stay hidden. Preferences remain `sound_actions_addon_v1` through the app context, not a fixed package name. Reset affects only that file; HushFeed backup/search do not include these preferences. Counts refresh as summary text, never through the removed upstream badge setter.
+Settings: **HushFeed → Your feed → BDCrusher's Settings → Sound button actions**, after Feed screen when available. With no feed routes selected, find the root under Personal add-ons before Hushfeed's own group. Public native header/palette/card/switch helpers are used. Sound appears only when selected, including with its runtime toggle off; hidden controls stay hidden. Preferences remain `sound_actions_addon_v1` through the app context, not a fixed package name. Reset affects only that file; HushFeed backup/search do not include these preferences. Counts refresh as summary text, never through the removed upstream badge setter.
 
 A normal music-disc tap remains native. A hold opens a bounded menu, capped at 60% of available screen height. Drag onto a visible row and release, or release over the disc and tap a row. Holding/releasing on the disc alone never triggers a save. Moving beyond touch slop before the hold cancels enhancement. Multitouch, cancellation, detach, rebind or changed track cancel selection. Popup rows scroll through Android's ScrollView, with ordinary row touch cancellation during scrolling.
 
@@ -32,7 +32,7 @@ The supplied APK contains the music-service implementation inside a ZIP-shaped `
 
 Source: `patches/src/main/kotlin/app/soundaddon/patches/SoundPatch.kt` binds exact APK references; `extensions/sound/src/main/java/app/soundaddon/runtime/` contains NativeBridge, SoundRuntime, SoundPolicy, SoundPreferences and SoundSettings. Compile-only HushFeed declarations are excluded from the payload. The collection behavior remains unchanged; both modules use the inspected 47.5.3 bindings and shared settings wrapper.
 
-## Known limits â€” not release acceptance
+## Known limits — not release acceptance
 
 This is **not phone-verified**. Successful DEX compilation cannot prove native ViewModel initialization, correct account linking, playlist destination, on-screen positioning or gesture delivery after opening a popup window.
 
@@ -42,7 +42,7 @@ No TalkBack long-click action has been added; touch gestures, TalkBack interacti
 
 ## Automated evidence
 
-The 0.7.0-beta.1 port has 83 JVM/JUnit/Robolectric tests (2 patch, 34 Collections, 37 Sound, 10 common) plus seven release-helper tests. See the exact [47.5.3 / HushFeed 0.78.0 verification report](verification/reports/hushfeed-078-tiktok-4753-verification.md) for completed final-bundle builds, lint, source orders, negative cases, native audits and hashes. Current machine records use `port9-patches-0.78.0-*`; older `flat7`/`port8` records describe historical inputs and are not evidence for this port. No real native saving/authentication occurs in simulations.
+The 0.7.0-beta.1 port has 83 JVM/JUnit/Robolectric tests (2 patch, 34 Collections, 37 Sound, 10 common) plus seven release-helper tests. See the exact [47.5.3 / HushFeed 0.79.0 verification report](verification/reports/hushfeed-079-tiktok-4753-verification.md) for completed final-bundle builds, lint, source orders, negative cases, native audits and hashes. Current machine records use `port9-patches-0.79.0-*`; retained 0.78 records also match the same personal bundle; older `flat7`/`port8` records describe historical inputs and are not evidence for this port. No real native saving/authentication occurs in simulations.
 
 ## Device checklist
 
@@ -54,4 +54,4 @@ Check light/dark/AMOLED/custom color, large fonts, RTL, rotation, Back and TalkB
 
 Use the pinned toolchain and confined `scripts/local_build.py` / `scripts/local_tests.py` commands in BUILDING.md. Set ANDROID_HOME to the local SDK first. The renamed bundle/source ZIP are in dist; checksum/payload audits are generated.
 
-In Morphe Expert mode select usual **HushFeed 0.78.0** patches, including Settings, and **Sound button actions** against the original TikTok APK in one run. Select Collections only if wanted. Replace the old add-on source, never select two copies. Keep your signing key; no automatic uninstall/install. Manager 2.0.0+ / patcher 2.0.0 is required; the installed device stack remains unverified. No other HushFeed/PineDrama compatibility is claimed. A [GitHub source/update feed](PUBLISHING.md) is available; fetching an updated bundle still requires repatching TikTok to apply it.
+In Morphe Expert mode select usual **HushFeed 0.79.0** patches, including Settings, and **Sound button actions** against the original TikTok APK in one run. Select Collections only if wanted. Replace the old add-on source, never select two copies. Keep your signing key; no automatic uninstall/install. Manager 2.0.0+ / patcher 2.0.0 is required; the installed device stack remains unverified. No other HushFeed/PineDrama compatibility is claimed. A [GitHub source/update feed](PUBLISHING.md) is available; fetching an updated bundle still requires repatching TikTok to apply it.

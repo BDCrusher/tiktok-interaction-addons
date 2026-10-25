@@ -52,7 +52,7 @@ def manifest(repository, version, timestamp=None):
         "version": version,
         "download_url": f"https://github.com/{repository}/releases/download/v{version}/TikTok-Interaction-Addons-{version}.mpp",
         "created_at": timestamp,
-        "description": "Independent beta collection-popup and sound-button add-ons. Requires original TikTok 47.5.3 and HushFeed 0.78.0 Settings. Two separately selectable patches. Device acceptance pending; see the compatibility report. Repatch TikTok to apply updates.",
+        "description": "Independent beta collection-popup and sound-button add-ons. Requires original TikTok 47.5.3 and HushFeed 0.78.0 or 0.79.0 Settings. Two separately selectable patches. Device acceptance pending; see the compatibility report. Repatch TikTok to apply updates.",
         "signature_download_url": "",
     }
 
@@ -109,7 +109,7 @@ def prepare(root, output, repository, bundle=None, source_archive=None):
     notes = output / "RELEASE-NOTES.md"
     notes.write_text(f"# TikTok Interaction Add-ons {version}\n\n"
         "Independent beta source; HushFeed is external and unchanged.\n\n"
-        "Target: original TikTok 47.5.3 / 2024705030 with HushFeed 0.78.0 Settings. "
+        "Target: original TikTok 47.5.3 / 2024705030 with HushFeed 0.78.0 or 0.79.0 Settings. "
         "Enhanced collection popup and Sound button actions remain independently selectable. "
         "This release ports both native features to TikTok 47.5.3, retaining the settings contract and flat home placement. "
         "Existing feature preferences are retained.\n\n"

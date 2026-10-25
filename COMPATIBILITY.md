@@ -1,4 +1,23 @@
-# Compatibility report â€” 0.6.0-beta.1
+# Compatibility report
+
+## Current 0.7.0-beta.1 - TikTok 47.5.3 / HushFeed 0.78.0 and 0.79.0
+
+The unchanged personal **0.7.0-beta.1** bundle passes with original global TikTok **47.5.3 / 2024705030**, package com.zhiliaoapp.musically, ARM64/ARMv7, minSDK23, and published **HushFeed 0.78.0 or 0.79.0**. Use **Manager 2.0.0+ / patcher 2.0.0**.
+
+Personal bundle SHA-256: `5e2a1d7c77320c4066bf17268a98e59539721baa3f5353e5bc2ac47b17e629ae` (141,232 bytes). Original APK SHA-256: `6670ca3f93bfea379658cad3c27f05d3a380b23a0d82569cce684b7453e8ff3e`. Original signer SHA-256: `9041803e91bcb814b4b4399fb5c85a91640b755e5e8ba76813814bf4cf2ab5ba`.
+
+[HushFeed 0.79 exact verification](verification/reports/hushfeed-079-tiktok-4753-verification.md): external SHA-256 `a25056e58abb44ffcd49fd5fa38f9fa315ac9553a113f15c86ea4c9509b069da`, source `02a4c5c5d1fd1123bdcd1f0fa8e6a59f8d8056a7`. Four positive compiled combinations, four negative cases and three nine-role native audits pass. Both source orders use all 140 global TikTok patches with default options, excluding PineDrama-only Allow photo comments. Settings/UI/pause contracts are unchanged.
+
+[HushFeed 0.78 exact verification](verification/reports/hushfeed-078-tiktok-4753-verification.md): external SHA-256 `d87ec98c85d5870c0604bf972372436d7ff20d282c1f8ad6c46614e6e9046417`, source `3b6254c304b52136633606037f4cda74c2371a88`. The same personal bundle passes the retained eight-case matrix and native audits. Its 83 unit/simulated tests, seven helper tests and three API lint tasks pass. Payload: 78 isolated own classes (33 Collections / 33 Sound / 12 common), two selectable patches and one common settings dependency; no host stubs, foreign implementations or test classes injected.
+
+Settings stay under HushFeed > Your feed > BDCrusher's Settings, with a Personal add-ons fallback. Preferences, native authenticated actions, inline slider, pause/visibility controls and gestures are retained. No universal option compatibility is claimed.
+
+Publication of this exact beta was requested on 2026-10-25. Use the GitHub release/dev feed and publication receipts for actual publication state. Enable Pre-release patches and Experimental app versions, then repatch the original APK with HushFeed Settings and either/both add-ons in one run. Never select two add-on versions.
+
+**Physical-device acceptance remains pending.** No app was signed or installed here. Actual ART loading, gestures/rendering, native save/account/provider eligibility, themes/haptics, fonts/RTL and accessibility need phone testing. A dedicated accessible sound-disc long-click action remains unimplemented. Keep Favorites hold-speed remapping off for the collection hold; hidden controls, pause/safe mode and haptic suppression remain authoritative.
+
+## Historical 0.6.0-beta.1 report - TikTok 47.4.3 / HushFeed 0.76.0
+
 
 ## Current target: TikTok 47.4.3 and HushFeed 0.76.0
 
@@ -10,7 +29,7 @@ Candidate bundle: `TikTok-Interaction-Addons-0.6.0-beta.1.mpp`, 141,201 bytes, S
 
 This is a native binding port, not an expanded version label. TikTok inlined collection construction into `X.0xe4.accept(Object)`, retired `X.0yck.Qk(List)`, renamed the collection loader/Rx types and moved cover bindings to `l4`. Both engines now use inspected 47.4.3 references. The collection wrapper preserves incoming arguments, retains native rows/callbacks, and retries stock once after an enhanced installation failure aborts the old frame before show. Sound observes Favorites width at the new content-install boundary, reads `ReusedAssem.getItem()`, binds both native disc containers, and forwards to the updated native music-service facade. Existing inline slider, native feedback, per-song lookup, short-tap replay and preference files remain.
 
-HushFeed's published five-argument settings API and flat home routes remain compatible. Find **HushFeed â†’ Your feed â†’ BDCrusher's Settings**, after Feed screen; with no feed routes, use Personal add-ons. The new upstream disc-spacing adjustment is respected because hit testing follows current visible view bounds rather than fixed screen coordinates.
+HushFeed's published five-argument settings API and flat home routes remain compatible. Find **HushFeed → Your feed → BDCrusher's Settings**, after Feed screen; with no feed routes, use Personal add-ons. The new upstream disc-spacing adjustment is respected because hit testing follows current visible view bounds rather than fixed screen coordinates.
 
 See the [47.4.3 verification record](verification/reports/hushfeed-076-tiktok-4743-verification.md) and matching final-hash `port8-patches-0.76.0-*.json` records. A `preliminary-` record uses earlier development bytes and is not final-candidate evidence. Exact selections/source orders matter: all-patches/default-options runs are stress checks, not recommended settings or universal option compatibility.
 
@@ -18,7 +37,7 @@ GitHub main was also inspected at `7d2ecc5eeb8a489a55f79f1d2e6604a8c83084db`, 20
 
 **Physical-device acceptance remains pending.** No TikTok APK was signed or installed here. Real sound-page navigation, account/provider eligibility and saving, drag/scroll cancellation, AMOLED/custom themes, fonts/RTL/accessibility, haptic strength and Android 17 ART loading need phone testing. Favorites hold-speed remapping still conflicts with the collection hold; leave that remapping off. Hidden controls, pause/safe mode and Turn off haptics remain authoritative. Compiled reference resolution is not proof that a provider will offer a song or that every runtime option combination works. Local diagnostics use pinned patcher 1.15.0; HushFeed's published patcher is 1.15.1.
 
-## Historical 0.5.1-beta.1 â€” TikTok 47.1.4 / HushFeed 0.74.0
+## Historical 0.5.1-beta.1 — TikTok 47.1.4 / HushFeed 0.74.0
 
 ## Current HushFeed 0.74.0 settings repair
 
@@ -32,7 +51,7 @@ External requirement: **HushFeed 0.74.0**, [release](https://github.com/SysAdmin
 
 Use the new add-on source instead of 0.5.0, selecting HushFeed Settings and either/both personal patches against the original APK in one run. Retain your signing key/preferences. Other HushFeed versions and PineDrama are not claimed supported by this add-on. No upstream files were changed; no APK was signed, installed, published or distributed. Previously documented gesture/provider/accessibility limitations remain.
 
-## Historical 0.5.0-beta.1 â€” incompatible with HushFeed 0.74.0 settings
+## Historical 0.5.0-beta.1 — incompatible with HushFeed 0.74.0 settings
 
 ## Current inline slider, native detail and sound feedback repair
 
@@ -46,7 +65,7 @@ Target remains original TikTok **47.1.4 / 2024701040**, HushFeed **0.71.1** (ext
 
 **Not phone-accepted.** Real navigation, native detail/account eligibility, provider saves/authentication, haptic strength, popup placement, scrolling, fonts/RTL/accessibility remain device-dependent. HushFeed Turn off haptics/device restrictions may suppress vibration. Hidden controls stay hidden, Pause/safe mode stays stock, Favorites hold-speed remap remains a gesture conflict. Native detail fetching does not guarantee every sound-page experiment/provider will be available. A dedicated TalkBack disc long-click action is not implemented.
 
-## Historical 0.4.0-beta.2 â€” hold menu opened, short taps/destination detection failed
+## Historical 0.4.0-beta.2 — hold menu opened, short taps/destination detection failed
 
 ## Current disc routing and collection slider
 
@@ -54,17 +73,17 @@ Current bundle: `TikTok-Interaction-Addons-0.4.0-beta.2.mpp`, SHA-256 `0b64c325e
 
 The user confirmed Sound was selected/enabled on beta.1 and a disc hold still sped up, including a song known to offer YouTube Music saving on its sound page. **Beta.1's compile/simulation success was not phone acceptance.** This revision reserves a visible eligible disc touch at the native shared Main/Detail Activity dispatcher before custom routing/feed parents, forwards native disc events locally for short-click/feedback handling and manages the add-on hold once. It also binds both native disc containers and re-registers after native view creation, using the current bound item rather than a global last song. The earlier settings wrapper and supplemental edge guard remain.
 
-The collection count now uses a themed native slider with one tick for each value 1â€“20, a live selected number, confirmed Save, Cancel and saved draft restoration. Its keyboard/accessibility controls keep the displayed 1â€“20 range; physical rendering/TalkBack acceptance is still pending.
+The collection count now uses a themed native slider with one tick for each value 1–20, a live selected number, confirmed Save, Cancel and saved draft restoration. Its keyboard/accessibility controls keep the displayed 1–20 range; physical rendering/TalkBack acceptance is still pending.
 
 **60 tests and all three minSDK 23 NewApi lint checks pass**. Current compiled combinations and eight-hook audits are recorded in the [beta.2 verification report](verification/reports/disc-gesture-beta2-verification.md). Only exact-hash `disc5-` reports concern this version. Historical `hub4-` reports are retained and do not prove the new window hook.
 
 Target remains original TikTok 47.1.4 / 2024701040 with external HushFeed 0.71.1, using the same input/bundle/signature identities in the historical report below. Upstream source and external bundles are unchanged. No signing, installation, publishing or APK distribution occurred.
 
-**Phone confirmation required:** normal For You and search/sound-detail videos, native short taps, holds inside/outside the visible disc, cancellation/scrolling, hidden controls, pause mode, actual save/linking, themes/rotation/large fonts and slider accessibility. Gesture status under **BDCrusher's Settings â†’ Sound button actions** displays session-only counters to help locate a remaining failure. Compare the version shown on the page; if it still speeds up, share that readout after reproducing, plus the HushFeed version and selected patches/options.
+**Phone confirmation required:** normal For You and search/sound-detail videos, native short taps, holds inside/outside the visible disc, cancellation/scrolling, hidden controls, pause mode, actual save/linking, themes/rotation/large fonts and slider accessibility. Gesture status under **BDCrusher's Settings → Sound button actions** displays session-only counters to help locate a remaining failure. Compare the version shown on the page; if it still speeds up, share that readout after reproducing, plus the HushFeed version and selected patches/options.
 
 External music eligibility still depends on native feed metadata and matching bound title context; this repair does not add lazy song-detail retrieval or new provider APIs. A sound-page YouTube Music button does not guarantee that the feed's native Music object already contains that destination. Capturing the hold and discovering every provider are separate acceptance checks.
 
-## Historical 0.4.0-beta.1 â€” disc hold failed on the user's phone
+## Historical 0.4.0-beta.1 — disc hold failed on the user's phone
 
 ## Current settings/gesture repair
 
@@ -78,7 +97,7 @@ HushFeed's compiled `createMasterMenu(Context, PreferenceScreen)` has five regis
 
 The new wrapper forwards the original body to a private native copy in its own register frame, then calls install with the unchanged incoming arguments. onResume, sound cover/title binding and disc touch use the same argument-preserving pattern. The code resolves contracts against the actual external payload. No HushFeed source or distributed bundle was altered.
 
-The personal root entry is now **HushFeed â†’ BDCrusher's Settings**, within the main screen's **Customize** section. Stable hub keys locate insertion after Feed/layout, or before App/advanced in a settings-only selection; the row uses native compact styling. It does not inject the obsolete Your feed heading. Existing preference files are preserved.
+The personal root entry is now **HushFeed → BDCrusher's Settings**, within the main screen's **Customize** section. Stable hub keys locate insertion after Feed/layout, or before App/advanced in a settings-only selection; the row uses native compact styling. It does not inject the obsolete Your feed heading. Existing preference files are preserved.
 
 ### Sound-disc priority
 
@@ -98,7 +117,7 @@ Current exact-hash combined reports use `verification/reports/hub4-hushfeed-0.71
 
 Current bundle: `TikTok-Interaction-Addons-0.3.0-beta.1.mpp`, SHA-256 `e605211763e9ea56cef031290b3e27fae8fe0a560d0790f0c62db15a27170e78`. Exactly two independently selectable patches; shared settings navigation is an unnamed dependency, not a third patch. Audit: 53 unique runtime classes (26 Collections, 18 Sound, 9 shared settings), no compile-only stubs, test adapters or foreign classes.
 
-The root entry is now **HushFeed â†’ Your feed â†’ BDCrusher's Settings**, containing Collection popup and Sound button actions pages only for selected modules. Sound no longer depends on the Feed screen category or an INTERFACE section hook. There is one shared install hook and lifecycle refresh, regardless of whether one or both features are selected. The existing preference files and native collection/sound engines are retained; neither HushFeed files nor YouTube Music sources were changed.
+The root entry is now **HushFeed → Your feed → BDCrusher's Settings**, containing Collection popup and Sound button actions pages only for selected modules. Sound no longer depends on the Feed screen category or an INTERFACE section hook. There is one shared install hook and lifecycle refresh, regardless of whether one or both features are selected. The existing preference files and native collection/sound engines are retained; neither HushFeed files nor YouTube Music sources were changed.
 
 Completed current checks against the unchanged published HushFeed 0.69.0 bundle and original TikTok 47.1.4:
 
@@ -221,7 +240,7 @@ The default-selection report lists all 41 names. It includes Downloads, Feed fil
 
 No Android emulator/physical-device TikTok run, account login, server-side save, Morphe Manager UI import, or installed combined APK test was performed. The following are **unverified**, not passing acceptance results:
 
-- Counts 1â€“20 with real account data at limitâˆ’1, limit, limit+1; empty lists; cached responses; pinned, collaborative and special collections; page exhaustion/errors/offline operation.
+- Counts 1–20 with real account data at limitâˆ’1, limit, limit+1; empty lists; cached responses; pinned, collaborative and special collections; page exhaustion/errors/offline operation.
 - Favorite/unfavorite single taps; holding, short drag selection, scrolling, release outside, cancellation, dismissal, repeated opening, and duplicate/accidental save detection.
 - TikTok light/dark modes independent of phone theme; AMOLED/custom palette on every action/icon/thumbnail; live theme switching.
 - Font scaling, TalkBack focus/labels, RTL, rotation, cutouts/insets, screen-edge anchors, landscape and small displays in the actual native popup. Height/RTL simulation is not visual QA.

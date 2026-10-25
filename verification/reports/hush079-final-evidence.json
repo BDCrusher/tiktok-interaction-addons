@@ -1,0 +1,114 @@
+{
+  "version": "0.7.0-beta.1",
+  "bundleSha256": "5e2a1d7c77320c4066bf17268a98e59539721baa3f5353e5bc2ac47b17e629ae",
+  "bundleUnchangedFrom078Verification": true,
+  "hushfeedVersion": "0.79.0",
+  "hushfeedSourceCommit": "02a4c5c5d1fd1123bdcd1f0fa8e6a59f8d8056a7",
+  "hushfeedBundleSha256": "a25056e58abb44ffcd49fd5fa38f9fa315ac9553a113f15c86ea4c9509b069da",
+  "apkSha256": "6670ca3f93bfea379658cad3c27f05d3a380b23a0d82569cce684b7453e8ff3e",
+  "androidDeviceTested": false,
+  "runs": [
+    {
+      "selection": "both-all",
+      "order": "hush-first",
+      "scratch": "C:\\Morphe\\App's\\TikTok\\Add-ons\\build\\verification\\both-all-hush-first-1811028291619581786",
+      "nativeAudit": true,
+      "result": "PASS: patch execution and compiled DEX/resources",
+      "selectedHushPatches": 140,
+      "report": "port9-patches-0.79.0-both-all-hush-first.json"
+    },
+    {
+      "selection": "both-all",
+      "order": "addon-first",
+      "scratch": "C:\\Morphe\\App's\\TikTok\\Add-ons\\build\\verification\\both-all-addon-first-5903701037828180399",
+      "nativeAudit": true,
+      "result": "PASS: patch execution and compiled DEX/resources",
+      "selectedHushPatches": 140,
+      "report": "port9-patches-0.79.0-both-all-addon-first.json"
+    },
+    {
+      "selection": "collections-minimal",
+      "order": "hush-first",
+      "scratch": "C:\\Morphe\\App's\\TikTok\\Add-ons\\build\\verification\\collections-minimal-hush-first-913761152492985276",
+      "nativeAudit": false,
+      "result": "PASS: patch execution and compiled DEX/resources",
+      "selectedHushPatches": 1,
+      "report": "port9-patches-0.79.0-collections-minimal-hush-first.json"
+    },
+    {
+      "selection": "sound-minimal",
+      "order": "addon-first",
+      "scratch": "C:\\Morphe\\App's\\TikTok\\Add-ons\\build\\verification\\sound-minimal-addon-first-11527790535432813454",
+      "nativeAudit": true,
+      "result": "PASS: patch execution and compiled DEX/resources",
+      "selectedHushPatches": 1,
+      "report": "port9-patches-0.79.0-sound-minimal-addon-first.json"
+    },
+    {
+      "selection": "missing",
+      "order": "hush-first",
+      "scratch": "C:\\Morphe\\App's\\TikTok\\Add-ons\\build\\verification\\missing-hush-first-13551369624435445671",
+      "nativeAudit": false,
+      "result": "PASS: missing dependency rejected",
+      "selectedHushPatches": 0,
+      "report": "port9-patches-0.79.0-missing-hush-first.json"
+    },
+    {
+      "selection": "sound-missing",
+      "order": "addon-first",
+      "scratch": "C:\\Morphe\\App's\\TikTok\\Add-ons\\build\\verification\\sound-missing-addon-first-4514789351608530246",
+      "nativeAudit": false,
+      "result": "PASS: missing dependency rejected",
+      "selectedHushPatches": 0,
+      "report": "port9-patches-0.79.0-sound-missing-addon-first.json"
+    },
+    {
+      "selection": "duplicate",
+      "order": "addon-first",
+      "scratch": "C:\\Morphe\\App's\\TikTok\\Add-ons\\build\\verification\\duplicate-addon-first-5318040715858563589",
+      "nativeAudit": false,
+      "result": "PASS: duplicate add-on rejected",
+      "selectedHushPatches": 4,
+      "report": "port9-patches-0.79.0-duplicate-addon-first.json"
+    },
+    {
+      "selection": "sound-duplicate",
+      "order": "hush-first",
+      "scratch": "C:\\Morphe\\App's\\TikTok\\Add-ons\\build\\verification\\sound-duplicate-hush-first-12455550028154153602",
+      "nativeAudit": false,
+      "result": "PASS: duplicate add-on rejected",
+      "selectedHushPatches": 4,
+      "report": "port9-patches-0.79.0-sound-duplicate-hush-first.json"
+    }
+  ],
+  "settingsSourceComparison": [
+    {
+      "path": "extensions/tiktok/src/main/java/app/morphe/extension/tiktok/settings/preference/SettingsMenuPreference.java",
+      "unchangedIgnoringFinalNewline": true,
+      "oldSha256": "6664f8795ff560b06e86ff04275ec9e7f1847cd50079c6e93fd4fdfc7664b03b",
+      "newSha256": "6664f8795ff560b06e86ff04275ec9e7f1847cd50079c6e93fd4fdfc7664b03b",
+      "diffLines": 0
+    },
+    {
+      "path": "extensions/shared/library/src/main/java/app/morphe/extension/shared/settings/HushfeedPause.java",
+      "unchangedIgnoringFinalNewline": true,
+      "oldSha256": "2908e4924cd65f0ae877a68ea787468b5395b608398dfcfb552d3ebf46490592",
+      "newSha256": "2908e4924cd65f0ae877a68ea787468b5395b608398dfcfb552d3ebf46490592",
+      "diffLines": 0
+    },
+    {
+      "path": "extensions/tiktok/src/main/java/app/morphe/extension/tiktok/settings/preference/TikTokPreferenceFragment.java",
+      "unchangedIgnoringFinalNewline": true,
+      "oldSha256": "181d7d57c1f6e947927e021aee3276d47c037b656657ac31e47255402562beff",
+      "newSha256": "181d7d57c1f6e947927e021aee3276d47c037b656657ac31e47255402562beff",
+      "diffLines": 0
+    },
+    {
+      "path": "extensions/tiktok/src/main/java/app/morphe/extension/tiktok/settings/preference/SettingsUi.java",
+      "unchangedIgnoringFinalNewline": true,
+      "oldSha256": "f75bf2e8e351417ab76bd8fcd101acfd3bc758a9f7ebd4f713a2e3cc8d203dda",
+      "newSha256": "f75bf2e8e351417ab76bd8fcd101acfd3bc758a9f7ebd4f713a2e3cc8d203dda",
+      "diffLines": 0
+    }
+  ]
+}

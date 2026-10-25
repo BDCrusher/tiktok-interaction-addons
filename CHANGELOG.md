@@ -2,6 +2,8 @@
 
 ## [0.7.0-beta.1] - 2026-10-23
 
+- Verified the unchanged bundle against HushFeed 0.79.0 on 2026-10-25: all 140 global TikTok patches in both source orders, each feature alone and explicit negative cases. Exclude PineDrama-only selections in the diagnostic.
+
 - Port both independent add-ons to original global TikTok 47.5.3 / 2024705030 and HushFeed 0.78.0.
 - Update inspected native collections, loader/Rx, sound binding, Activity, music-service, save-action and haptic contracts.
 - Use pinned Morphe patcher 2.0.0; preserve settings, gestures, preferences and isolated payloads.

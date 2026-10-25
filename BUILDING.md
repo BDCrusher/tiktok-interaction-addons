@@ -2,7 +2,7 @@
 
 ## Current toolchain
 
-The local 0.7.0-beta.1 port targets original global TikTok 47.5.3 / 2024705030 and external HushFeed 0.78.0. Use Morphe Manager 2.0.0 or newer with patcher 2.0.0. No device installation is performed by these diagnostics.
+The 0.7.0-beta.1 port targets original global TikTok 47.5.3 / 2024705030 and external HushFeed 0.78.0 or 0.79.0. Use Morphe Manager 2.0.0 or newer with patcher 2.0.0. No device installation is performed by these diagnostics.
 
 Use JDK 17, Android SDK platform 36/build-tools 36.0.0 and the included checksum-pinned Gradle 9.7.1 wrapper. Initial dependency resolution needs network access. No provider/API keys are used.
 
@@ -33,17 +33,17 @@ Gradle 9.7.1's Windows test-worker argument file mishandles the apostrophe in th
 
 ## Exact combination verification
 
-Acquire the external [HushFeed v0.78.0 release](https://github.com/SysAdminDoc/HushFeed/releases/tag/v0.78.0) separately, verify its published checksums/receipt, and keep it in ignored inputs. Supply the original TikTok 47.5.3 APK. Exact fixture identities and current results are in [the verification report](verification/reports/hushfeed-078-tiktok-4753-verification.md). Never distribute vendor or prepatched APKs with this add-on.
+Acquire the external [HushFeed v0.79.0 release](https://github.com/SysAdminDoc/HushFeed/releases/tag/v0.79.0) separately, verify its published checksums/receipt, and keep it in ignored inputs. Supply the original TikTok 47.5.3 APK. Exact fixture identities and current results are in [the verification report](verification/reports/hushfeed-079-tiktok-4753-verification.md). Never distribute vendor or prepatched APKs with this add-on.
 
 ```powershell
-python -B scripts/local_build.py :patches:verifyCombination "-Papk=C:\path\to\original-47.5.3.apk" "-Phushfeed=C:\path\to\patches-0.78.0.mpp" -Pselection=both-all -Porder=hush-first
+python -B scripts/local_build.py :patches:verifyCombination "-Papk=C:\path\to\original-47.5.3.apk" "-Phushfeed=C:\path\to\patches-0.79.0.mpp" -Pselection=both-all -Porder=hush-first
 ```
 
-Collections selections: `core`, `amoled`, `extended`, `defaults`, `collections-minimal`, `missing`, `duplicate`. Sound selections: `sound-minimal`, `sound-extended`, `sound-defaults`, `sound-missing`, `sound-duplicate`. Both: `both-extended`, `both-defaults`, `both-all`. `both-all` selects all 138 named external patches with default options as a stress check, not an installation recommendation. `defaults` selects the external defaults, not all patches. `extended` adds AMOLED, Remember clear display, Change app name and Look like the store app to core. Orders are `hush-first` and `addon-first`.
+Collections selections: `core`, `amoled`, `extended`, `defaults`, `collections-minimal`, `missing`, `duplicate`. Sound selections: `sound-minimal`, `sound-extended`, `sound-defaults`, `sound-missing`, `sound-duplicate`. Both: `both-extended`, `both-defaults`, `both-all`. `both-all` selects all 140 global TikTok patches in 0.79.0 with default options as a stress check, not an installation recommendation. `defaults` selects the external defaults, not all patches. `extended` adds AMOLED, Remember clear display, Change app name and Look like the store app to core. Orders are `hush-first` and `addon-first`.
 
 The four negative selections must explicitly reject missing Settings or duplicate add-on selection. Positive checks compile DEX/resources, check duplicate classes and injected references, audit settings argument preservation and native bindings. Patcher 2 STRIP_FAST returns changed entries only; the verifier reads the complete compiled DEX directory, including unchanged originals. No signing or installation is performed.
 
-Current machine reports use `verification/reports/port9-patches-0.78.0-<selection>-<order>.json`. A repeated identical selection overwrites that report; preserve earlier evidence before reruns. Historical reports remain separate. Scratch is retained under `build/verification/`; check free space before full APK runs. Do not delete retained scratch without cleanup authorization.
+Current machine reports use `verification/reports/port9-patches-0.79.0-<selection>-<order>.json`. A repeated identical selection overwrites that report; preserve earlier evidence before reruns. Historical reports remain separate. Scratch is retained under `build/verification/`; check free space before full APK runs. Do not delete retained scratch without cleanup authorization.
 
 After a completed selection containing Sound:
 
@@ -55,7 +55,7 @@ python -B scripts/local_build.py :patches:verifyNativeHooks "-PcompiledDex=C:\pa
 
 ## Delivery and acceptance
 
-`packageSource` writes a local source ZIP and checksums beside the bundle and metadata in `dist/`. It excludes tool checkouts, caches, input APKs/bundles, host scratch, Git internals and SDK settings, while retaining source, notices, wrapper and verification reports. This private source ZIP can contain historical local paths; it is not a privacy-approved public export. Publication is a separate explicitly authorized action; see PUBLISHING.md. The local 0.7 build does not advance the existing GitHub feeds.
+`packageSource` writes a local source ZIP and checksums beside the bundle and metadata in `dist/`. It excludes tool checkouts, caches, input APKs/bundles, host scratch, Git internals and SDK settings, while retaining source, notices, wrapper and verification reports. This private source ZIP can contain historical local paths; it is not a privacy-approved public export. Publication is a separate explicitly authorized action; see PUBLISHING.md. The authorized 0.7 beta publication advances dev only after exact-asset verification. Main is not the beta channel.
 
 Archive order/timestamps are fixed. A forced rebuild can assess local repeatability; it is not a cross-platform guarantee. Source updates do not automatically repatch or reinstall TikTok.
 
