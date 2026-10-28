@@ -38,19 +38,28 @@ public final class PopupStyle {
         return Math.max(1,Math.min(available,desired));
     }
     public static int background(Context context) {
-        int host=(context.getResources().getConfiguration().uiMode & 0x30)==0x20 ? 0xff121212 : Color.WHITE;
-        TypedValue value=new TypedValue();
-        try {
-            if("a24".equals(context.getResources().getResourceEntryName(0x7f0603e5))
-                && context.getTheme().resolveAttribute(0x7f0603e5,value,true)) {
-                if(value.type>=TypedValue.TYPE_FIRST_COLOR_INT && value.type<=TypedValue.TYPE_LAST_COLOR_INT) host=value.data;
-                else if(value.resourceId!=0) host=context.getResources().getColor(value.resourceId);
-            }
-        } catch(RuntimeException ignored) {}
+        int fallback=(context.getResources().getConfiguration().uiMode & 0x30)==0x20 ? 0xff121212 : Color.WHITE;
+        int host=sheetColor(context,fallback);
         if(luminance(host)<.5) try(InputStream stream=context.getAssets().open("hushfeed-build-v1.txt")) {
             Properties properties=new Properties(); properties.load(stream); return configuredBackground(host,properties);
         } catch(Exception ignored) {}
         return host;
+    }
+    public static int sheetColor(Context context,int fallback) {
+        TypedValue value=new TypedValue();
+        try {
+            // Original 47.5.3: a27 is UISheetFlat1. a24 is translucent orange.
+            if("a27".equals(context.getResources().getResourceEntryName(0x7f0603e8))
+                && context.getTheme().resolveAttribute(0x7f0603e8,value,true)) {
+                if(value.type>=TypedValue.TYPE_FIRST_COLOR_INT && value.type<=TypedValue.TYPE_LAST_COLOR_INT) {
+                    if(Color.alpha(value.data)==255) return value.data;
+                } else if(value.resourceId!=0) {
+                    int color=context.getResources().getColor(value.resourceId);
+                    if(Color.alpha(color)==255) return color;
+                }
+            }
+        } catch(RuntimeException ignored) {}
+        return fallback;
     }
     public static int configuredBackground(int host,Properties properties) {
         if(luminance(host)<.5 && "applied".equals(properties.getProperty("amoled"))) {

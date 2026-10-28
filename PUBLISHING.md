@@ -8,11 +8,15 @@ Morphe reads root `patches-bundle.json` on main/dev. Its required fields are ver
 
 The **0.7.0-beta.1** port targets original TikTok 47.5.3 / 2024705030 and verified HushFeed 0.78.0/0.79.0 with Manager/patcher 2.0.0. Beta publication advances dev; main retains its older version. Use the release page and actual patches-bundle.json to confirm current publication state.
 
+**0.7.1-beta.1** repairs the Favorites/Sound surface color with exact HushFeed 0.79.0 verification. Existing immutable releases remain archived. Use each new version's own exact verification evidence.
+
+The owner's standing instruction, recorded 2026-10-28 in the TikTok app-home AGENTS.md, authorizes publishing completed TikTok work after required verification. Agents should finish the reviewed source push, immutable release and dev-feed update without asking for repeated permission. Use the shared C:\Morphe\Toolkit\GITHUB-PUBLISHING.md contract and github_publish.py in place. Ordinary GitHub push workflows still verify only; this agent publication workflow uses the exact locally tested bundle after CI succeeds.
+
 ## Channels and installation
 
 This source began with the same beta on main/dev; the channels have since advanced separately. Enable **Pre-release patches**, then **Experimental app versions** on its Morphe source card. Future beta publications advance dev; stable publications advance main. Manager's prerelease mode compares both feeds so a newer stable release is not missed.
 
-Remove/disable the old local source rather than selecting it alongside the remote one. Keep HushFeed as its own external source. For 0.7.0-beta.1, repatch original TikTok 47.5.3 with HushFeed 0.79.0 Settings and your selected add-ons in one Expert-mode run. Source updates do not patch/reinstall TikTok automatically and do not automatically repair compatibility with future HushFeed versions.
+Remove/disable the old local source rather than selecting it alongside the remote one. Keep HushFeed as its own external source. For 0.7.1-beta.1, repatch original TikTok 47.5.3 with HushFeed 0.79.0 Settings and your selected add-ons in one Expert-mode run. Source updates do not patch/reinstall TikTok automatically and do not automatically repair compatibility with future HushFeed versions.
 
 ## Maintainer workflow
 
@@ -22,7 +26,7 @@ Remove/disable the old local source rather than selecting it alongside the remot
 4. In GitHub Actions, run **Build, test and optionally release** on the intended main/dev revision, explicitly enabling **publish**. The write-enabled job runs only after verification succeeds and only in the canonical repository. It uses GitHub's repository-scoped built-in token, no private credentials stored in source.
 5. Publication creates a versioned release, verifies the publicly downloaded .mpp SHA-256, then advances that channel's feed through GitHub's contents API with an expected-file-SHA check. It refuses a feed downgrade and never replaces release assets. A failed feed update can leave an unadvertised release; inspect it instead of overwriting a version.
 
-The initial publication used the already combined-build-verified 0.5.1-beta.1 bundle. For the 0.7.0-beta.1 beta update, publish the exact locally combined-build-verified bundle after public-source CI passes, using the shared Toolkit github_publish.py prepare/validate/publish commands in place. CI rebuilds have their own hashes and must not be substituted while claiming the local APK-combination evidence. The current candidate/published hash is recorded in COMPATIBILITY.md and the publication record; local cross-source evidence applies only to that hash. The immutable release source archive comes from the reviewed public Git revision, not this private workspace.
+The initial publication used the already combined-build-verified 0.5.1-beta.1 bundle. For the 0.7.1-beta.1 beta update, publish the exact locally combined-build-verified bundle after public-source CI passes, using the shared Toolkit github_publish.py prepare/validate/publish commands in place. CI rebuilds have their own hashes and must not be substituted while claiming the local APK-combination evidence. The current candidate/published hash is recorded in COMPATIBILITY.md and the publication record; local cross-source evidence applies only to that hash. The immutable release source archive comes from the reviewed public Git revision, not this private workspace.
 
 ## Local private workspace versus public snapshot
 

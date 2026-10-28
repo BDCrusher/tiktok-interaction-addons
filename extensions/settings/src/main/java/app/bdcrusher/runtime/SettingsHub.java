@@ -133,7 +133,7 @@ public final class SettingsHub {
                 View gap=new View(context); body.addView(gap,new LinearLayout.LayoutParams(1,SettingsUi.dp(context,12)));
             }
             if(slots.isEmpty()) body.addView(SettingsUi.text(context,"No add-on modules found. Repatch with Enhanced collection popup or Sound button actions selected.",15,SettingsUi.textSecondary(),0));
-            body.addView(SettingsUi.text(context,"BDCrusher add-ons · 0.7.0-beta.1\nGPL-3.0 · Morphe and HushFeed UI credits. Preferences and reset remain separate for each feature.",14,SettingsUi.textSecondary(),0));
+            body.addView(SettingsUi.text(context,"BDCrusher add-ons · 0.7.1-beta.1\nGPL-3.0 · Morphe and HushFeed UI credits. Preferences and reset remain separate for each feature.",14,SettingsUi.textSecondary(),0));
             update();
             if(saved!=null) scroll.post(()->{ if(scroll!=null) scroll.scrollTo(0,saved.getInt("scrollY")); });
             return scroll;

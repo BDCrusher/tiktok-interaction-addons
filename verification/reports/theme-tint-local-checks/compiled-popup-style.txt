@@ -1,0 +1,85 @@
+CLASS extensions/settings.mpe Lapp/bdcrusher/runtime/PopupStyle; extends Ljava/lang/Object;
+FIELD WIDTHS:Ljava/util/Map;
+METHOD background[Landroid/content/Context;]:I flags=9 regs=6
+0000 INVOKE_VIRTUAL {v5,v0,v0,v0,v0} count=1 Landroid/content/Context;->getResources()Landroid/content/res/Resources;
+0003 MOVE_RESULT_OBJECT v0
+0004 INVOKE_VIRTUAL {v0,v0,v0,v0,v0} count=1 Landroid/content/res/Resources;->getConfiguration()Landroid/content/res/Configuration;
+0007 MOVE_RESULT_OBJECT v0
+0008 IGET v0,v0 Landroid/content/res/Configuration;->uiMode:I
+000a AND_INT_LIT8 v0,v0 #48
+000c CONST_16 v1 #32
+000e IF_NE v0,v1 -> 0014
+0010 CONST v0 #-15592942
+0013 GOTO -> 0015
+0014 CONST_4 v0 #-1
+0015 INVOKE_STATIC {v5,v0,v0,v0,v0} count=2 Lapp/bdcrusher/runtime/PopupStyle;->sheetColor(Landroid/content/Context;I)I
+0018 MOVE_RESULT v0
+0019 INVOKE_STATIC {v0,v0,v0,v0,v0} count=1 Lapp/bdcrusher/runtime/PopupStyle;->luminance(I)D
+001c MOVE_RESULT_WIDE v1
+001d CONST_WIDE_HIGH16 v3
+001f CMPG_DOUBLE v1,v1,v3
+0021 IF_GEZ v1 -> 004b
+0023 INVOKE_VIRTUAL {v5,v0,v0,v0,v0} count=1 Landroid/content/Context;->getAssets()Landroid/content/res/AssetManager;
+0026 MOVE_RESULT_OBJECT v5
+0027 CONST_STRING v1 hushfeed-build-v1.txt
+0029 INVOKE_VIRTUAL {v5,v1,v0,v0,v0} count=2 Landroid/content/res/AssetManager;->open(Ljava/lang/String;)Ljava/io/InputStream;
+002c MOVE_RESULT_OBJECT v5
+002d NEW_INSTANCE v1 Ljava/util/Properties;
+002f INVOKE_DIRECT {v1,v0,v0,v0,v0} count=1 Ljava/util/Properties;-><init>()V
+0032 INVOKE_VIRTUAL {v1,v5,v0,v0,v0} count=2 Ljava/util/Properties;->load(Ljava/io/InputStream;)V
+0035 INVOKE_STATIC {v0,v1,v0,v0,v0} count=2 Lapp/bdcrusher/runtime/PopupStyle;->configuredBackground(ILjava/util/Properties;)I
+0038 MOVE_RESULT v1
+0039 IF_EQZ v5 -> 003e
+003b INVOKE_VIRTUAL {v5,v0,v0,v0,v0} count=1 Ljava/io/InputStream;->close()V
+003e RETURN v1
+003f MOVE_EXCEPTION v1
+0040 IF_EQZ v5 -> 004a
+0042 INVOKE_VIRTUAL {v5,v0,v0,v0,v0} count=1 Ljava/io/InputStream;->close()V
+0045 GOTO -> 004a
+0046 MOVE_EXCEPTION v5
+0047 INVOKE_VIRTUAL {v1,v5,v0,v0,v0} count=2 Ljava/lang/Throwable;->addSuppressed(Ljava/lang/Throwable;)V
+004a THROW v1
+004b RETURN v0
+METHOD sheetColor[Landroid/content/Context;, I]:I flags=9 regs=6
+0000 NEW_INSTANCE v0 Landroid/util/TypedValue;
+0002 INVOKE_DIRECT {v0,v0,v0,v0,v0} count=1 Landroid/util/TypedValue;-><init>()V
+0005 CONST_STRING v1 a27
+0007 INVOKE_VIRTUAL {v4,v0,v0,v0,v0} count=1 Landroid/content/Context;->getResources()Landroid/content/res/Resources;
+000a MOVE_RESULT_OBJECT v2
+000b CONST v3 #2131100648
+000e INVOKE_VIRTUAL {v2,v3,v0,v0,v0} count=2 Landroid/content/res/Resources;->getResourceEntryName(I)Ljava/lang/String;
+0011 MOVE_RESULT_OBJECT v2
+0012 INVOKE_VIRTUAL {v1,v2,v0,v0,v0} count=2 Ljava/lang/String;->equals(Ljava/lang/Object;)Z
+0015 MOVE_RESULT v1
+0016 IF_EQZ v1 -> 0051
+0018 INVOKE_VIRTUAL {v4,v0,v0,v0,v0} count=1 Landroid/content/Context;->getTheme()Landroid/content/res/Resources$Theme;
+001b MOVE_RESULT_OBJECT v1
+001c CONST_4 v2 #1
+001d INVOKE_VIRTUAL {v1,v3,v0,v2,v0} count=4 Landroid/content/res/Resources$Theme;->resolveAttribute(ILandroid/util/TypedValue;Z)Z
+0020 MOVE_RESULT v1
+0021 IF_EQZ v1 -> 0051
+0023 IGET v1,v0 Landroid/util/TypedValue;->type:I
+0025 CONST_16 v2 #28
+0027 CONST_16 v3 #255
+0029 IF_LT v1,v2 -> 003c
+002b IGET v1,v0 Landroid/util/TypedValue;->type:I
+002d CONST_16 v2 #31
+002f IF_GT v1,v2 -> 003c
+0031 IGET v4,v0 Landroid/util/TypedValue;->data:I
+0033 INVOKE_STATIC {v4,v0,v0,v0,v0} count=1 Landroid/graphics/Color;->alpha(I)I
+0036 MOVE_RESULT v4
+0037 IF_NE v4,v3 -> 0051
+0039 IGET v4,v0 Landroid/util/TypedValue;->data:I
+003b RETURN v4
+003c IGET v1,v0 Landroid/util/TypedValue;->resourceId:I
+003e IF_EQZ v1 -> 0051
+0040 INVOKE_VIRTUAL {v4,v0,v0,v0,v0} count=1 Landroid/content/Context;->getResources()Landroid/content/res/Resources;
+0043 MOVE_RESULT_OBJECT v4
+0044 IGET v0,v0 Landroid/util/TypedValue;->resourceId:I
+0046 INVOKE_VIRTUAL {v4,v0,v0,v0,v0} count=2 Landroid/content/res/Resources;->getColor(I)I
+0049 MOVE_RESULT v4
+004a INVOKE_STATIC {v4,v0,v0,v0,v0} count=1 Landroid/graphics/Color;->alpha(I)I
+004d MOVE_RESULT v0
+004e IF_NE v0,v3 -> 0051
+0050 RETURN v4
+0051 RETURN v5

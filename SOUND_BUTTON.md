@@ -1,6 +1,6 @@
 # Sound button actions — development beta
 
-This is a separate selectable patch in TikTok Interaction Add-ons **0.7.0-beta.1**, not a HushFeed fork or part of Enhanced collection popup. Selection defaults off; runtime enable defaults on once selected. Target: original global TikTok 47.5.3 / 2024705030 with external **HushFeed 0.78.0 or 0.79.0 Settings**. This port updates native bindings for 47.5.3 and retains the existing gestures and settings; compiled/simulated checks are not phone acceptance. See [COMPATIBILITY.md](COMPATIBILITY.md). No APK is distributed or installed automatically.
+This is a separate selectable patch in TikTok Interaction Add-ons **0.7.1-beta.1**, not a HushFeed fork or part of Enhanced collection popup. Selection defaults off; runtime enable defaults on once selected. Target: original global TikTok 47.5.3 / 2024705030 with external **HushFeed 0.79.0 Settings**. This port updates native bindings for 47.5.3 and retains the existing gestures and settings; compiled/simulated checks are not phone acceptance. See [COMPATIBILITY.md](COMPATIBILITY.md). No APK is distributed or installed automatically.
 
 ## Behavior and settings
 
@@ -41,6 +41,8 @@ Native detail fetching is now implemented, but exact server/account responses, r
 No TalkBack long-click action has been added; touch gestures, TalkBack interaction with the open popup, system Back, rotation and large-font scrolling all need real-device testing. These are beta limitations, not verified accessibility claims. Other TikTok versions or HushFeed releases are unsupported until separately checked.
 
 ## Automated evidence
+
+The 0.7.1 color repair uses the corrected opaque a27 sheet background shared with Favorites. Four native-color regression tests were added to the retained suite; see [color-repair verification](verification/reports/theme-tint-071-verification.md) for the exact new bundle and compiled checks. The 0.7.0 results below remain historical evidence.
 
 The 0.7.0-beta.1 port has 83 JVM/JUnit/Robolectric tests (2 patch, 34 Collections, 37 Sound, 10 common) plus seven release-helper tests. See the exact [47.5.3 / HushFeed 0.79.0 verification report](verification/reports/hushfeed-079-tiktok-4753-verification.md) for completed final-bundle builds, lint, source orders, negative cases, native audits and hashes. Current machine records use `port9-patches-0.79.0-*`; retained 0.78 records also match the same personal bundle; older `flat7`/`port8` records describe historical inputs and are not evidence for this port. No real native saving/authentication occurs in simulations.
 

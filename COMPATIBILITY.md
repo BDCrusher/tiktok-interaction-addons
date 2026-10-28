@@ -1,5 +1,9 @@
 # Compatibility report
 
+## Current 0.7.1-beta.1 AMOLED color repair - 2026-10-28
+
+This version repairs a phone-reported appearance failure in published 0.7.0-beta.1: Favorites and Sound popups used the old a24 token, which is translucent orange in original TikTok 47.5.3. The corrected shared reader uses opaque a27 / UISheetFlat1 and retains native dark/light and HushFeed AMOLED/custom colors. Targets remain original global TikTok 47.5.3 / 2024705030 and HushFeed 0.79.0. [Exact current repair evidence](verification/reports/theme-tint-071-verification.md). Older reports below describe their own bundle hashes. Phone rendering acceptance remains pending. Publication state is established separately by the release/feed and publication receipts; no device installation was performed.
+
 ## Current 0.7.0-beta.1 - TikTok 47.5.3 / HushFeed 0.78.0 and 0.79.0
 
 The unchanged personal **0.7.0-beta.1** bundle passes with original global TikTok **47.5.3 / 2024705030**, package com.zhiliaoapp.musically, ARM64/ARMv7, minSDK23, and published **HushFeed 0.78.0 or 0.79.0**. Use **Manager 2.0.0+ / patcher 2.0.0**.

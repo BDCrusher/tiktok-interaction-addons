@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.7.1-beta.1] - 2026-10-28
+
+- Fix the translucent orange Favorites and Sound menu fill: read inspected 47.5.3 UISheetFlat1 a27 instead of the old a24 token.
+- Require opaque surface colors and preserve black AMOLED, custom dark colors and light mode. Share the validated resolver across both features.
+- Add four regression tests that reproduce the exact native orange value before the fix and pass afterward. Phone appearance acceptance remains pending.
+
 ## [0.7.0-beta.1] - 2026-10-23
 
 - Verified the unchanged bundle against HushFeed 0.79.0 on 2026-10-25: all 140 global TikTok patches in both source orders, each feature alone and explicit negative cases. Exclude PineDrama-only selections in the diagnostic.

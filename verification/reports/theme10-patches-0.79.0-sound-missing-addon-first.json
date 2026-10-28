@@ -1,0 +1,14 @@
+{
+  "selection": "sound-missing",
+  "order": "addon-first",
+  "hushPatches": [],
+  "apkSha256": "6670ca3f93bfea379658cad3c27f05d3a380b23a0d82569cce684b7453e8ff3e",
+  "hushBundleSha256": "a25056e58abb44ffcd49fd5fa38f9fa315ac9553a113f15c86ea4c9509b069da",
+  "addonSha256": "7fcf12041e61c1bff39a81bae424c4471812b97691625dbb84350b458e390489",
+  "androidDeviceTested": false,
+  "externalPackageFilter": "com.zhiliaoapp.musically",
+  "excludedOtherPackagePatches": [
+    "Allow photo comments"
+  ],
+  "result": "PASS: missing dependency rejected"
+}

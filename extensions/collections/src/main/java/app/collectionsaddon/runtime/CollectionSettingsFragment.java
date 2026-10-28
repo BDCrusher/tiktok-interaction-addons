@@ -105,7 +105,7 @@ public final class CollectionSettingsFragment extends Fragment {
         reset.addView(labels("Reset collection settings", "Restore enabled and five collections. HushFeed settings are untouched."));
         reset.setOnClickListener(v -> showDialog("reset")); content.addView(reset);
         LinearLayout about = row(false, true, "collections_addon.about");
-        about.addView(labels("About and licenses  ›", "TikTok Interaction Add-ons · 0.7.0-beta.1"));
+        about.addView(labels("About and licenses  ›", "TikTok Interaction Add-ons · 0.7.1-beta.1"));
         about.setOnClickListener(v -> showDialog("about")); content.addView(about);
         refresh();
         if (state != null) scroll.post(() -> { if (scroll != null) scroll.scrollTo(0, state.getInt("scrollY")); });
@@ -210,7 +210,7 @@ public final class CollectionSettingsFragment extends Fragment {
                     .setPositiveButton("Reset", (d, w) -> { Preferences.reset(context); refreshPage(); })
                     .setNegativeButton("Cancel", null);
             } else {
-                builder.setTitle("TikTok Interaction Add-ons").setMessage("0.7.0-beta.1 · Enhanced collection popup\n\n"
+                builder.setTitle("TikTok Interaction Add-ons").setMessage("0.7.1-beta.1 · Enhanced collection popup\n\n"
                     + "Independent add-on, not a HushFeed fork.\n\nGPL-3.0-only. Built with the Morphe patches template. Uses HushFeed’s settings hooks, header and styling helpers (GPL-3.0). Credits: MorpheApp, icysymmetra/tiktok-patches-for-morphe and SysAdminDoc/HushFeed contributors.\n\n"
                     + "Morphe trademark notice: this project is not affiliated with, sponsored or endorsed by the Morphe project. Full notices are included with the source bundle.")
                     .setPositiveButton("Close", null);

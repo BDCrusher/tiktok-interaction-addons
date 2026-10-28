@@ -1,0 +1,36 @@
+    resource 0x7f1203a3 style/zk
+        a24(0x7f0603e5)=?attr/aid
+    resource 0x7f1203a3 style/zk
+        a27(0x7f0603e8)=?attr/aig
+    resource 0x7f1203a5 style/zm
+        a24(0x7f0603e5)=?attr/aid
+    resource 0x7f1203a5 style/zm
+        a27(0x7f0603e8)=?attr/aig
+    resource 0x7f1203a7 style/zo
+        a24(0x7f0603e5)=?attr/axo
+    resource 0x7f1203a7 style/zo
+        a27(0x7f0603e8)=?attr/axr
+    resource 0x7f1203a7 style/zo
+        aid(0x7f060664)=#47fe7c02
+    resource 0x7f1203a7 style/zo
+        aig(0x7f060667)=#ff000000
+    resource 0x7f1203a7 style/zo
+        axo(0x7f060899)=#1ffe7c02
+    resource 0x7f1203a7 style/zo
+        axr(0x7f06089c)=#ffffffff
+    resource 0x7f1203a9 style/zq
+        a24(0x7f0603e5)=?attr/axo
+    resource 0x7f1203a9 style/zq
+        a27(0x7f0603e8)=?attr/axr
+    resource 0x7f120539 style/a_j
+        aid(0x7f060664)=#57fe7c02
+    resource 0x7f120539 style/a_j
+        aig(0x7f060667)=#ff000000
+    resource 0x7f120539 style/a_j
+        axo(0x7f060899)=#33fe7c02
+    resource 0x7f120539 style/a_j
+        axr(0x7f06089c)=#ffffffff
+    resource 0x7f12053a style/a_k
+        aig(0x7f060667)=#ff000000
+    resource 0x7f12053b style/a_l
+        aig(0x7f060667)=#ff000000

@@ -89,7 +89,7 @@ fun main(args: Array<String>) = runBlocking {
         "excludedOtherPackagePatches" to (loadedHushPatches - hushPatches).mapNotNull { it.name }.sorted())
     fun save() {
         val output = root.parentFile.parentFile.resolve("verification/reports").apply { mkdirs() }
-        output.resolve("port9-${hush.nameWithoutExtension}-$mode-$order.json").writeText(GsonBuilder().setPrettyPrinting().create().toJson(report))
+        output.resolve("theme10-${hush.nameWithoutExtension}-$mode-$order.json").writeText(GsonBuilder().setPrettyPrinting().create().toJson(report))
     }
     Patcher(PatcherConfig(input.canonicalFile, temporaryFilesPath = scratch)).use { patcher ->
         patcher += ordered

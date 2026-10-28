@@ -1,0 +1,126 @@
+{
+  "version": "0.7.1-beta.1",
+  "localOnly": true,
+  "androidDeviceTested": false,
+  "sourceCommitted": false,
+  "bundleSha256": "7fcf12041e61c1bff39a81bae424c4471812b97691625dbb84350b458e390489",
+  "bundleBytes": 141051,
+  "originalApkSha256": "6670ca3f93bfea379658cad3c27f05d3a380b23a0d82569cce684b7453e8ff3e",
+  "hushBundleSha256": "a25056e58abb44ffcd49fd5fa38f9fa315ac9553a113f15c86ea4c9509b069da",
+  "hushReleaseCommit": "02a4c5c5d1fd1123bdcd1f0fa8e6a59f8d8056a7",
+  "unitSimulatedTests": 87,
+  "releaseHelperTests": 7,
+  "regressionsFailBefore": 4,
+  "regressionsPassAfter": 4,
+  "compiledPaletteAudit": [
+    {
+      "order": "hush-first",
+      "resourcesApk": "C:\\Morphe\\App's\\TikTok\\Add-ons\\build\\verification\\both-all-hush-first-3319129747459227527\\scratch\\patched\\resources.apk",
+      "darkSheetValues": [
+        "ff000000",
+        "ff000000",
+        "ff000000",
+        "ff000000"
+      ],
+      "lightSheetValues": [
+        "ffffffff",
+        "ffffffff"
+      ],
+      "orangeTokenPreserved": true,
+      "result": "PASS",
+      "record": "compiled-palette-hush-first.txt"
+    },
+    {
+      "order": "addon-first",
+      "resourcesApk": "C:\\Morphe\\App's\\TikTok\\Add-ons\\build\\verification\\both-all-addon-first-63303286805462260\\scratch\\patched\\resources.apk",
+      "darkSheetValues": [
+        "ff000000",
+        "ff000000",
+        "ff000000",
+        "ff000000"
+      ],
+      "lightSheetValues": [
+        "ffffffff",
+        "ffffffff"
+      ],
+      "orangeTokenPreserved": true,
+      "result": "PASS",
+      "record": "compiled-palette-addon-first.txt"
+    }
+  ],
+  "runs": [
+    {
+      "selection": "both-all",
+      "order": "hush-first",
+      "scratch": "C:\\Morphe\\App's\\TikTok\\Add-ons\\build\\verification\\both-all-hush-first-3319129747459227527",
+      "nativeAudit": true,
+      "report": "theme10-patches-0.79.0-both-all-hush-first.json",
+      "result": "PASS: patch execution and compiled DEX/resources",
+      "selectedHushPatches": 140
+    },
+    {
+      "selection": "both-all",
+      "order": "addon-first",
+      "scratch": "C:\\Morphe\\App's\\TikTok\\Add-ons\\build\\verification\\both-all-addon-first-63303286805462260",
+      "nativeAudit": true,
+      "report": "theme10-patches-0.79.0-both-all-addon-first.json",
+      "result": "PASS: patch execution and compiled DEX/resources",
+      "selectedHushPatches": 140
+    },
+    {
+      "selection": "collections-minimal",
+      "order": "hush-first",
+      "scratch": "C:\\Morphe\\App's\\TikTok\\Add-ons\\build\\verification\\collections-minimal-hush-first-12553415144709121478",
+      "nativeAudit": false,
+      "report": "theme10-patches-0.79.0-collections-minimal-hush-first.json",
+      "result": "PASS: patch execution and compiled DEX/resources",
+      "selectedHushPatches": 1
+    },
+    {
+      "selection": "sound-minimal",
+      "order": "addon-first",
+      "scratch": "C:\\Morphe\\App's\\TikTok\\Add-ons\\build\\verification\\sound-minimal-addon-first-2706737177120999208",
+      "nativeAudit": true,
+      "report": "theme10-patches-0.79.0-sound-minimal-addon-first.json",
+      "result": "PASS: patch execution and compiled DEX/resources",
+      "selectedHushPatches": 1
+    },
+    {
+      "selection": "missing",
+      "order": "hush-first",
+      "scratch": "C:\\Morphe\\App's\\TikTok\\Add-ons\\build\\verification\\missing-hush-first-11489607386457559877",
+      "nativeAudit": false,
+      "report": "theme10-patches-0.79.0-missing-hush-first.json",
+      "result": "PASS: missing dependency rejected",
+      "selectedHushPatches": 0
+    },
+    {
+      "selection": "sound-missing",
+      "order": "addon-first",
+      "scratch": "C:\\Morphe\\App's\\TikTok\\Add-ons\\build\\verification\\sound-missing-addon-first-11259949996640476725",
+      "nativeAudit": false,
+      "report": "theme10-patches-0.79.0-sound-missing-addon-first.json",
+      "result": "PASS: missing dependency rejected",
+      "selectedHushPatches": 0
+    },
+    {
+      "selection": "duplicate",
+      "order": "addon-first",
+      "scratch": "C:\\Morphe\\App's\\TikTok\\Add-ons\\build\\verification\\duplicate-addon-first-10342641307025124126",
+      "nativeAudit": false,
+      "report": "theme10-patches-0.79.0-duplicate-addon-first.json",
+      "result": "PASS: duplicate add-on rejected",
+      "selectedHushPatches": 4
+    },
+    {
+      "selection": "sound-duplicate",
+      "order": "hush-first",
+      "scratch": "C:\\Morphe\\App's\\TikTok\\Add-ons\\build\\verification\\sound-duplicate-hush-first-9216667706210734987",
+      "nativeAudit": false,
+      "report": "theme10-patches-0.79.0-sound-duplicate-hush-first.json",
+      "result": "PASS: duplicate add-on rejected",
+      "selectedHushPatches": 4
+    }
+  ],
+  "preFixBackupSha256": "45220ed3b7964e7f222367b5e3576cff5995a0a3983788d7df6ba56d3e8e5789"
+}

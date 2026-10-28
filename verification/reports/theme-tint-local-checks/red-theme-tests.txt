@@ -1,0 +1,38 @@
+JUnit version 4.13.2
+[Robolectric] WARN: Android SDK 36 requires Java 21 (have Java 17). Tests won't be run on SDK 36 unless explicitly requested.
+[Robolectric] WARN: Android SDK 37 requires Java 21 (have Java 17). Tests won't be run on SDK 37 unless explicitly requested.
+....E.E.E.E.......
+Time: 3.051
+There were 4 failures:
+1) customDarkSheetColorIsRetained(app.bdcrusher.runtime.PopupThemeRegressionTest)
+java.lang.AssertionError: expected:<-16314345> but was:<1207860226>
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.failNotEquals(Assert.java:835)
+	at org.junit.Assert.assertEquals(Assert.java:647)
+	at org.junit.Assert.assertEquals(Assert.java:633)
+	at app.bdcrusher.runtime.PopupThemeRegressionTest.customDarkSheetColorIsRetained(PopupThemeRegressionTest.java:66)
+2) translucentSheetCannotBecomePopupSurface(app.bdcrusher.runtime.PopupThemeRegressionTest)
+java.lang.AssertionError: expected:<-15592942> but was:<1207860226>
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.failNotEquals(Assert.java:835)
+	at org.junit.Assert.assertEquals(Assert.java:647)
+	at org.junit.Assert.assertEquals(Assert.java:633)
+	at app.bdcrusher.runtime.PopupThemeRegressionTest.translucentSheetCannotBecomePopupSurface(PopupThemeRegressionTest.java:69)
+3) amoledUsesBlackSheetInsteadOfTranslucentOrange(app.bdcrusher.runtime.PopupThemeRegressionTest)
+java.lang.AssertionError: expected:<-16777216> but was:<1207860226>
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.failNotEquals(Assert.java:835)
+	at org.junit.Assert.assertEquals(Assert.java:647)
+	at org.junit.Assert.assertEquals(Assert.java:633)
+	at app.bdcrusher.runtime.PopupThemeRegressionTest.amoledUsesBlackSheetInsteadOfTranslucentOrange(PopupThemeRegressionTest.java:60)
+4) lightModeUsesWhiteSheetInsteadOfTranslucentOrange(app.bdcrusher.runtime.PopupThemeRegressionTest)
+java.lang.AssertionError: expected:<-1> but was:<1207860226>
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.failNotEquals(Assert.java:835)
+	at org.junit.Assert.assertEquals(Assert.java:647)
+	at org.junit.Assert.assertEquals(Assert.java:633)
+	at app.bdcrusher.runtime.PopupThemeRegressionTest.lightModeUsesWhiteSheetInsteadOfTranslucentOrange(PopupThemeRegressionTest.java:63)
+
+FAILURES!!!
+Tests run: 14,  Failures: 4
+

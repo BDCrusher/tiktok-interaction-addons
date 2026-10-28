@@ -7,7 +7,6 @@ import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
-import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
@@ -40,20 +39,7 @@ final class Panels {
         }
     }
     static int resolve(Context context, String attr, int fallback) {
-        // This token is verified against the sole supported APK. Its ID survives app renaming.
-        int id = 0;
-        if ("a24".equals(attr)) try {
-            if ("a24".equals(context.getResources().getResourceEntryName(0x7f0603e5))) id = 0x7f0603e5;
-        } catch (android.content.res.Resources.NotFoundException ignored) { }
-        TypedValue value = new TypedValue();
-        if (id != 0 && context.getTheme().resolveAttribute(id, value, true)) {
-            if (value.type >= TypedValue.TYPE_FIRST_COLOR_INT && value.type <= TypedValue.TYPE_LAST_COLOR_INT) return value.data;
-            if (value.resourceId != 0) {
-                try { return context.getResources().getColor(value.resourceId); }
-                catch (RuntimeException ignored) { }
-            }
-        }
-        return fallback;
+        return "a27".equals(attr) ? PopupStyle.sheetColor(context, fallback) : fallback;
     }
     static int background(Context context) {
         return PopupStyle.background(context);

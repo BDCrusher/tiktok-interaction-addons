@@ -1,0 +1,13 @@
+JUnit version 4.13.2
+[Robolectric] WARN: Android SDK 36 requires Java 21 (have Java 17). Tests won't be run on SDK 36 unless explicitly requested.
+[Robolectric] WARN: Android SDK 37 requires Java 21 (have Java 17). Tests won't be run on SDK 37 unless explicitly requested.
+..............No package ID 7f found for ID 0x7f0603e8.
+..No package ID 7f found for ID 0x7f0603e8.
+.No package ID 7f found for ID 0x7f0603e8.
+.No package ID 7f found for ID 0x7f0603e8.
+.No package ID 7f found for ID 0x7f0603e8.
+...............
+Time: 6.191
+
+OK (34 tests)
+

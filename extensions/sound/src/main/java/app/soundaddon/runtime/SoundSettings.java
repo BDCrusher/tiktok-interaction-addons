@@ -66,7 +66,7 @@ public final class SoundSettings implements SettingsHub.Feature {
             TextView reset = SettingsUi.text(context, "Reset sound settings", 17, SettingsUi.textPrimary(), 1);
             reset.setPadding(pad,pad,pad,pad); reset.setBackground(SettingsUi.groupedRow(context,true,true));
             reset.setOnClickListener(view -> { SoundPreferences.reset(context); toggle.setChecked(true); }); body.addView(reset);
-            TextView about = SettingsUi.text(context, "Sound button actions · 0.7.0-beta.1\nGPL-3.0 · Morphe template and HushFeed UI integration. HushFeed is an external requirement, not bundled.", 14, SettingsUi.textSecondary(), 0);
+            TextView about = SettingsUi.text(context, "Sound button actions · 0.7.1-beta.1\nGPL-3.0 · Morphe template and HushFeed UI integration. HushFeed is an external requirement, not bundled.", 14, SettingsUi.textSecondary(), 0);
             about.setPadding(pad,pad,pad,pad); body.addView(about);
             if(saved != null) scroll.post(() -> { if(scroll != null) scroll.scrollTo(0,saved.getInt("scrollY")); });
             return scroll;
