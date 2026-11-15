@@ -52,7 +52,7 @@ def manifest(repository, version, timestamp=None):
         "version": version,
         "download_url": f"https://github.com/{repository}/releases/download/v{version}/TikTok-Interaction-Addons-{version}.mpp",
         "created_at": timestamp,
-        "description": "Independent beta collection-popup and sound-button add-ons. Requires original TikTok 47.5.3 and HushFeed 0.78.0 or 0.79.0 Settings. Two separately selectable patches. Device acceptance pending; see the compatibility report. Repatch TikTok to apply updates.",
+        "description": "Independent Favorites collection-popup and TikTok sound-saving add-ons. Requires original TikTok 47.7.3 and HushFeed 0.82.0 Settings, with Morphe Manager 2.5.0 or newer. Phone validation pending. Repatch TikTok to apply the update.",
         "signature_download_url": "",
     }
 
@@ -109,9 +109,10 @@ def prepare(root, output, repository, bundle=None, source_archive=None):
     notes = output / "RELEASE-NOTES.md"
     notes.write_text(f"# TikTok Interaction Add-ons {version}\n\n"
         "Independent beta source; HushFeed is external and unchanged.\n\n"
-        "Target: original TikTok 47.5.3 / 2024705030 with HushFeed 0.78.0 or 0.79.0 Settings. "
+        "Target: original TikTok 47.7.3 / 2024707030 with HushFeed 0.82.0 Settings. "
         "Enhanced collection popup and Sound button actions remain independently selectable. "
-        "This release ports both native features to TikTok 47.5.3, retaining the settings contract and flat home placement. "
+        "Sound offers native Save sound to TikTok. The menu does not include external music providers. "
+        "Popup colors follow the active TikTok theme, including HushFeed's AMOLED switch. "
         "Existing feature preferences are retained.\n\n"
         "Enable Pre-release patches and Experimental app versions on this source in Morphe. "
         "Replace any older local source rather than selecting two copies. Repatch the original APK "

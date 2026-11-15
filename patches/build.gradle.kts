@@ -35,15 +35,18 @@ tasks {
         args(project.tasks.named<Jar>("jar").get().archiveFile.get().asFile.absolutePath, rootProject.projectDir.absolutePath, project.version.toString())
     }
     register<JavaExec>("verifyCombination") {
-        dependsOn(testClasses, "buildAndroid")
+        val suppliedAddon = providers.gradleProperty("addon")
+        dependsOn(testClasses)
+        if (!suppliedAddon.isPresent) dependsOn("buildAndroid")
         classpath = sourceSets["test"].runtimeClasspath + generatorClasspath
         mainClass.set("app.collectionsaddon.patches.VerifyCombinationKt")
         maxHeapSize = "6g"
         doFirst {
             args(requireNotNull(project.findProperty("apk")), requireNotNull(project.findProperty("hushfeed")),
-                project.tasks.named<Jar>("jar").get().archiveFile.get().asFile.absolutePath,
+                suppliedAddon.orNull ?: project.tasks.named<Jar>("jar").get().archiveFile.get().asFile.absolutePath,
                 rootProject.layout.buildDirectory.dir("verification").get().asFile.absolutePath,
-                project.findProperty("selection") ?: "core", project.findProperty("order") ?: "hush-first")
+                project.findProperty("selection") ?: "core", project.findProperty("order") ?: "hush-first",
+                project.findProperty("verificationLabel") ?: "port11")
         }
     }
     val compileNativeHookAudit = register<JavaCompile>("compileNativeHookAudit") {

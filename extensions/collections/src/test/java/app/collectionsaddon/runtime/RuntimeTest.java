@@ -57,16 +57,6 @@ public class RuntimeTest {
         } finally { app.morphe.extension.shared.settings.HushfeedPause.paused = false; }
         assertTrue(CollectionsRuntime.enabled(activity));
     }
-    @Test public void customAmoledOnlyChangesDarkSurfaceAndRejectsInvalidColors() {
-        java.util.Properties properties = new java.util.Properties();
-        properties.setProperty("amoled", "applied"); properties.setProperty("amoled_color", "#071017");
-        assertEquals(0xff071017, Panels.configuredBackground(0xff121212, properties));
-        assertEquals(0xffffffff, Panels.configuredBackground(0xffffffff, properties));
-        properties.setProperty("amoled_color", "#00000000");
-        assertEquals(0xff121212, Panels.configuredBackground(0xff121212, properties));
-        properties.setProperty("amoled_color", "#000000");
-        assertEquals(0xff000000, Panels.configuredBackground(0xff121212, properties));
-    }
     @Test public void settingsValidateRangeAndSaveIndependentPreferences() {
         Activity activity = Robolectric.buildActivity(Activity.class).setup().get();
         Preferences.reset(activity);

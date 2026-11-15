@@ -14,17 +14,14 @@ import java.util.Map;
 public final class NativeHookAudit {
     private static final String SOUND = "Lapp/soundaddon/runtime/SoundRuntime;";
     private static final String COVER = "Lcom/ss/android/ugc/aweme/feed/assem/music/VideoMusicCoverAssem;";
-    private static final String TITLE = "Lcom/ss/android/ugc/aweme/feed/assem/music/VideoMusicTitleAssem;";
     private static final Map<String, String> HOOKS = Map.of(
-        COVER + "->j4", "bindDisc",
+        COVER + "->n4", "bindDisc",
         COVER + "->unBind", "unbindDisc",
         COVER + "->onViewCreated", "viewsCreated",
-        TITLE + "->j4", "bindTitle",
-        TITLE + "->unBind", "unbindTitle",
-        "LX/07Hy;->onTouch", "touch",
-        "LX/03dx;->dispatchTouchEvent", "dispatchDiscTouch",
-        "LX/0rky;->accept", "observeFavorites",
-        "LX/0rky;->bdcrusherRenderResponse", "observeFavorites");
+        "LX/09gx;->onTouch", "touch",
+        "LX/04LB;->dispatchTouchEvent", "dispatchDiscTouch",
+        "LX/1KFR;->accept", "observeFavorites",
+        "LX/1KFR;->bdcrusherRenderResponse", "observeFavorites");
 
     public static void main(String[] args) throws Exception {
         if (args.length != 1) throw new IllegalArgumentException("Expected compiled DEX directory");
@@ -60,9 +57,9 @@ public final class NativeHookAudit {
                 }
             }
         }
-        if (evidence.size() != 9) throw new IllegalStateException("Missing native methods: " + evidence.keySet());
+        if (evidence.size() != 7) throw new IllegalStateException("Missing native methods: " + evidence.keySet());
         evidence.forEach((key, value) -> System.out.println(key + ": PASS " + value));
-        System.out.println("PASS: all nine Sound lifecycle/touch/priority/width hooks survived combined compilation. Not a device test.");
+        System.out.println("PASS: all seven Sound lifecycle/touch/priority/width hooks survived combined compilation. Not a device test.");
     }
     private static boolean hasEdgeAbility(ClassDef clazz) {
         for (var field : clazz.getFields()) if (field.getType().equals(

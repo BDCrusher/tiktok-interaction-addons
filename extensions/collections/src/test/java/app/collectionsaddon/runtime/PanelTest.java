@@ -84,21 +84,4 @@ public class PanelTest {
         Panels.install(dialog, root);
         assertTrue(dialog.getWindow().getAttributes().height <= Policy.maxHeight(context.getResources().getDisplayMetrics().heightPixels));
     }
-    @Test public void clippedHitTestingUsesRawScreenRatherThanWindowCoordinates() {
-        Activity activity = Robolectric.buildActivity(Activity.class).setup().get();
-        Preferences.reset(activity);
-        View row = new View(activity) {
-            @Override public boolean getGlobalVisibleRect(android.graphics.Rect rect, android.graphics.Point offset) {
-                rect.set(20, 30, 60, 70); if (offset != null) offset.set(20, 30); return true;
-            }
-            @Override public void getLocationOnScreen(int[] position) { position[0] = 120; position[1] = 230; }
-            @Override public void getLocationInWindow(int[] position) { position[0] = 20; position[1] = 30; }
-        };
-        row.layout(0, 0, 40, 100);
-        assertTrue(CollectionsRuntime.hit(125, 235, row));
-        assertFalse(CollectionsRuntime.hit(25, 35, row));
-        assertFalse(CollectionsRuntime.hit(125, 275, row));
-        Preferences.save(activity, false, 5);
-        assertTrue(CollectionsRuntime.hit(125, 275, row)); // Stock includes the entire row.
-    }
 }

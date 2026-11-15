@@ -28,7 +28,7 @@ public final class SoundSettings implements SettingsHub.Feature {
     public static void refresh(Fragment host) { SettingsHub.refresh(host); }
     @Override public Fragment page() { return new Page(); }
     @Override public int changes(Context context) { return SoundPreferences.enabled(context)?0:1; }
-    @Override public String summary() { return "Hold the music disc for TikTok and eligible music-app saving"; }
+    @Override public String summary() { return "Hold the music disc to save a sound in TikTok"; }
     /** Restorable full page; no crowded multi-purpose Save/Cancel dialog. */
     public static final class Page extends Fragment {
         private ScrollView scroll;
@@ -42,7 +42,7 @@ public final class SoundSettings implements SettingsHub.Feature {
             LinearLayout row = new LinearLayout(context); row.setOrientation(LinearLayout.VERTICAL); row.setPadding(pad,pad,pad,pad);
             row.setBackground(SettingsUi.groupedRow(context, true, true));
             row.addView(SettingsUi.text(context, "Sound button actions", 17, SettingsUi.textPrimary(), 1));
-            TextView summary = SettingsUi.text(context, "Hold the spinning music disc for a save menu. Ordinary taps still open the sound page.", 15, SettingsUi.textSecondary(), 0);
+            TextView summary = SettingsUi.text(context, "Hold the spinning music disc for Save sound to TikTok. It uses the same hold delay as Favorites. Tap the disc normally to open the sound page.", 15, SettingsUi.textSecondary(), 0);
             row.addView(summary);
             Switch toggle = new Switch(context); toggle.setContentDescription("Sound button actions");
             toggle.setChecked(SoundPreferences.enabled(context)); SettingsUi.styleSwitch(toggle);
@@ -51,12 +51,10 @@ public final class SoundSettings implements SettingsHub.Feature {
             body.addView(SettingsUi.sectionTitle(context, "Availability and privacy"));
             TextView help = SettingsUi.text(context,
                 (HushfeedPause.isPaused() ? "HushFeed is paused: stock gestures are used.\n\n" : "")
-                + "TikTok supplies the available music apps for each sound. Only eligible destinations appear; installed apps and search results are not used as substitutes. If none are eligible, only TikTok saving appears.\n\n"
-                + "When feed data is incomplete, opening this menu checks TikTok's existing sound-detail service (up to four seconds). Destinations can appear after loading. Only the exact sound or TikTok's explicitly matched song is accepted. Leaving the menu cancels the check.\n\n"
                 + "Drag onto a row and release, or release on the disc and tap a row. Releasing outside a row never saves. Hidden music discs stay hidden.\n\n"
                 + "The visible disc owns its touch area before feed speed-up gestures. Holding elsewhere keeps HushFeed's usual behavior.\n\n"
-                + "TikTok handles saving, authorization and provider linking. The add-on never reads or logs credentials. These settings are separate from HushFeed backup/reset.\n\n"
-                + "Experimental beta: phone validation is still required, including account linking, drag gestures and accessibility.", 15, SettingsUi.textSecondary(), 0);
+                + "TikTok handles saving and sign-in. If asked to sign in, open the menu again afterward. These settings are separate from HushFeed backup/reset.\n\n"
+                + "Experimental beta: phone validation is still required, including saving, drag gestures and accessibility.", 15, SettingsUi.textSecondary(), 0);
             help.setPadding(pad,pad,pad,pad); body.addView(help);
             body.addView(SettingsUi.sectionTitle(context, "Gesture status"));
             TextView diagnostics = SettingsUi.text(context, SoundRuntime.diagnosticStatus(), 14, SettingsUi.textSecondary(), 0);
@@ -66,7 +64,7 @@ public final class SoundSettings implements SettingsHub.Feature {
             TextView reset = SettingsUi.text(context, "Reset sound settings", 17, SettingsUi.textPrimary(), 1);
             reset.setPadding(pad,pad,pad,pad); reset.setBackground(SettingsUi.groupedRow(context,true,true));
             reset.setOnClickListener(view -> { SoundPreferences.reset(context); toggle.setChecked(true); }); body.addView(reset);
-            TextView about = SettingsUi.text(context, "Sound button actions · 0.7.1-beta.1\nGPL-3.0 · Morphe template and HushFeed UI integration. HushFeed is an external requirement, not bundled.", 14, SettingsUi.textSecondary(), 0);
+            TextView about = SettingsUi.text(context, "Sound button actions · 0.8.0-beta.1\nGPL-3.0 · Morphe template and HushFeed UI integration. HushFeed is an external requirement, not bundled.", 14, SettingsUi.textSecondary(), 0);
             about.setPadding(pad,pad,pad,pad); body.addView(about);
             if(saved != null) scroll.post(() -> { if(scroll != null) scroll.scrollTo(0,saved.getInt("scrollY")); });
             return scroll;

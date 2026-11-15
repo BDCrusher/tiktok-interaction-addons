@@ -1,10 +1,16 @@
 # Compatibility report
 
-## Current 0.7.1-beta.1 AMOLED color repair - 2026-10-28
+## 0.8.0-beta.1 port - TikTok 47.7.3 / HushFeed 0.82.0
+
+Target: original global `com.zhiliaoapp.musically` **47.7.3 / 2024707030**, original APK SHA-256 `9b35d4caed14ae54938eca1fa27fc89ce8307a9cf8350b80f66a9968fc3684e9`. This fingerprint matches HushFeed's published fixture reference. The exact [HushFeed 0.82.0 bundle](https://github.com/SysAdminDoc/HushFeed/releases/tag/v0.82.0) SHA-256 is `e5bf347ebbc365f3bb3b131dc868f99592f23e2aa34122edf86eaf8443678f46` (source `86131614f2ac78ccb92b5e68af3e6bc27d3d6d79`). Manager 2.5.0 / Patcher 2.3.0 is the upstream floor. The beta check used Patcher 2.4.0-dev.8, the engine bundled in Manager 2.6.0-dev.6.
+
+The Sound menu is limited to TikTok's own save action in this port and follows the native Favorites hold timer. Favorites and Sound share the live opaque sheet palette, which follows HushFeed's runtime AMOLED switch. Both add-ons compiled with all 147 HushFeed patches in both source orders on each tested patcher. The [verification report](verification/reports/tiktok-4773-port-verification.md) records exact artifact hashes, selections and results. Physical-device validation remains pending.
+
+## Historical 0.7.1-beta.1 AMOLED color repair - 2026-10-28
 
 This version repairs a phone-reported appearance failure in published 0.7.0-beta.1: Favorites and Sound popups used the old a24 token, which is translucent orange in original TikTok 47.5.3. The corrected shared reader uses opaque a27 / UISheetFlat1 and retains native dark/light and HushFeed AMOLED/custom colors. Targets remain original global TikTok 47.5.3 / 2024705030 and HushFeed 0.79.0. [Exact current repair evidence](verification/reports/theme-tint-071-verification.md). Older reports below describe their own bundle hashes. Phone rendering acceptance remains pending. Publication state is established separately by the release/feed and publication receipts; no device installation was performed.
 
-## Current 0.7.0-beta.1 - TikTok 47.5.3 / HushFeed 0.78.0 and 0.79.0
+## Historical 0.7.0-beta.1 - TikTok 47.5.3 / HushFeed 0.78.0 and 0.79.0
 
 The unchanged personal **0.7.0-beta.1** bundle passes with original global TikTok **47.5.3 / 2024705030**, package com.zhiliaoapp.musically, ARM64/ARMv7, minSDK23, and published **HushFeed 0.78.0 or 0.79.0**. Use **Manager 2.0.0+ / patcher 2.0.0**.
 

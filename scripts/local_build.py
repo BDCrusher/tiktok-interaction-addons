@@ -25,7 +25,7 @@ def main():
     env.pop("ANDROID_PREFS_ROOT", None)
     env.pop("ANDROID_SDK_HOME", None)
     env["JAVA_TOOL_OPTIONS"] = f'-Duser.home="{STATE / "home"}" -Djava.io.tmpdir="{STATE / "temp"}" -XX:-UsePerfData'
-    java_home = env.get("JAVA_HOME", "C:/Program Files/Microsoft/jdk-17.0.20.101-hotspot")
+    java_home = env.get("JAVA_HOME", "C:/Program Files/Microsoft/jdk-17.0.21.21-hotspot")
     env["JAVA_HOME"] = java_home
     env.setdefault("ANDROID_HOME", "USER_HOME/AppData/Local/Android/Sdk")
     command = [str(Path(java_home) / "bin/java.exe"), "-cp", str(ROOT / "gradle/wrapper/gradle-wrapper.jar"),

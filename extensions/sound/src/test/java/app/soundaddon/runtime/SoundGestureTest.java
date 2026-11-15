@@ -3,7 +3,6 @@ package app.soundaddon.runtime;
 import android.app.Activity;
 import android.view.MotionEvent;
 import android.os.Looper;
-import android.view.ViewConfiguration;
 import android.view.View;
 import android.widget.FrameLayout;
 import app.morphe.extension.shared.settings.HushfeedPause;
@@ -31,24 +30,15 @@ public class SoundGestureTest {
         static int saves;
         static View primary, alternate;
         static Object boundData;
-        static Activity titleActivity;
-        static int externalSaves;
+        static long delay;
         @Implementation public static View disc(Object owner) {return primary;}
         @Implementation public static View alternateDisc(Object owner) {return alternate;}
         @Implementation public static Object boundParams(Object owner) {return boundData;}
         @Implementation public static String track(Object data) {return "track";}
         @Implementation public static Object music(Object data) {return "music";}
         @Implementation public static String musicId(Object music) {return "sound";}
-        @Implementation public static String matchedId(Object music) {return null;}
-        @Implementation public static Activity titleActivity(Object owner) {return titleActivity;}
-        @Implementation public static java.util.List<?> destinations(Object music) {
-            return "enriched".equals(music)?java.util.Collections.singletonList(10):java.util.Collections.emptyList();
-        }
-        @Implementation public static Integer provider(Object info) {return (Integer)info;}
-        @Implementation public static Object platform(Integer code) {return code;}
-        @Implementation public static String label(Object platform) {return "YT Music";}
-        @Implementation public static void add(Object owner,Object params,Object music,Object platform,java.util.List<?> infos) {externalSaves++;}
-        @Implementation public static void collect(Object music) {saves++;}
+        @Implementation public static long holdDelayMillis() {return delay;}
+        @Implementation public static void collect(Activity activity,Object music) {saves++;}
     }
     static class FeedRoot extends FrameLayout {
         int events; boolean speedStarted;
@@ -63,8 +53,7 @@ public class SoundGestureTest {
     }
     Activity activity; FrameLayout root; View disc; Object data=new Object();
     @Before public void setup() {
-        SoundRuntime.DISCS.clear(); HushfeedPause.paused=false; NativeFixture.saves=0; NativeFixture.externalSaves=0; Feedback.pulses=0;
-        NativeFixture.titleActivity=null;
+        SoundRuntime.DISCS.clear(); HushfeedPause.paused=false; NativeFixture.saves=0; NativeFixture.delay=200; Feedback.pulses=0;
         NativeFixture.primary=null; NativeFixture.alternate=null; NativeFixture.boundData=data;
         activity=Robolectric.buildActivity(Activity.class).setup().visible().get();
         root=new FeedRoot(activity); activity.setContentView(root);
@@ -80,7 +69,6 @@ public class SoundGestureTest {
             public boolean hasSound(Object params) {return true;}
         }));
         SoundPreferences.enabled(activity,true);
-        SoundRuntime.DISCS.get(disc).lookupStarter=(id,match,callback)->new SongLookup.Request();
     }
     @After public void teardown() { SoundRuntime.DISCS.clear(); HushfeedPause.paused=false; }
     boolean window(long down,int action,boolean onDisc) {
@@ -139,15 +127,17 @@ public class SoundGestureTest {
         disc.layout(220,400,280,460);
         assertFalse(touch(1,MotionEvent.ACTION_DOWN,true));
     }
-    @Test public void reservedDiscSurvives300msThenShowsMenuAndSavesOnlyOnExplicitRow() {
+    @Test public void standard200MillisecondHoldShowsOnlyTikTokAndRequiresExplicitSelection() {
         MotionEvent down=event(1,MotionEvent.ACTION_DOWN,true);
         try { assertTrue(SoundRuntime.skipEdgeTouch(root,down)); assertFalse(SoundRuntime.touch(disc,down)); }
         finally {down.recycle();}
-        shadowOf(Looper.getMainLooper()).idleFor(301,TimeUnit.MILLISECONDS);
+        shadowOf(Looper.getMainLooper()).idleFor(199,TimeUnit.MILLISECONDS);
         SoundRuntime.Binding binding=SoundRuntime.DISCS.get(disc);
         assertFalse(binding.opened);
-        shadowOf(Looper.getMainLooper()).idleFor(Math.max(0,ViewConfiguration.getLongPressTimeout()-301)+1,TimeUnit.MILLISECONDS);
+        shadowOf(Looper.getMainLooper()).idleFor(1,TimeUnit.MILLISECONDS);
         assertTrue(binding.opened); assertNotNull(binding.popup);
+        assertEquals(1,binding.rows.size());
+        assertEquals("Save sound to TikTok",((android.widget.TextView)binding.rows.get(0)).getText().toString());
         MotionEvent up=event(1,MotionEvent.ACTION_UP,true);
         try {assertTrue(SoundRuntime.touch(disc,up));} finally {up.recycle();}
         assertEquals(0,NativeFixture.saves);
@@ -159,7 +149,7 @@ public class SoundGestureTest {
         int[] clicks={0}; disc.setOnClickListener(v -> clicks[0]++);
         disc.setOnTouchListener((view,event) -> SoundRuntime.touch(view,event));
         assertTrue(window(10,MotionEvent.ACTION_DOWN,true));
-        shadowOf(Looper.getMainLooper()).idleFor(ViewConfiguration.getLongPressTimeout()+1,TimeUnit.MILLISECONDS);
+        shadowOf(Looper.getMainLooper()).idleFor(NativeFixture.delay+1,TimeUnit.MILLISECONDS);
         SoundRuntime.Binding binding=SoundRuntime.DISCS.get(disc);
         assertTrue(binding.opened); assertFalse(((FeedRoot)root).speedStarted); assertEquals(0,((FeedRoot)root).events);
         assertTrue(window(10,MotionEvent.ACTION_UP,true)); assertEquals(0,clicks[0]); assertEquals(0,NativeFixture.saves);
@@ -179,7 +169,7 @@ public class SoundGestureTest {
     @Test public void windowScrollBeforeHoldAndMultitouchDoNotClickOrSave() {
         int[] clicks={0}; disc.setOnClickListener(v -> clicks[0]++);
         window(10,MotionEvent.ACTION_DOWN,true); window(10,MotionEvent.ACTION_MOVE,false);
-        shadowOf(Looper.getMainLooper()).idleFor(ViewConfiguration.getLongPressTimeout()+1,TimeUnit.MILLISECONDS);
+        shadowOf(Looper.getMainLooper()).idleFor(NativeFixture.delay+1,TimeUnit.MILLISECONDS);
         assertFalse(SoundRuntime.DISCS.get(disc).opened);
         window(10,MotionEvent.ACTION_UP,false);
         window(20,MotionEvent.ACTION_DOWN,true); window(20,MotionEvent.ACTION_POINTER_DOWN,true);
@@ -217,17 +207,9 @@ public class SoundGestureTest {
         assertEquals(1,SoundRuntime.DISCS.size()); assertTrue(window(10,MotionEvent.ACTION_DOWN,true));
         window(10,MotionEvent.ACTION_CANCEL,true); SoundRuntime.unbindDisc(owner);
     }
-    @Test public void nativeTitleContextMatchesSameTrackAndWindowNotParamsObjectIdentity() {
-        SoundRuntime.Binding binding=SoundRuntime.DISCS.get(disc); binding.startTrack="track";
-        Object title=new Object(); Object separateData=new Object(); NativeFixture.boundData=separateData;
-        NativeFixture.titleActivity=activity; SoundRuntime.bindTitle(title,separateData);
-        assertSame(title,SoundRuntime.titleFor(binding));
-        NativeFixture.titleActivity=Robolectric.buildActivity(Activity.class).setup().get();
-        assertNull(SoundRuntime.titleFor(binding)); SoundRuntime.unbindTitle(title);
-    }
     @Test public void hoverUsesMatchingPaletteAndOnePulsePerChangedRow() {
         window(10,MotionEvent.ACTION_DOWN,true);
-        shadowOf(Looper.getMainLooper()).idleFor(ViewConfiguration.getLongPressTimeout()+1,TimeUnit.MILLISECONDS);
+        shadowOf(Looper.getMainLooper()).idleFor(NativeFixture.delay+1,TimeUnit.MILLISECONDS);
         SoundRuntime.Binding binding=SoundRuntime.DISCS.get(disc); int before=Feedback.pulses;
         binding.select(0); assertEquals(before+1,Feedback.pulses); binding.select(0); assertEquals(before+1,Feedback.pulses);
         android.graphics.drawable.ColorDrawable highlight=(android.graphics.drawable.ColorDrawable)binding.rows.get(0).getBackground().getCurrent();
@@ -235,18 +217,6 @@ public class SoundGestureTest {
         binding.select(-1); binding.select(0); assertEquals(before+2,Feedback.pulses);
         assertEquals(app.bdcrusher.runtime.PopupStyle.width(activity,320),binding.popup.getWidth());
         window(10,MotionEvent.ACTION_CANCEL,true);
-    }
-    @Test public void nativeDetailAddsMusicRowButReflowCannotSaveWithoutFreshSelection() {
-        SoundRuntime.Binding binding=SoundRuntime.DISCS.get(disc); SongLookup.Callback[] pending={null};
-        binding.lookupStarter=(id,match,callback)-> {pending[0]=callback; return new SongLookup.Request();};
-        Object title=new Object(); NativeFixture.titleActivity=activity; SoundRuntime.bindTitle(title,data);
-        window(10,MotionEvent.ACTION_DOWN,true);
-        shadowOf(Looper.getMainLooper()).idleFor(ViewConfiguration.getLongPressTimeout()+1,TimeUnit.MILLISECONDS);
-        binding.select(0); binding.moved=true;
-        pending[0].complete("enriched","loaded"); shadowOf(Looper.getMainLooper()).idle();
-        assertEquals(2,binding.rows.size()); assertEquals(-1,binding.selected); assertFalse(binding.moved);
-        window(10,MotionEvent.ACTION_UP,true); assertEquals(0,NativeFixture.saves); assertEquals(0,NativeFixture.externalSaves);
-        binding.rows.get(1).performClick(); assertEquals(1,NativeFixture.externalSaves); SoundRuntime.unbindTitle(title);
     }
     @Test public void hoverAccountsForPopupWindowScreenOriginAndClippedRows() {
         SoundRuntime.Binding binding=SoundRuntime.DISCS.get(disc);
@@ -260,13 +230,15 @@ public class SoundGestureTest {
         binding.highlight(15,25); assertEquals(-1,binding.selected);
         binding.highlight(195,225); assertEquals(-1,binding.selected);
     }
-    @Test public void dismissedOrObsoleteDetailResultCannotReopenOrChangePopup() {
-        SoundRuntime.Binding binding=SoundRuntime.DISCS.get(disc); SongLookup.Callback[] pending={null};
-        binding.lookupStarter=(id,match,callback)-> {pending[0]=callback; return new SongLookup.Request();};
+    @Test public void native500MillisecondVariantMatchesFavoritesInsteadOfOpeningEarly() {
+        NativeFixture.delay=500;
         window(10,MotionEvent.ACTION_DOWN,true);
-        shadowOf(Looper.getMainLooper()).idleFor(ViewConfiguration.getLongPressTimeout()+1,TimeUnit.MILLISECONDS);
-        binding.cancel(); pending[0].complete("enriched","loaded"); shadowOf(Looper.getMainLooper()).idle();
-        assertNull(binding.popup); assertTrue(binding.rows.isEmpty()); assertEquals(0,NativeFixture.externalSaves);
+        shadowOf(Looper.getMainLooper()).idleFor(499,TimeUnit.MILLISECONDS);
+        SoundRuntime.Binding binding=SoundRuntime.DISCS.get(disc);
+        assertFalse(binding.opened);
+        shadowOf(Looper.getMainLooper()).idleFor(1,TimeUnit.MILLISECONDS);
+        assertTrue(binding.opened);
+        assertEquals(0,NativeFixture.saves);
         window(10,MotionEvent.ACTION_CANCEL,true);
     }
 }

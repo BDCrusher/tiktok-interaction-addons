@@ -18,7 +18,7 @@ import org.robolectric.shadow.api.Shadow;
 import org.robolectric.util.ReflectionHelpers.ClassParameter;
 import static org.junit.Assert.*;
 
-/** The two real 47.5.3 attributes, reproduced from the original APK resource table. */
+/** The two real 47.7.3 sheet attribute and historical orange token, reproduced from the original APK resource table. */
 @RunWith(RobolectricTestRunner.class)
 @Config(sdk=28, manifest=Config.NONE, shadows=PopupThemeRegressionTest.HostTheme.class)
 public class PopupThemeRegressionTest {
@@ -27,9 +27,9 @@ public class PopupThemeRegressionTest {
         @RealObject private Resources.Theme realTheme;
         static int sheet;
         @Implementation protected boolean resolveAttribute(int id, TypedValue out, boolean resolveRefs) {
-            if (id==0x7f0603e5 || id==0x7f0603e8) {
+            if (id==0x7f0603e5 || id==0x7f0603e7) {
                 out.type=TypedValue.TYPE_INT_COLOR_ARGB8;
-                // a24 -> aid is translucent orange; a27 -> aig is UISheetFlat1.
+                // a24 -> aid is translucent orange; a26 -> aif is UISheetFlat1.
                 out.data=id==0x7f0603e5 ? 0x47fe7c02 : sheet;
                 out.resourceId=0;
                 return true;
@@ -48,7 +48,7 @@ public class PopupThemeRegressionTest {
         Resources resources=new Resources(activity.getAssets(),activity.getResources().getDisplayMetrics(),config) {
             @Override public String getResourceEntryName(int id) {
                 if(id==0x7f0603e5) return "a24";
-                if(id==0x7f0603e8) return "a27";
+                if(id==0x7f0603e7) return "a26";
                 return super.getResourceEntryName(id);
             }
         };
@@ -64,6 +64,12 @@ public class PopupThemeRegressionTest {
     }
     @Test public void customDarkSheetColorIsRetained() {
         assertEquals(0xff071017,PopupStyle.background(host(0xff071017,true)));
+    }
+    @Test public void changingTheLiveThemeRestoresStockDarkWhenAmoledIsTurnedOff() {
+        Context host=host(0xff000000,true);
+        assertEquals(0xff000000,PopupStyle.background(host));
+        HostTheme.sheet=0xff1e1e1e;
+        assertEquals(0xff1e1e1e,PopupStyle.background(host));
     }
     @Test public void translucentSheetCannotBecomePopupSurface() {
         assertEquals(0xff121212,PopupStyle.background(host(0x33000000,true)));

@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.8.0-beta.1] - 2026-11-15
+
+- Port Favorites and Sound to original global TikTok 47.7.3 and HushFeed 0.82.0.
+- Follow the new live sheet color token, including HushFeed's runtime AMOLED switch.
+- Make the record menu TikTok-only, drop music-app lookups, and use the same native 200/500 ms timing choice as Favorites.
+- Build for Morphe Patcher 2.3.0. See the compatibility report for checked toolchains and device limits.
+
 ## [0.7.1-beta.1] - 2026-10-28
 
 - Fix the translucent orange Favorites and Sound menu fill: read inspected 47.5.3 UISheetFlat1 a27 instead of the old a24 token.

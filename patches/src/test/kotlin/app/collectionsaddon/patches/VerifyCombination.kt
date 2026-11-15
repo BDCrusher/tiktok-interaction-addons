@@ -1,6 +1,8 @@
 package app.collectionsaddon.patches
 import app.morphe.patcher.Patcher
 import app.morphe.patcher.PatcherConfig
+import app.morphe.patcher.dex.DexVerifier
+import app.morphe.patcher.dex.NoOpDexVerifier
 import app.morphe.patcher.patch.loadPatchesFromJar
 import app.morphe.patcher.patch.Patch
 import java.net.URLClassLoader
@@ -22,14 +24,15 @@ import java.nio.file.Files
 /** Local diagnostic: compile output only, never install or distribute the host APK. */
 fun main(args: Array<String>) = runBlocking {
     val input = File(args[0]); val hush = File(args[1]); val addon = File(args[2]); val root = File(args[3]).apply { mkdirs() }
-    val mode = args[4]; val order = args[5]
+    val mode = args[4]; val order = args[5]; val label = args[6]
+    require(label.matches(Regex("[A-Za-z0-9_-]+"))) { "Invalid verification label" }
     val loadedHushPatches = loadPatchesFromJar(setOf(hush))
     // External bundles can include PineDrama-only patches. This diagnostic targets
     // the original global TikTok fixture; do not select patches for another app.
     val hushPatches = loadedHushPatches.filter { patch ->
         patch.compatibility?.any { it.packageName == null || it.packageName == "com.zhiliaoapp.musically" } ?: true
     }.toSet()
-    fun loadAddon(): Set<Patch<*>> {
+    fun loadAddon(): Set<Patch> {
         // Do not accidentally test the main-source classes on this diagnostic's own classpath.
         val loader = object : URLClassLoader(arrayOf(addon.toURI().toURL()), Patch::class.java.classLoader) {
             override fun loadClass(name: String, resolve: Boolean): Class<*> {
@@ -43,14 +46,14 @@ fun main(args: Array<String>) = runBlocking {
             override fun getResource(name: String) =
                 if (name in setOf("extensions/collections.mpe", "extensions/sound.mpe", "extensions/settings.mpe")) findResource(name) else super.getResource(name)
         }
-        val result = linkedSetOf<Patch<*>>()
+        val result = linkedSetOf<Patch>()
         if (!mode.startsWith("sound")) {
             val clazz = loader.loadClass("app.collectionsaddon.patches.CollectionsPatchKt")
-            result.add(clazz.getMethod("getEnhancedCollectionsPatch").invoke(null) as Patch<*>)
+            result.add(clazz.getMethod("getEnhancedCollectionsPatch").invoke(null) as Patch)
         }
         if (mode.startsWith("sound") || mode.startsWith("both")) {
             val clazz = loader.loadClass("app.soundaddon.patches.SoundPatchKt")
-            result.add(clazz.getMethod("getSoundButtonActionsPatch").invoke(null) as Patch<*>)
+            result.add(clazz.getMethod("getSoundButtonActionsPatch").invoke(null) as Patch)
         }
         return result
     }
@@ -75,6 +78,7 @@ fun main(args: Array<String>) = runBlocking {
     val run = Files.createTempDirectory(root.toPath(), "$mode-$order-").toFile().canonicalFile
     val scratch = run.resolve("scratch")
     check(scratch.toPath().startsWith(root.canonicalFile.toPath()) && !scratch.exists())
+    println("Verification scratch: $scratch")
     println("Mode $mode / $order. Hush patches: ${selectedHush.map { it.name }.sortedBy { it }}")
     fun hash(file: File) = file.inputStream().use { stream ->
         val digest = MessageDigest.getInstance("SHA-256"); val buffer = ByteArray(65536)
@@ -89,9 +93,18 @@ fun main(args: Array<String>) = runBlocking {
         "excludedOtherPackagePatches" to (loadedHushPatches - hushPatches).mapNotNull { it.name }.sorted())
     fun save() {
         val output = root.parentFile.parentFile.resolve("verification/reports").apply { mkdirs() }
-        output.resolve("theme10-${hush.nameWithoutExtension}-$mode-$order.json").writeText(GsonBuilder().setPrettyPrinting().create().toJson(report))
+        output.resolve("$label-${hush.nameWithoutExtension}-$mode-$order.json").writeText(GsonBuilder().setPrettyPrinting().create().toJson(report))
     }
-    Patcher(PatcherConfig(input.canonicalFile, temporaryFilesPath = scratch)).use { patcher ->
+    // A distinct verifier asks STRIP_FAST to materialize unchanged DEX files too.
+    // Keep the complete class/reference audit below the patcher compilation step.
+    var compiledDexDirectory: File? = null
+    val verifier = object : DexVerifier by NoOpDexVerifier {
+        override fun verifyDexDirectory(dexDir: File) {
+            NoOpDexVerifier.verifyDexDirectory(dexDir)
+            compiledDexDirectory = dexDir
+        }
+    }
+    Patcher(PatcherConfig(input.canonicalFile, temporaryFilesPath = scratch, verifier = verifier)).use { patcher ->
         patcher += ordered
         val results = patcher().toList()
         results.forEach { println("${it.patch.name ?: "internal"}: ${it.exception?.stackTraceToString() ?: "PASS"}") }
@@ -123,7 +136,7 @@ fun main(args: Array<String>) = runBlocking {
         // compiled directory, including untouched original DEX files, so minimal
         // selections receive the same reference/duplicate checks as all-patches.
         result.dexFiles.forEach { it.stream.close() }
-        val compiledDex = scratch.resolve("patched/dex").listFiles { file -> file.isFile && file.extension == "dex" }
+        val compiledDex = compiledDexDirectory?.listFiles { file -> file.isFile && file.extension == "dex" }
             ?.sortedBy { it.name } ?: error("Missing complete compiled DEX directory")
         check(compiledDex.isNotEmpty())
         report["dexAuditScope"] = "complete compiled directory (including unchanged originals)"
@@ -159,7 +172,7 @@ fun main(args: Array<String>) = runBlocking {
         }
         if (mode.startsWith("sound")) check(classes.keys.none { it.startsWith("Lapp/collectionsaddon/") })
         if (!mode.startsWith("sound") && !mode.startsWith("both")) check(classes.keys.none { it.startsWith("Lapp/soundaddon/") })
-        if (!mode.startsWith("sound")) check(classes["Lapp/collectionsaddon/runtime/NativeCallback;"]!!.interfaces.contains("LX/02sd;"))
+        if (!mode.startsWith("sound")) check(classes["Lapp/collectionsaddon/runtime/NativeCallback;"]!!.interfaces.contains("LX/02tu;"))
         val hostMenu = classes["Lapp/morphe/extension/tiktok/settings/preference/TikTokPreferenceFragment;"]!!.methods.single { it.name == "createMasterMenu" }
         val entryCalls = hostMenu.implementation!!.instructions.count {
             ((it as? ReferenceInstruction)?.reference as? MethodReference)?.definingClass == "Lapp/bdcrusher/runtime/SettingsHub;"
@@ -171,12 +184,10 @@ fun main(args: Array<String>) = runBlocking {
                 ref.definingClass == "Lapp/bdcrusher/runtime/SettingsHub;" && ref.name == "refresh"
             } == true
         } == hostResume.implementation!!.instructions.count { it.opcode == com.android.tools.smali.dexlib2.Opcode.RETURN_VOID })
-        if (mode.startsWith("sound") || mode.startsWith("both")) {
-            val section = classes["Lapp/morphe/extension/tiktok/settings/preference/TikTokPreferenceFragment;"]!!.methods.single { it.name == "createSectionMenu" }
-            check(section.implementation!!.instructions.count {
-                ((it as? ReferenceInstruction)?.reference as? MethodReference)?.let { ref -> ref.definingClass == "Lapp/soundaddon/runtime/SoundSettings;" && ref.name == "install" } == true
-            } == 0)
-        }
+        val settingsClass=classes["Lapp/morphe/extension/tiktok/settings/preference/TikTokPreferenceFragment;"]!!
+        check(settingsClass.methods.none { method -> method.implementation?.instructions?.any {
+            ((it as? ReferenceInstruction)?.reference as? MethodReference)?.let { ref -> ref.definingClass == "Lapp/soundaddon/runtime/SoundSettings;" && ref.name == "install" } == true
+        } == true })
         check(classes.containsKey("Lapp/bdcrusher/runtime/SettingsHub;"))
         fun wrapper(type:String,name:String,native:String,count:Int) {
             val clazz=classes[type] ?: error("Missing wrapped host $type")
@@ -208,12 +219,11 @@ fun main(args: Array<String>) = runBlocking {
         fun references(type:String,name:String):List<Any> = classes[type]!!.methods.single {it.name==name}
             .implementation!!.instructions.mapNotNull {(it as? ReferenceInstruction)?.reference}.toList()
         val haptic=references("Lapp/bdcrusher/runtime/NativeUiBridge;","haptic").filterIsInstance<MethodReference>()
-        check(haptic.any {it.definingClass=="LX/0kMm;" && it.name=="<init>" && it.parameterTypes==listOf("Landroid/content/Context;")})
-        check(haptic.any {it.definingClass=="LX/0kMm;" && it.name=="LIZ" && it.parameterTypes==listOf("I")})
+        check(haptic.any {it.definingClass=="LX/0sTN;" && it.name=="<init>" && it.parameterTypes==listOf("Landroid/content/Context;")})
+        check(haptic.any {it.definingClass=="LX/0sTN;" && it.name=="LIZ" && it.parameterTypes==listOf("I")})
         report["nativeFavoritesHapticBound"]=true
         if(mode.startsWith("sound") || mode.startsWith("both")) {
-            wrapper("Lcom/ss/android/ugc/aweme/feed/assem/music/VideoMusicCoverAssem;","j4","bdcrusherNativeBind",2)
-            wrapper("Lcom/ss/android/ugc/aweme/feed/assem/music/VideoMusicTitleAssem;","j4","bdcrusherNativeBind",2)
+            wrapper("Lcom/ss/android/ugc/aweme/feed/assem/music/VideoMusicCoverAssem;","n4","bdcrusherNativeBind",2)
             val guarded=classes.values.flatMap {clazz->clazz.methods.toList()}.filter {method->
                 method.implementation?.instructions?.any {
                     ((it as? ReferenceInstruction)?.reference as? MethodReference)?.let {ref->
@@ -231,7 +241,7 @@ fun main(args: Array<String>) = runBlocking {
             report["soundBindingsArgumentsPreserved"]=true
             report["soundDiscPriorityBeforeNativeTimer"]=true
             report["soundEdgeListener"]=guarded.single().definingClass
-            val window=classes["LX/03dx;"]!!.methods.single {it.name=="dispatchTouchEvent"}
+            val window=classes["LX/04LB;"]!!.methods.single {it.name=="dispatchTouchEvent"}
             val windowCode=window.implementation!!.instructions.toList()
             check(windowCode.take(5).map {it.opcode}==listOf(com.android.tools.smali.dexlib2.Opcode.INVOKE_STATIC_RANGE,
                 com.android.tools.smali.dexlib2.Opcode.MOVE_RESULT,com.android.tools.smali.dexlib2.Opcode.IF_EQZ,
@@ -244,7 +254,7 @@ fun main(args: Array<String>) = runBlocking {
             })
             val alternate=classes["Lapp/soundaddon/runtime/NativeBridge;"]!!.methods.single {it.name=="alternateDisc"}
             check(alternate.implementation!!.instructions.any {
-                ((it as? ReferenceInstruction)?.reference as? FieldReference)?.name=="LLLIZZ"
+                ((it as? ReferenceInstruction)?.reference as? FieldReference)?.name=="LLLL"
             })
             report["soundWindowDispatchBeforeFeedParents"]=true
             report["soundAlternateDiscBound"]=true
@@ -256,7 +266,7 @@ fun main(args: Array<String>) = runBlocking {
             check(((creationCode[1] as ReferenceInstruction).reference as MethodReference).name=="viewsCreated")
             check((creationCode[1] as RegisterRangeInstruction).registerCount==1)
             report["soundBindBeforeInflationCovered"]=true
-            val favorites=classes["LX/0rky;"]!!.methods.single {it.name==if(mode.startsWith("both")) "bdcrusherRenderResponse" else "accept"}
+            val favorites=classes["LX/1KFR;"]!!.methods.single {it.name==if(mode.startsWith("both")) "bdcrusherRenderResponse" else "accept"}
             val favoriteCode=favorites.implementation!!.instructions.toList()
             val observer=favoriteCode.indexOfFirst {
                 ((it as? ReferenceInstruction)?.reference as? MethodReference)?.let {ref->
@@ -266,28 +276,31 @@ fun main(args: Array<String>) = runBlocking {
             check(observer>0)
             val install=(favoriteCode[observer-1] as ReferenceInstruction).reference as MethodReference
             check(install.name=="setContentView" || install.name=="install")
-            check((favoriteCode[observer] as com.android.tools.smali.dexlib2.iface.instruction.FiveRegisterInstruction).registerC==6)
+            check((favoriteCode[observer] as com.android.tools.smali.dexlib2.iface.instruction.FiveRegisterInstruction).registerC==8)
             val bridge="Lapp/soundaddon/runtime/NativeBridge;"
-            val query=references(bridge,"queryMusic").filterIsInstance<MethodReference>().single {it.name=="queryMusic"}
-            check(query.definingClass=="Lcom/ss/android/ugc/aweme/music/api/MusicDetailApi${'$'}DetailApi;"
-                && query.parameterTypes==listOf("Ljava/lang/String;","I")
-                && query.returnType=="Lcom/google/common/util/concurrent/ListenableFuture;")
-            for((name,field) in listOf("detailMusic" to "music","detailMatchedMusic" to "matchedPgcMusicInfo")) {
-                val refs=references(bridge,name).filterIsInstance<FieldReference>()
-                check(refs.any {it.name=="status_code"} && refs.any {it.name==field})
-            }
-            check(references(bridge,"matchedId").filterIsInstance<MethodReference>().any {it.name=="getMatchedSongInfo"})
-            report["nativeMusicDetailFutureBound"]=true
-            report["nativeDetailStatusAndMatchedIdChecked"]=true
+            val delay=references(bridge,"holdDelayMillis").filterIsInstance<MethodReference>()
+            check(delay.any { it.definingClass=="LX/1VaJ;" && it.name=="LJ" && it.returnType=="Z" })
+            val delayMethod=classes[bridge]!!.methods.single { it.name=="holdDelayMillis" }
+            val delays=delayMethod.implementation!!.instructions.filterIsInstance<com.android.tools.smali.dexlib2.iface.instruction.WideLiteralInstruction>().map { it.wideLiteral }.toSet()
+            check(delays.containsAll(setOf(200L,500L)))
+            val saveRefs=references(bridge,"collect").filterIsInstance<MethodReference>()
+            check(saveRefs.any { it.definingClass.endsWith("/MusicCollectViewModel;") && it.name=="cR2" })
+            check(saveRefs.any { it.name=="isLogin" } && saveRefs.any { it.definingClass=="LX/0585;" && it.name=="LIZIZ" })
+            val soundClasses=own.filter { it.type.startsWith("Lapp/soundaddon/") }
+            check(soundClasses.none { "SongLookup" in it.type })
+            val removedNames=setOf("bindTitle","unbindTitle","destinations","beginLookup","queryMusic","platform","provider","addProviders")
+            check(soundClasses.none { clazz -> clazz.methods.any { it.name in removedNames } })
+            report["nativeFavoritesHoldDelayVariantsMs"]=listOf(200,500)
+            report["tiktokOnlyNativeSaveWithLoginGuard"]=true
             report["nativeFavoritesWidthObservedWithoutReplacingMenu"]=true
         }
         if (!mode.startsWith("sound")) {
-            val consumer=classes["LX/0rky;"]!!.methods.single {it.name=="accept"}
+            val consumer=classes["LX/1KFR;"]!!.methods.single {it.name=="accept"}
             check(consumer.implementation!!.registerCount==2)
-            val native=classes["LX/0rky;"]!!.methods.single {it.name=="bdcrusherRenderResponse"}
-            check(native.accessFlags and 1 != 0 && native.implementation!!.registerCount==25)
+            val native=classes["LX/1KFR;"]!!.methods.single {it.name=="bdcrusherRenderResponse"}
+            check(native.accessFlags and 1 != 0 && native.implementation!!.registerCount==31)
             val nativeRefs=native.implementation!!.instructions.mapNotNull {(it as? ReferenceInstruction)?.reference as? MethodReference}.toList()
-            check(listOf("count","threshold","install").all {name->nativeRefs.count {
+            check(listOf("count","thresholdForResponse","install").all {name->nativeRefs.count {
                 it.definingClass=="Lapp/collectionsaddon/runtime/CollectionsRuntime;" && it.name==name
             }==1})
             report["inlinedCollectionRendererAndStockRetryBound"]=true

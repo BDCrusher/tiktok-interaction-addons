@@ -95,16 +95,16 @@ public class PagerTest {
         Response response = new Response(1, true, "A", "B", "C", "D", "E");
         assertFalse(CollectionsRuntime.beforeResponse(new Object(), response));
         assertEquals(0, fake.loads);
-        assertEquals(0, CollectionsRuntime.threshold(new android.app.Dialog(activity), response.items));
+        assertEquals(0, CollectionsRuntime.thresholdForResponse(new android.app.Dialog(activity), response));
     }
-    @Test public void equalCachedListsDoNotShareMoreState() {
+    @Test public void responsesSharingItemsStillUseTheirOwnMoreState() {
         Response paged = new Response(1, true, "A", "B", "C", "D", "E");
-        Response exhausted = new Response(0, false, "A", "B", "C", "D", "E");
+        Response exhausted = new Response(paged.items, 0, false);
         assertFalse(CollectionsRuntime.beforeResponse(new Object(), paged));
         assertFalse(CollectionsRuntime.beforeResponse(new Object(), exhausted));
         android.app.Dialog dialog = new android.app.Dialog(activity);
-        assertEquals(0, CollectionsRuntime.threshold(dialog, paged.items));
-        assertEquals(6, CollectionsRuntime.threshold(dialog, exhausted.items));
+        assertEquals(0, CollectionsRuntime.thresholdForResponse(dialog, paged));
+        assertEquals(6, CollectionsRuntime.thresholdForResponse(dialog, exhausted));
     }
     @Test public void initialLoaderExceptionReplaysStockOnce() {
         fake.throwLoad = true;

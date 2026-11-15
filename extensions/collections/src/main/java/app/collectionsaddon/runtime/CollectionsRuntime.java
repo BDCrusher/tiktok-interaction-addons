@@ -12,7 +12,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.WeakHashMap;
-import java.lang.ref.WeakReference;
 import app.morphe.extension.shared.settings.HushfeedPause;
 
 public final class CollectionsRuntime {
@@ -50,25 +49,6 @@ public final class CollectionsRuntime {
     }
     private static final ThreadLocal<Boolean> STOCK = new ThreadLocal<>();
     private static final Map<Object, Session> SESSIONS = new IdentityHashMap<>();
-    private static final List<PageState> MORE = new ArrayList<>();
-    private static final class PageState {
-        final WeakReference<List<?>> items; final boolean more;
-        PageState(List<?> items, boolean more) { this.items = new WeakReference<>(items); this.more = more; }
-    }
-    private static void recordMore(List<?> items, boolean more) {
-        java.util.Iterator<PageState> iterator = MORE.iterator();
-        while (iterator.hasNext()) {
-            List<?> existing = iterator.next().items.get();
-            if (existing == null || existing == items) iterator.remove();
-        }
-        if (items == null) return;
-        if (MORE.size() >= 32) MORE.remove(0);
-        MORE.add(new PageState(items, more));
-    }
-    private static boolean hasMore(List<?> items) {
-        for (PageState state : MORE) if (items != null && state.items.get() == items) return state.more;
-        return false;
-    }
     private static final Set<Dialog> FAILED = java.util.Collections.newSetFromMap(new WeakHashMap<>());
     private static final Handler MAIN = new Handler(Looper.getMainLooper());
     static final class Session {
@@ -94,9 +74,9 @@ public final class CollectionsRuntime {
     public static int count(Dialog dialog) {
         return !FAILED.contains(dialog) && enabled(dialog.getContext()) ? Preferences.count(dialog.getContext()) : 3;
     }
-    public static int threshold(Dialog dialog, List<?> items) {
+    public static int thresholdForResponse(Dialog dialog, Object response) {
         if (FAILED.contains(dialog) || !enabled(dialog.getContext())) return 4;
-        return hasMore(items) ? 0 : count(dialog) + 1;
+        return access.more(response) ? 0 : count(dialog) + 1;
     }
     public static int layout(Object owner, int original) {
         try { return enabled(access.context(owner)) ? 1 : original; }
@@ -108,7 +88,6 @@ public final class CollectionsRuntime {
             Context context = access.context(owner);
             if (!enabled(context)) return false;
             List<?> items = access.items(response);
-            recordMore(items, access.more(response));
             if (SESSIONS.containsKey(owner)) return false; // Deliberate replay.
             if (!access.more(response) || (items != null && items.size() >= Preferences.count(context))) return false;
             if (access.cursor(response) <= 0) return false;
@@ -165,7 +144,6 @@ public final class CollectionsRuntime {
             }
             // Always release TikTok's pending quick-favorite manager through its own consumer.
             Object response = failed ? session.original : access.copy(session.latest, session.items);
-            recordMore(access.items(response), failed || access.more(response));
             if (failed) STOCK.set(true);
             try { access.replay(session.owner, response); }
             finally { if (failed) STOCK.remove(); }
@@ -199,20 +177,6 @@ public final class CollectionsRuntime {
             Panels.pressed(dialog.getContext(), HostBridge.highlight(view), pressed);
             return true;
         } catch (RuntimeException | LinkageError failure) { return false; }
-    }
-    public static boolean hit(int x, int y, android.view.View view) {
-        android.graphics.Rect rect = new android.graphics.Rect();
-        if (enabled(view.getContext())) {
-            if (!view.getGlobalVisibleRect(rect)) return false;
-            // getGlobalVisibleRect is in root/window coordinates; native gestures use raw screen coordinates.
-            int[] screen = new int[2], window = new int[2];
-            view.getLocationOnScreen(screen); view.getLocationInWindow(window);
-            rect.offset(screen[0] - window[0], screen[1] - window[1]);
-            return rect.contains(x, y);
-        }
-        int[] location = new int[2]; view.getLocationOnScreen(location);
-        rect.set(location[0], location[1], location[0] + view.getWidth(), location[1] + view.getHeight());
-        return rect.contains(x, y);
     }
     private CollectionsRuntime() {}
 }

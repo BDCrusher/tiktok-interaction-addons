@@ -1,0 +1,20 @@
+{
+  "selection": "duplicate",
+  "order": "hush-first",
+  "hushPatches": [
+    "Hide feed save button",
+    "Keep the Favorites tab",
+    "Long-press controls",
+    "Settings"
+  ],
+  "apkSha256": "9b35d4caed14ae54938eca1fa27fc89ce8307a9cf8350b80f66a9968fc3684e9",
+  "hushBundleSha256": "e5bf347ebbc365f3bb3b131dc868f99592f23e2aa34122edf86eaf8443678f46",
+  "addonSha256": "f534c03189dffa2268afa53b81fe3e8518cb8ca06f62859e157a73176ccdd15f",
+  "androidDeviceTested": false,
+  "externalPackageFilter": "com.zhiliaoapp.musically",
+  "excludedOtherPackagePatches": [],
+  "result": "PASS: duplicate add-on rejected",
+  "verifiedPatcher": "2.3.0",
+  "patcherJarSha256": "5979d120f94a211e5ac35d7363b9c8b0ab5da0e8828fac7000233049dd7b6de7",
+  "nativeHookAuditPassed": false
+}

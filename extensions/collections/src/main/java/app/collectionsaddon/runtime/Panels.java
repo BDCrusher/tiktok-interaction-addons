@@ -20,7 +20,6 @@ import android.widget.TextView;
 import java.io.InputStream;
 import java.lang.ref.WeakReference;
 import java.util.Map;
-import java.util.Properties;
 import java.util.WeakHashMap;
 import app.bdcrusher.runtime.PopupStyle;
 
@@ -39,13 +38,10 @@ final class Panels {
         }
     }
     static int resolve(Context context, String attr, int fallback) {
-        return "a27".equals(attr) ? PopupStyle.sheetColor(context, fallback) : fallback;
+        return "a26".equals(attr) ? PopupStyle.sheetColor(context, fallback) : fallback;
     }
     static int background(Context context) {
         return PopupStyle.background(context);
-    }
-    static int configuredBackground(int host, Properties properties) {
-        return PopupStyle.configuredBackground(host, properties);
     }
     static double luminance(int color) {
         return (.2126 * Color.red(color) + .7152 * Color.green(color) + .0722 * Color.blue(color)) / 255.;

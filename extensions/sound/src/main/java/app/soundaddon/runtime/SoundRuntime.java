@@ -1,6 +1,8 @@
 package app.soundaddon.runtime;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.ContextWrapper;
 import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.view.Gravity;
@@ -16,7 +18,6 @@ import app.morphe.extension.shared.settings.HushfeedPause;
 import app.morphe.extension.tiktok.settings.preference.SettingsUi;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.WeakHashMap;
@@ -32,7 +33,6 @@ public final class SoundRuntime {
     private static long capturedPresses, menuOpens;
     private static String lastStage = "No disc press yet";
     private static final Map<View, Long> EDGE_PRESSES = new WeakHashMap<>();
-    private static final Map<Object, WeakReference<Object>> TITLES = new WeakHashMap<>();
     interface Identity {
         String track(Object data);
         boolean hasSound(Object data);
@@ -109,7 +109,7 @@ public final class SoundRuntime {
             }
             boolean wasOpen = binding.opened;
             boolean shortTap = action==MotionEvent.ACTION_UP && binding.down && !wasOpen
-                && event.getEventTime()-downTime<ViewConfiguration.getLongPressTimeout();
+                && event.getEventTime()-downTime<binding.holdDelayMillis;
             boolean consumed = binding.touch(event);
             if(shortTap && !consumed) {
                 dispatchNative(binding.anchor.get(),event,true);
@@ -136,7 +136,7 @@ public final class SoundRuntime {
         void release() { if(originalDown!=null) originalDown.recycle(); originalDown=null; }
     }
 
-    /** Session-only counters/state, never song IDs, user data, provider objects or credentials. */
+    /** Session-only counters/state, never song IDs, user data or credentials. */
     public static String diagnosticStatus() {
         int eligible = 0;
         for (Binding binding : DISCS.values()) {
@@ -182,10 +182,6 @@ public final class SoundRuntime {
         }
         return null;
     }
-    public static void bindTitle(Object owner, Object params) {
-        TITLES.put(owner, new WeakReference<>(params));
-    }
-    public static void unbindTitle(Object owner) { TITLES.remove(owner); }
     /** Covers bind-before-inflation as well as view recreation after a bind. */
     public static void viewsCreated(Object owner) {
         try {
@@ -242,20 +238,6 @@ public final class SoundRuntime {
             PopupStyle.rememberWidth(root.getContext(),width);
         } catch(RuntimeException | LinkageError ignored) {}
     }
-    static Object titleFor(Binding binding) {
-        View anchor=binding.anchor.get(); if(anchor==null) return null;
-        for (Map.Entry<Object, WeakReference<Object>> entry : TITLES.entrySet()) {
-            try {
-                Object data=NativeBridge.boundParams(entry.getKey());
-                if(data==null) data=entry.getValue().get();
-                if(data==null || !SoundPolicy.sameTrack(binding.startTrack,binding.identity.track(data))) continue;
-                Activity activity=NativeBridge.titleActivity(entry.getKey());
-                if(activity!=null && activity.getWindow()!=null
-                    && activity.getWindow().getDecorView().getRootView()==anchor.getRootView()) return entry.getKey();
-            } catch(RuntimeException | LinkageError ignored) {}
-        }
-        return null;
-    }
     static final class Binding implements View.OnAttachStateChangeListener {
         final WeakReference<View> anchor;
         final WeakReference<Object> params;
@@ -264,12 +246,7 @@ public final class SoundRuntime {
         final List<Runnable> actions = new ArrayList<>();
         final Runnable hold = this::show;
         PopupWindow popup;
-        LinearLayout menu;
-        TextView lookupStatus;
-        SongLookup.Request lookup;
-        interface LookupStarter { SongLookup.Request start(String id,String match,SongLookup.Callback callback); }
-        LookupStarter lookupStarter=SongLookup::start;
-        long requestGeneration;
+        long holdDelayMillis;
         int background;
         String startTrack;
         float startX, startY, rawX, rawY;
@@ -317,7 +294,9 @@ public final class SoundRuntime {
                 startTrack = identity.track(data);
                 if (!usable()) return false;
                 startX = rawX; startY = rawY; down = true;
-                view.postDelayed(hold, ViewConfiguration.getLongPressTimeout());
+                try { holdDelayMillis=NativeBridge.holdDelayMillis(); }
+                catch (RuntimeException | LinkageError unavailable) { holdDelayMillis=200L; }
+                view.postDelayed(hold, holdDelayMillis);
                 return false;
             }
             if (action == MotionEvent.ACTION_POINTER_DOWN || action == MotionEvent.ACTION_CANCEL) {
@@ -351,16 +330,12 @@ public final class SoundRuntime {
                 View view = anchor.get(); Object data = params.get();
                 Object music = NativeBridge.music(data);
                 if (music == null || NativeBridge.musicId(music) == null || NativeBridge.musicId(music).isEmpty()) return;
+                Activity activity=activityOf(view.getContext());
+                if(activity==null || activity.isFinishing()) return;
                 SettingsUi.syncDarkMode(view.getContext());
                 background=PopupStyle.background(view.getContext());
-                menu = new LinearLayout(view.getContext()); menu.setOrientation(LinearLayout.VERTICAL);
-                add(menu, "Save sound to TikTok", () -> NativeBridge.collect(music));
-                boolean needsDetail=eligible(music).isEmpty();
-                addProviders(music);
-                if(needsDetail) {
-                    lookupStatus=SettingsUi.text(view.getContext(),"Checking music apps…",13,PopupStyle.textColor(background),Typeface.NORMAL);
-                    int pad=SettingsUi.dp(view.getContext(),12); lookupStatus.setPadding(pad,pad,pad,pad); menu.addView(lookupStatus);
-                }
+                LinearLayout menu = new LinearLayout(view.getContext()); menu.setOrientation(LinearLayout.VERTICAL);
+                add(menu, "Save sound to TikTok", () -> NativeBridge.collect(activity,music));
                 ScrollView scroll = new ScrollView(view.getContext()); scroll.addView(menu);
                 scroll.setBackground(PopupStyle.rounded(view.getContext(),background)); scroll.setClipToOutline(true);
                 Rect frame = new Rect(); view.getWindowVisibleDisplayFrame(frame);
@@ -378,7 +353,7 @@ public final class SoundRuntime {
                 PopupWindow created=popup;
                 popup.setOnDismissListener(() -> {
                     if(popup!=created) return;
-                    cancelLookup(); popup=null; menu=null; lookupStatus=null; opened=false; down=false;
+                    popup=null; opened=false; down=false;
                     rows.clear(); actions.clear(); selected=-1;
                 });
                 popup.showAtLocation(view, Gravity.TOP | Gravity.LEFT, left, top);
@@ -390,63 +365,10 @@ public final class SoundRuntime {
                 opened = true;
                 menuOpens++;
                 lastStage = "Sound menu opened";
-                if(needsDetail) beginLookup(music);
             } catch (RuntimeException | LinkageError ignored) { cancel(); }
-        }
-        List<?> eligible(Object music) {
-            try { List<?> items=NativeBridge.destinations(music); return items==null ? Collections.emptyList() : items; }
-            catch(RuntimeException | LinkageError unavailable) { return Collections.emptyList(); }
-        }
-        int addProviders(Object music) {
-            Object data=params.get(), title=titleFor(this); if(data==null || title==null) return 0;
-            List<Integer> codes=new ArrayList<>(); for(Object info:eligible(music)) codes.add(NativeBridge.provider(info));
-            int added=0;
-            for(Integer code:SoundPolicy.uniqueProviders(codes)) {
-                Object platform=NativeBridge.platform(code); String label=NativeBridge.label(platform);
-                if(label==null || label.isEmpty()) continue;
-                add(menu,"Add to "+label,()-> {
-                    Object current=titleFor(this); if(current==null) throw new IllegalStateException("Song context unavailable");
-                    List<Object> valid=new ArrayList<>();
-                    for(Object info:eligible(music)) if(code.equals(NativeBridge.provider(info))) valid.add(info);
-                    if(valid.isEmpty()) throw new IllegalStateException("Destination no longer available");
-                    NativeBridge.add(current,data,music,platform,valid);
-                }); added++;
-            }
-            return added;
-        }
-        void beginLookup(Object music) {
-            View view=anchor.get(); long generation=++requestGeneration;
-            String id=NativeBridge.musicId(music), match=null;
-            try { match=NativeBridge.matchedId(music); } catch(RuntimeException | LinkageError unavailable) {}
-            lookup=lookupStarter.start(id,match,(loaded,status)->view.post(()-> {
-                try {
-                    if(generation!=requestGeneration || !opened || popup==null || !usable()) return;
-                    lookup=null;
-                    if(lookupStatus!=null) menu.removeView(lookupStatus); lookupStatus=null;
-                    int added=loaded==null ? 0 : addProviders(loaded);
-                    lastStage=loaded!=null && added==0 ? "Native destination data loaded; bound sound context unavailable" : status;
-                    resize(); select(-1); moved=false; // Reflow must never silently select a newly arrived destination.
-                } catch(RuntimeException | LinkageError unavailable) { lastStage="Native destination UI unavailable"; }
-            }));
-        }
-        void cancelLookup() { requestGeneration++; if(lookup!=null) lookup.cancel(); lookup=null; }
-        void resize() {
-            View view=anchor.get(); if(view==null || popup==null || menu==null) return;
-            Rect frame=new Rect(); view.getWindowVisibleDisplayFrame(frame); if(frame.width()<=0 || frame.height()<=0) return;
-            int width=PopupStyle.width(view.getContext(),frame.width());
-            menu.measure(View.MeasureSpec.makeMeasureSpec(width,View.MeasureSpec.EXACTLY),View.MeasureSpec.makeMeasureSpec(0,View.MeasureSpec.UNSPECIFIED));
-            int height=Math.max(1,Math.min(menu.getMeasuredHeight(),(int)(frame.height()*.6f)));
-            int[] position=new int[2]; view.getLocationOnScreen(position);
-            int left=Math.max(frame.left,Math.min(position[0]-width,frame.right-width));
-            int top=Math.max(frame.top,Math.min(position[1]+view.getHeight()-height,frame.bottom-height));
-            popup.update(left,top,width,height);
         }
         void add(LinearLayout menu, String title, Runnable action) {
             View view = anchor.get(); int index = actions.size();
-            if(index>0) {
-                View divider=new View(view.getContext()); divider.setBackgroundColor((PopupStyle.textColor(background)&0xffffff)|0x33000000);
-                menu.addView(divider,new LinearLayout.LayoutParams(-1,SettingsUi.dp(view.getContext(),1)));
-            }
             TextView row = SettingsUi.text(view.getContext(), title, 16, PopupStyle.textColor(background), Typeface.BOLD);
             int pad = SettingsUi.dp(view.getContext(), 16); row.setPaddingRelative(pad, pad, pad, pad);
             row.setMinimumHeight(SettingsUi.dp(view.getContext(), 52)); row.setGravity(Gravity.CENTER_VERTICAL);
@@ -484,14 +406,22 @@ public final class SoundRuntime {
             }
         }
         void cancel() {
-            cancelLookup();
             View view = anchor.get(); if (view != null) view.removeCallbacks(hold);
             down = false; opened = false; moved = false; selected = -1;
             if (popup != null) {
                 try { popup.dismiss(); } catch (RuntimeException | LinkageError ignored) {}
             }
-            popup = null; menu=null; lookupStatus=null; rows.clear(); actions.clear();
+            popup = null; rows.clear(); actions.clear();
         }
+    }
+    private static Activity activityOf(Context context) {
+        while (context instanceof ContextWrapper) {
+            if (context instanceof Activity) return (Activity) context;
+            Context base=((ContextWrapper)context).getBaseContext();
+            if (base==context) break;
+            context=base;
+        }
+        return null;
     }
     private SoundRuntime() {}
 }

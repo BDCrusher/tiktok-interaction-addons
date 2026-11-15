@@ -8,9 +8,7 @@ import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.StateListDrawable;
 import android.util.TypedValue;
 import android.view.View;
-import java.io.InputStream;
 import java.util.Map;
-import java.util.Properties;
 import java.util.WeakHashMap;
 
 /** Shared appearance/feedback, independent of either feature's runtime. */
@@ -39,18 +37,15 @@ public final class PopupStyle {
     }
     public static int background(Context context) {
         int fallback=(context.getResources().getConfiguration().uiMode & 0x30)==0x20 ? 0xff121212 : Color.WHITE;
-        int host=sheetColor(context,fallback);
-        if(luminance(host)<.5) try(InputStream stream=context.getAssets().open("hushfeed-build-v1.txt")) {
-            Properties properties=new Properties(); properties.load(stream); return configuredBackground(host,properties);
-        } catch(Exception ignored) {}
-        return host;
+        // Read live host resources so HushFeed’s runtime AMOLED switch can restore stock colors.
+        return sheetColor(context,fallback);
     }
     public static int sheetColor(Context context,int fallback) {
         TypedValue value=new TypedValue();
         try {
-            // Original 47.5.3: a27 is UISheetFlat1. a24 is translucent orange.
-            if("a27".equals(context.getResources().getResourceEntryName(0x7f0603e8))
-                && context.getTheme().resolveAttribute(0x7f0603e8,value,true)) {
+            // Original 47.7.3: a26 routes through dark aif or light axq.
+            if("a26".equals(context.getResources().getResourceEntryName(0x7f0603e7))
+                && context.getTheme().resolveAttribute(0x7f0603e7,value,true)) {
                 if(value.type>=TypedValue.TYPE_FIRST_COLOR_INT && value.type<=TypedValue.TYPE_LAST_COLOR_INT) {
                     if(Color.alpha(value.data)==255) return value.data;
                 } else if(value.resourceId!=0) {
@@ -60,13 +55,6 @@ public final class PopupStyle {
             }
         } catch(RuntimeException ignored) {}
         return fallback;
-    }
-    public static int configuredBackground(int host,Properties properties) {
-        if(luminance(host)<.5 && "applied".equals(properties.getProperty("amoled"))) {
-            String color=properties.getProperty("amoled_color","");
-            if(color.matches("#[0-9a-fA-F]{6}|#[fF]{2}[0-9a-fA-F]{6}")) return Color.parseColor(color);
-        }
-        return host;
     }
     public static double luminance(int color) { return (.2126*Color.red(color)+.7152*Color.green(color)+.0722*Color.blue(color))/255.; }
     public static int textColor(int background) { return luminance(background)<.5 ? Color.WHITE : 0xff161823; }
