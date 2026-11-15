@@ -95,6 +95,7 @@
       "result": "PASS"
     }
   ],
+  "reportLineEndings": "LF",
   "combinations": [
     {
       "selection": "both-all",
@@ -105,7 +106,7 @@
       "nativeHookAuditPassed": true,
       "hushPatchCount": 147,
       "report": "port11-beta-patches-0.82.0-both-all-addon-first.json",
-      "reportSha256": "0fe8a0e1084643d095e015ccf9a1bd98d190734c08704619b6340919b4b43948"
+      "reportSha256": "b953d603e118e73e4fcd59b0bd89935c43f1f2046e19a1ada30697a5d90971a1"
     },
     {
       "selection": "both-all",
@@ -116,7 +117,7 @@
       "nativeHookAuditPassed": true,
       "hushPatchCount": 147,
       "report": "port11-beta-patches-0.82.0-both-all-hush-first.json",
-      "reportSha256": "8790250441ab8679797256f4c2ac0abec4ecf38b5520f1c2f4377a3a63527c0c"
+      "reportSha256": "174a45fc162b2a93a15c8821214603d51f82f9ffb9a3cbeff50b611c45118422"
     },
     {
       "selection": "both-all",
@@ -127,7 +128,7 @@
       "nativeHookAuditPassed": true,
       "hushPatchCount": 147,
       "report": "port11-patches-0.82.0-both-all-addon-first.json",
-      "reportSha256": "6e3660febec97b157de6f6c2fef091c0af1c6624df91cc36bcb50f40553bbdd4"
+      "reportSha256": "f30063113c8c53e1b75bed6e4b7d280ce3acccf72e9039aae8d07a61220ad9d8"
     },
     {
       "selection": "both-all",
@@ -138,7 +139,7 @@
       "nativeHookAuditPassed": true,
       "hushPatchCount": 147,
       "report": "port11-patches-0.82.0-both-all-hush-first.json",
-      "reportSha256": "493a667f9290253bb91f38dc883e738cc797f15c5501513f5811d6778e06a0de"
+      "reportSha256": "abb094f7e111fb8597fe803106b1b1dd20d58d9bb0fb4b92da6f636cda58e72c"
     },
     {
       "selection": "collections-minimal",
@@ -149,7 +150,7 @@
       "nativeHookAuditPassed": false,
       "hushPatchCount": 1,
       "report": "port11-patches-0.82.0-collections-minimal-hush-first.json",
-      "reportSha256": "4a3e9d31d4e27c1aaa2d17473b280f23398218c9660f701029f4c71163f4be2a"
+      "reportSha256": "e8ba74eef5a4b15de3098632f1fb3cc171e9cd156112f4bc765fdcca75402717"
     },
     {
       "selection": "duplicate",
@@ -160,7 +161,7 @@
       "nativeHookAuditPassed": false,
       "hushPatchCount": 4,
       "report": "port11-patches-0.82.0-duplicate-hush-first.json",
-      "reportSha256": "d3f21ce8f9b9aa890041bb5dfca3857c1a477a7c0060f1d4f91fdd62df3ab18f"
+      "reportSha256": "a9ce30703a4c496ae0b48d5c607545c14b0344b2eb4103bdb0dcaf8896912214"
     },
     {
       "selection": "missing",
@@ -171,7 +172,7 @@
       "nativeHookAuditPassed": false,
       "hushPatchCount": 0,
       "report": "port11-patches-0.82.0-missing-hush-first.json",
-      "reportSha256": "130023994fb58c615c23a58c37d3d0f9e6dc07505143d5c458691313716baaa0"
+      "reportSha256": "62ebea09f30f5901039bf5b1480171d550c6481aaaf7b082cefff1ee9a230dd1"
     },
     {
       "selection": "sound-duplicate",
@@ -182,7 +183,7 @@
       "nativeHookAuditPassed": false,
       "hushPatchCount": 4,
       "report": "port11-patches-0.82.0-sound-duplicate-addon-first.json",
-      "reportSha256": "cea351179ec3b8bce5ac2dccc9ba2c6fcc78a813f8619fa34bbfa991ca46b3de"
+      "reportSha256": "645f0b9b9294ddb82d04a6dc98343d4f1572fe74ea9280b8d3b671a36ba01266"
     },
     {
       "selection": "sound-minimal",
@@ -193,7 +194,7 @@
       "nativeHookAuditPassed": true,
       "hushPatchCount": 1,
       "report": "port11-patches-0.82.0-sound-minimal-addon-first.json",
-      "reportSha256": "ca8e7ae7ad12de14ad305f4b9445323d1d5bf510a1fa711ae0c76496f2d716fe"
+      "reportSha256": "f605468412baeb8c3676b1ec3c204d87d987674ceff58a4a9a91e7714cd0cb66"
     },
     {
       "selection": "sound-missing",
@@ -204,7 +205,7 @@
       "nativeHookAuditPassed": false,
       "hushPatchCount": 0,
       "report": "port11-patches-0.82.0-sound-missing-addon-first.json",
-      "reportSha256": "209c4854c8a9017487f22dae3bc5d513f4e1d8617e4526d1cd2425db6655e7c8"
+      "reportSha256": "c2f90ea7f6647c69529e81819df1cd28fb69ff20432534025167e58e96af5a55"
     }
   ]
 }
