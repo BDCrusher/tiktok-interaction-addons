@@ -1,0 +1,41 @@
+{
+  "selection": "sound-minimal",
+  "order": "addon-first",
+  "hushPatches": [
+    "Settings"
+  ],
+  "apkSha256": "30acb1301f97ae7cc51c820914ee021bc02ec80b717a126f4b01520f8c8643e0",
+  "hushBundleSha256": "ef0c73f97a8e9ac4e798d8c5c93c78cb9227c58a45addec0cc8b32cacd1a305c",
+  "addonSha256": "18ec267e05469ff70f9939e89a484d758dc18ad3752a434dd707d46a3fe298e8",
+  "androidDeviceTested": false,
+  "externalPackageFilter": "com.zhiliaoapp.musically",
+  "excludedOtherPackagePatches": [],
+  "dexAuditScope": "complete compiled directory (including unchanged originals)",
+  "settingsArgumentsPreserved": true,
+  "nativeExpandableSettingsBound": true,
+  "fiveArgumentMenuConstructorBound": true,
+  "removedBadgeApiNotReferenced": true,
+  "nativeFavoritesHapticBound": true,
+  "soundBindingsArgumentsPreserved": true,
+  "soundDiscPriorityBeforeNativeTimer": true,
+  "soundEdgeListener": "LX/0BtR;",
+  "soundWindowDispatchBeforeFeedParents": true,
+  "soundAlternateDiscBound": true,
+  "soundBindBeforeInflationCovered": true,
+  "nativeFavoritesHoldDelayVariantsMs": [
+    200,
+    500
+  ],
+  "tiktokOnlyNativeSaveWithLoginGuard": true,
+  "nativeFavoritesWidthObservedWithoutReplacingMenu": true,
+  "settingsHub": "BDCrusher's Settings",
+  "result": "PASS: patch execution and compiled DEX/resources",
+  "classCount": 487978,
+  "ownClassCount": 30,
+  "duplicateClasses": false,
+  "unresolvedHostReferences": false,
+  "settingsEntryHooks": 1,
+  "verifiedPatcher": "2.4.0",
+  "patcherJarSha256": "142bb4b60251339dd45d2b84b3ffd2dc398be49bb587683d76b0da289f701416",
+  "nativeHookAuditPassed": true
+}

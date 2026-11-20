@@ -1,6 +1,6 @@
 # Sound button actions — development beta
 
-**0.8.0-beta.1** is a separately selectable patch for original global TikTok **47.7.3 / 2024707030** with external **HushFeed 0.82.0 Settings**. Select it explicitly in Morphe. Its runtime switch defaults on once selected.
+**0.9.0-beta.1** is a separately selectable patch for original global TikTok **47.8.3 / 2024708030** with external **HushFeed 0.83.0 Settings**. Select it explicitly in Morphe. Its runtime switch defaults on once selected.
 
 ## Behavior and settings
 
@@ -28,4 +28,4 @@ See [COMPATIBILITY.md](COMPATIBILITY.md) for automated and compiled checks again
 
 ## Build and install
 
-Use the pinned toolchain and confined launchers in [BUILDING.md](BUILDING.md). In Morphe Expert mode select **HushFeed 0.82.0 Settings** and **Sound button actions** in the same run against original 47.7.3. Collections is optional. Enable **Pre-release patches** and **Experimental app versions** for the beta source. Keep your existing signing key. The HushFeed bundle requires Manager **2.5.0+** and Patcher **2.3.0+**. Source updates require repatching; they do not change an already installed app. No APK is distributed or installed automatically.
+Use the pinned toolchain and confined launchers in [BUILDING.md](BUILDING.md). In Morphe Expert mode select **HushFeed 0.83.0 Settings** and **Sound button actions** in the same run against original 47.8.3. Collections is optional. Enable **Pre-release patches** and **Experimental app versions** for the beta source. Keep your existing signing key. The HushFeed bundle requires Manager **2.6.0+** and Patcher **2.4.0+**. Source updates require repatching; they do not change an already installed app. No APK is distributed or installed automatically.

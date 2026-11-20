@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.9.0-beta.1] - 2026-11-19
+
+- Port Favorites and Sound to original global TikTok 47.8.3 and HushFeed 0.83.0.
+- Open BDCrusher's Settings in place using HushFeed's expandable section. In list view, the installed add-ons appear under a fixed heading. Each row opens its feature controls.
+- Use HushFeed's independent settings theme for feature pages and keep feed popups on TikTok's live AMOLED, dark or light palette.
+- Build for Morphe Patcher 2.4.0. HushFeed requires Manager 2.6.0 or newer.
+
 ## [0.8.0-beta.1] - 2026-11-15
 
 - Port Favorites and Sound to original global TikTok 47.7.3 and HushFeed 0.82.0.

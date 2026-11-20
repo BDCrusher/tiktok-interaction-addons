@@ -18,10 +18,10 @@ public final class NativeHookAudit {
         COVER + "->n4", "bindDisc",
         COVER + "->unBind", "unbindDisc",
         COVER + "->onViewCreated", "viewsCreated",
-        "LX/09gx;->onTouch", "touch",
-        "LX/04LB;->dispatchTouchEvent", "dispatchDiscTouch",
-        "LX/1KFR;->accept", "observeFavorites",
-        "LX/1KFR;->bdcrusherRenderResponse", "observeFavorites");
+        "LX/09f1;->onTouch", "touch",
+        "LX/04LH;->dispatchTouchEvent", "dispatchDiscTouch",
+        "LX/0wHU;->accept", "observeFavorites",
+        "LX/0wHU;->bdcrusherRenderResponse", "observeFavorites");
 
     public static void main(String[] args) throws Exception {
         if (args.length != 1) throw new IllegalArgumentException("Expected compiled DEX directory");

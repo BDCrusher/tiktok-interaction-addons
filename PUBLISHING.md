@@ -6,7 +6,7 @@ Repository: [BDCrusher/tiktok-interaction-addons](https://github.com/BDCrusher/t
 
 Morphe reads root `patches-bundle.json` on main/dev. Its required fields are version, download_url, created_at and description; signature_download_url is empty because no separate bundle signature is claimed. Timestamps are UTC ISO local-date-time strings (no trailing zone) as accepted by the current Manager. Release downloads are immutable version-tag URLs, not moving latest URLs.
 
-The **0.8.0-beta.1** port targets original TikTok 47.7.3 / 2024707030 and HushFeed 0.82.0 Settings with Manager 2.5.0 or newer. Beta publication advances dev; main retains its older version. Use the release page and actual `patches-bundle.json` to confirm current publication state. The immutable **0.7.1-beta.1** release remains available for its original 47.5.3 and HushFeed 0.79.0 pairing.
+The **0.9.0-beta.1** port targets original TikTok 47.8.3 / 2024708030 and HushFeed 0.83.0 Settings with Manager 2.6.0 or newer. Beta publication advances dev. Use the release page and `patches-bundle.json` to confirm the feed version. The [0.8.0 beta release](https://github.com/BDCrusher/tiktok-interaction-addons/releases/tag/v0.8.0-beta.1) targets TikTok 47.7.3 and HushFeed 0.82.0.
 
 The owner's standing instruction, recorded 2026-10-28 in the TikTok app-home AGENTS.md, authorizes publishing completed TikTok work after required verification. Agents should finish the reviewed source push, immutable release and dev-feed update without asking for repeated permission. Use the shared C:\Morphe\Toolkit\GITHUB-PUBLISHING.md contract and github_publish.py in place. Ordinary GitHub push workflows still verify only; this agent publication workflow uses the exact locally tested bundle after CI succeeds.
 
@@ -14,7 +14,7 @@ The owner's standing instruction, recorded 2026-10-28 in the TikTok app-home AGE
 
 This source began with the same beta on main/dev; the channels have since advanced separately. Enable **Pre-release patches**, then **Experimental app versions** on its Morphe source card. Future beta publications advance dev; stable publications advance main. Manager's prerelease mode compares both feeds so a newer stable release is not missed.
 
-Remove or disable the old local source before selecting the remote one. Keep HushFeed as its own external source. For 0.8.0-beta.1, repatch original TikTok 47.7.3 with HushFeed 0.82.0 Settings and your selected add-ons in one Expert-mode run. Source updates do not patch or reinstall TikTok automatically. Future HushFeed versions require separate verification.
+Remove or disable the old local source before selecting the remote one. Keep HushFeed as its own external source. For 0.9.0-beta.1, repatch original TikTok 47.8.3 with HushFeed 0.83.0 Settings and your selected add-ons in one Expert-mode run. Source updates do not patch or reinstall TikTok automatically. Future HushFeed versions require separate verification.
 
 ## Maintainer workflow
 
@@ -24,7 +24,7 @@ Remove or disable the old local source before selecting the remote one. Keep Hus
 4. In GitHub Actions, run **Build, test and optionally release** on the intended main/dev revision, explicitly enabling **publish**. The write-enabled job runs only after verification succeeds and only in the canonical repository. It uses GitHub's repository-scoped built-in token, no private credentials stored in source.
 5. Publication creates a versioned release, verifies the publicly downloaded .mpp SHA-256, then advances that channel's feed through GitHub's contents API with an expected-file-SHA check. It refuses a feed downgrade and never replaces release assets. A failed feed update can leave an unadvertised release; inspect it instead of overwriting a version.
 
-For the 0.8.0-beta.1 beta update, publish the exact locally verified bundle after public-source CI passes, using the shared Toolkit `github_publish.py` prepare, validate and publish commands in place. CI rebuilds have their own hashes and must not be substituted while claiming local APK-combination evidence. Use COMPATIBILITY.md and the publication record to verify the exact hash. The immutable release source archive comes from the reviewed public Git revision.
+For the 0.9.0-beta.1 beta update, publish the exact locally verified bundle after public-source CI passes, using the shared Toolkit `github_publish.py` prepare, validate and publish commands in place. CI rebuilds have their own hashes and must not be substituted while claiming local APK-combination evidence. Use COMPATIBILITY.md and the publication record to verify the exact hash. The immutable release source archive comes from the reviewed public Git revision.
 
 ## Local private workspace versus public snapshot
 

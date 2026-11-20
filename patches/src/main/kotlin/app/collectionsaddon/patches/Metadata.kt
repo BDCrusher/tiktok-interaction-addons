@@ -3,6 +3,7 @@ import app.morphe.patcher.patch.loadPatchesFromJar
 import com.google.gson.GsonBuilder
 import java.io.File
 import java.security.MessageDigest
+import java.util.jar.JarFile
 import java.util.zip.ZipFile
 import java.nio.ByteBuffer
 import com.android.tools.smali.dexlib2.Opcodes
@@ -23,6 +24,9 @@ fun main(args: Array<String>) {
     }
     check(payloadClasses.size == payloadClasses.distinct().size) { "Duplicate classes across add-on payloads" }
     val version = args[2]
+    val patcherVersion = JarFile(bundle).use { jar ->
+        checkNotNull(jar.manifest.mainAttributes.getValue("Patcher-Version")) { "Missing bundle patcher version" }
+    }
     val destination = dist.resolve("TikTok-Interaction-Addons-$version.mpp")
     bundle.copyTo(destination, overwrite = true)
     val gson = GsonBuilder().setPrettyPrinting().create()
@@ -35,7 +39,7 @@ fun main(args: Array<String>) {
                 "minSdk" to t.minSdk) }) },
         "options" to emptyList<Any>(), "dependencies" to emptyList<Any>()) })
     dist.resolve("patches-list.json").writeText(gson.toJson(list))
-    dist.resolve("patches-bundle.json").writeText(gson.toJson(mapOf("name" to "TikTok Interaction Add-ons", "version" to version, "file" to destination.name, "patcherVersion" to "2.3.0", "source" to "local; not publicly published")))
+    dist.resolve("patches-bundle.json").writeText(gson.toJson(mapOf("name" to "TikTok Interaction Add-ons", "version" to version, "file" to destination.name, "patcherVersion" to patcherVersion, "source" to "local")))
     val checksum = MessageDigest.getInstance("SHA-256").digest(destination.readBytes()).joinToString("") { "%02x".format(it) }
     dist.resolve("SHA256SUMS.txt").writeText("$checksum  ${destination.name}\n")
     dist.resolve("payload-audit.json").writeText(gson.toJson(mapOf("classCount" to payloadClasses.size,

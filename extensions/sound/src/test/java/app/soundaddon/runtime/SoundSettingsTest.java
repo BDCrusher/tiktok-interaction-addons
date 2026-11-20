@@ -29,11 +29,10 @@ public class SoundSettingsTest {
         android.preference.Preference entry = screen.findPreference(SoundSettings.KEY);
         assertEquals("BDCrusher's Settings", entry.getTitle());
         entry.getOnPreferenceClickListener().onPreferenceClick(entry);
-        activity.getFragmentManager().executePendingTransactions();
-        android.app.Fragment hub = activity.getFragmentManager().findFragmentById(android.R.id.content);
-        assertTrue(hub instanceof app.bdcrusher.runtime.SettingsHub.Page);
-        assertNull(hub.getView().findViewWithTag("collections_addon.settings"));
-        hub.getView().findViewWithTag("sound_actions_addon.settings").performClick();
+        assertSame(host, activity.getFragmentManager().findFragmentById(android.R.id.content));
+        assertNull(host.findPreference("collections_addon.settings"));
+        android.preference.Preference sound = host.findPreference("sound_actions_addon.settings");
+        sound.getOnPreferenceClickListener().onPreferenceClick(sound);
         activity.getFragmentManager().executePendingTransactions();
         assertTrue(activity.getFragmentManager().findFragmentById(android.R.id.content) instanceof SoundSettings.Page);
     }

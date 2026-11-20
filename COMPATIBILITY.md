@@ -1,6 +1,12 @@
 # Compatibility report
 
-## 0.8.0-beta.1 port - TikTok 47.7.3 / HushFeed 0.82.0
+## 0.9.0-beta.1 — TikTok 47.8.3 and HushFeed 0.83.0
+
+The target is original global `com.zhiliaoapp.musically` **47.8.3 / 2024708030** with **HushFeed 0.83.0 Settings**. Manager 2.6.0 and Patcher 2.4.0 are the upstream minimums. The beta check uses Patcher 2.5.0-dev.4 from Manager 2.7.0-dev.6.
+
+BDCrusher's Settings expands on the HushFeed home screen and follows its list view setting. The updated native Favorites and Sound bindings keep collection loading, TikTok sound saving and the live opaque sheet palette. See the [verification report](verification/reports/tiktok-4783-port-verification.md) for the exact hashes, selections and settings checks. Phone verification is pending.
+
+## Historical 0.8.0-beta.1 port - TikTok 47.7.3 / HushFeed 0.82.0
 
 Target: original global `com.zhiliaoapp.musically` **47.7.3 / 2024707030**, original APK SHA-256 `9b35d4caed14ae54938eca1fa27fc89ce8307a9cf8350b80f66a9968fc3684e9`. This fingerprint matches HushFeed's published fixture reference. The exact [HushFeed 0.82.0 bundle](https://github.com/SysAdminDoc/HushFeed/releases/tag/v0.82.0) SHA-256 is `e5bf347ebbc365f3bb3b131dc868f99592f23e2aa34122edf86eaf8443678f46` (source `86131614f2ac78ccb92b5e68af3e6bc27d3d6d79`). Manager 2.5.0 / Patcher 2.3.0 is the upstream floor. The beta check used Patcher 2.4.0-dev.8, the engine bundled in Manager 2.6.0-dev.6.
 

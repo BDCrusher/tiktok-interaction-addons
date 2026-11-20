@@ -5,19 +5,12 @@ import android.content.Context;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
+import android.preference.PreferenceGroup;
 import android.preference.PreferenceScreen;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.LinearLayout;
-import android.widget.ScrollView;
-import android.widget.TextView;
 import android.widget.Toast;
 import app.morphe.extension.tiktok.settings.L10n;
 import app.morphe.extension.tiktok.settings.preference.SectionHeadingPreference;
-import app.morphe.extension.tiktok.settings.preference.SettingsHeaderPreference;
 import app.morphe.extension.tiktok.settings.preference.SettingsMenuPreference;
-import app.morphe.extension.tiktok.settings.preference.SettingsUi;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,6 +19,7 @@ import java.util.List;
 public final class SettingsHub {
     public static final String KEY = "bdcrusher.addons.settings";
     public static final String TITLE = "BDCrusher's Settings";
+    private static final String EXPANDED_STATE = KEY + ".expanded";
     public interface Feature {
         Fragment page();
         int changes(Context context);
@@ -60,18 +54,28 @@ public final class SettingsHub {
         return changed;
     }
     public static void install(Fragment host, Context context, PreferenceScreen screen) {
+        install(host, context, screen, false);
+    }
+    public static void install(Fragment host, Context context, PreferenceScreen screen, boolean list) {
         if (screen.findPreference(KEY) != null) return;
-        Preference entry = new SettingsMenuPreference(context, TITLE,
+        SettingsMenuPreference menu = new SettingsMenuPreference(context, TITLE,
             summary(context), SettingsMenuPreference.Icon.LAYOUT,
-            pref -> { navigate(host, new Page(), KEY); return true; });
+            pref -> {
+                SettingsMenuPreference group = (SettingsMenuPreference) pref;
+                group.setExpanded(!group.isExpanded());
+                return true;
+            });
+        PreferenceGroup entry = menu;
         entry.setKey(KEY);
-        ((SettingsMenuPreference)entry).setCompact(true);
+        menu.setCompact(true);
+        menu.setExpandable(!list);
+        entry.setSelectable(!list);
         List<Preference> rows = new ArrayList<>();
         int insertion=-1, lastFeed=-1, hushHeading=-1;
         for(int i=0;i<screen.getPreferenceCount();i++) {
             Preference row=screen.getPreference(i); rows.add(row);
             String key=row.getKey();
-            // 0.74 uses flat section_* routes, not the retired Customize/hub_* tree.
+            // Use the host's section keys so placement is independent of language.
             if("section_interface".equals(key)) insertion=i+1;
             if("section_feed_filter".equals(key) || "section_feed_navigation".equals(key)
                     || "section_playback".equals(key) || "section_screen_time".equals(key)) lastFeed=i+1;
@@ -89,15 +93,58 @@ public final class SettingsHub {
         int order=0; for(Preference row:rows) if(row.getOrder()>=0) row.setOrder(order++);
         if(personalHeading!=null) screen.addPreference(personalHeading);
         screen.addPreference(entry);
+        for (Slot slot : features()) {
+            SettingsMenuPreference route = new SettingsMenuPreference(context, slot.title,
+                featureSummary(slot, context), SettingsMenuPreference.Icon.LAYOUT, pref -> {
+                    if (slot.feature != null) navigate(host, slot.feature.page(), slot.key);
+                    return true;
+                });
+            route.setCompact(true);
+            Preference child = route;
+            child.setKey(slot.key);
+            child.setEnabled(slot.feature != null);
+            entry.addPreference(child);
+        }
     }
     public static void refresh(Fragment host) {
-        if(!(host instanceof PreferenceFragment) || host.getActivity()==null) return;
-        Preference entry=((PreferenceFragment)host).findPreference(KEY);
-        if(entry instanceof SettingsMenuPreference) entry.setSummary(summary(host.getActivity()));
+        SettingsMenuPreference menu = menu(host);
+        Context context = host.getActivity();
+        if (menu == null || context == null) return;
+        PreferenceGroup entry = menu;
+        entry.setSummary(summary(context));
+        for (Slot slot : features()) {
+            Preference child = entry.findPreference(slot.key);
+            if (child != null) child.setSummary(featureSummary(slot, context));
+        }
+    }
+    public static void showAsList(Fragment host, boolean list) {
+        SettingsMenuPreference menu = menu(host);
+        if (menu == null) return;
+        menu.setExpandable(!list);
+        Preference entry = menu;
+        entry.setSelectable(!list);
+    }
+    public static void saveExpansion(Fragment host, Bundle state) {
+        SettingsMenuPreference menu = menu(host);
+        if (menu != null) state.putBoolean(EXPANDED_STATE, menu.isExpanded());
+    }
+    public static void restoreExpansion(Fragment host, Bundle state) {
+        SettingsMenuPreference menu = menu(host);
+        if (menu != null && state != null) menu.setExpanded(state.getBoolean(EXPANDED_STATE));
+    }
+    private static SettingsMenuPreference menu(Fragment host) {
+        if (!(host instanceof PreferenceFragment)) return null;
+        Preference entry = ((PreferenceFragment) host).findPreference(KEY);
+        return entry instanceof SettingsMenuPreference ? (SettingsMenuPreference) entry : null;
+    }
+    private static String featureSummary(Slot slot, Context context) {
+        if (slot.feature == null) return "Module unavailable. Repatch using one current add-on bundle.";
+        int changes = slot.feature.changes(context);
+        return slot.feature.summary() + (changes == 0 ? "" : " · " + changes + " changed");
     }
     private static String summary(Context context) {
         int changes=changedCount(context);
-        return "Collection and sound add-ons · "+(changes==0 ? "personal settings" : changes+" changed");
+        return changes == 0 ? "Personal add-on settings" : changes + " changed";
     }
     private static void navigate(Fragment host, Fragment page, String key) {
         if(host==null || host.getActivity()==null) return;
@@ -106,51 +153,6 @@ public final class SettingsHub {
         }
         host.getFragmentManager().beginTransaction().setTransition(android.app.FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
             .replace(host.getId(),page).addToBackStack(key).commit();
-    }
-    public static final class Page extends Fragment {
-        private ScrollView scroll;
-        private List<Slot> slots;
-        @Override public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saved) {
-            Context context=getActivity(); SettingsUi.syncDarkMode(context);
-            scroll=new ScrollView(context); scroll.setFillViewport(true); scroll.setBackgroundColor(SettingsUi.background());
-            LinearLayout body=new LinearLayout(context); body.setOrientation(LinearLayout.VERTICAL);
-            int pad=SettingsUi.dp(context,16); body.setPaddingRelative(pad,0,pad,pad*2); scroll.addView(body);
-            body.addView(SettingsHeaderPreference.createHeader(context,TITLE,()->getFragmentManager().popBackStack()));
-            TextView intro=SettingsUi.text(context,"Your installed collection and sound add-ons. HushFeed's own settings stay separate.",15,SettingsUi.textSecondary(),0);
-            intro.setPadding(pad,pad,pad,pad); body.addView(intro);
-            body.addView(SettingsUi.sectionTitle(context,"Installed add-ons"));
-            slots=features();
-            for(Slot slot:slots) {
-                LinearLayout row=new LinearLayout(context); row.setOrientation(LinearLayout.VERTICAL);
-                row.setTag(slot.key); row.setPadding(pad,pad,pad,pad); row.setMinimumHeight(SettingsUi.dp(context,48));
-                row.setBackground(SettingsUi.groupedRow(context,true,true));
-                row.addView(SettingsUi.text(context,slot.title+"  ›",18,SettingsUi.textPrimary(),1));
-                TextView summary=SettingsUi.text(context,"",15,SettingsUi.textSecondary(),0);
-                summary.setTag(slot.key+".summary"); row.addView(summary);
-                row.setEnabled(slot.feature!=null); row.setFocusable(true);
-                row.setOnClickListener(view->{ if(slot.feature!=null) navigate(this,slot.feature.page(),slot.key); });
-                body.addView(row,new LinearLayout.LayoutParams(-1,-2));
-                View gap=new View(context); body.addView(gap,new LinearLayout.LayoutParams(1,SettingsUi.dp(context,12)));
-            }
-            if(slots.isEmpty()) body.addView(SettingsUi.text(context,"No add-on modules found. Repatch with Enhanced collection popup or Sound button actions selected.",15,SettingsUi.textSecondary(),0));
-            body.addView(SettingsUi.text(context,"BDCrusher add-ons · 0.8.0-beta.1\nGPL-3.0 · Morphe and HushFeed UI credits. Preferences and reset remain separate for each feature.",14,SettingsUi.textSecondary(),0));
-            update();
-            if(saved!=null) scroll.post(()->{ if(scroll!=null) scroll.scrollTo(0,saved.getInt("scrollY")); });
-            return scroll;
-        }
-        private void update() {
-            if(scroll==null || slots==null || getActivity()==null) return;
-            for(Slot slot:slots) {
-                TextView summary=scroll.findViewWithTag(slot.key+".summary");
-                String text=slot.feature==null ? "Module unavailable. Repatch using one current add-on bundle."
-                    : slot.feature.summary()+"\n"+slot.feature.changes(getActivity())+" changed";
-                summary.setText(text);
-                scroll.<View>findViewWithTag(slot.key).setContentDescription(slot.title+". "+text);
-            }
-        }
-        @Override public void onResume() { super.onResume(); update(); }
-        @Override public void onSaveInstanceState(Bundle state) { super.onSaveInstanceState(state); if(scroll!=null) state.putInt("scrollY",scroll.getScrollY()); }
-        @Override public void onDestroyView() { scroll=null; slots=null; super.onDestroyView(); }
     }
     private SettingsHub() {}
 }

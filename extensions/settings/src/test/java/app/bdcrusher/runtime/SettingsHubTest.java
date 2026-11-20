@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.preference.*;
 import android.view.*;
 import android.widget.TextView;
+import app.morphe.extension.tiktok.settings.preference.SettingsMenuPreference;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.*;
@@ -25,6 +26,14 @@ public class SettingsHubTest {
             setPreferenceScreen(screen);
             SettingsHub.install(this,getActivity(),screen);
         }
+        @Override public void onActivityCreated(Bundle state) {
+            super.onActivityCreated(state);
+            SettingsHub.restoreExpansion(this, state);
+        }
+        @Override public void onSaveInstanceState(Bundle state) {
+            super.onSaveInstanceState(state);
+            SettingsHub.saveExpansion(this, state);
+        }
     }
     public static class ChildPage extends Fragment {
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle state) { return new TextView(getActivity()); }
@@ -37,34 +46,67 @@ public class SettingsHubTest {
         SettingsHub.install(host,activity,host.getPreferenceScreen());
         assertEquals(2,host.getPreferenceScreen().getPreferenceCount());
         assertEquals(2,SettingsHub.features().size());
-        Preference root=host.findPreference(SettingsHub.KEY);
+        SettingsMenuPreference root=(SettingsMenuPreference) host.findPreference(SettingsHub.KEY);
+        assertTrue(root.isExpandable());
+        assertFalse(root.isExpanded());
         root.getOnPreferenceClickListener().onPreferenceClick(root);
-        activity.getFragmentManager().executePendingTransactions();
-        Fragment hub=activity.getFragmentManager().findFragmentById(android.R.id.content);
-        assertNotNull(hub.getView().findViewWithTag("collections_addon.settings"));
-        assertNotNull(hub.getView().findViewWithTag("sound_actions_addon.settings"));
-        hub.getView().findViewWithTag("sound_actions_addon.settings").performClick();
+        assertTrue(root.isExpanded());
+        assertEquals(0, activity.getFragmentManager().getBackStackEntryCount());
+        assertEquals(2, root.getPreferenceCount());
+        Preference sound=root.findPreference("sound_actions_addon.settings");
+        sound.getOnPreferenceClickListener().onPreferenceClick(sound);
         activity.getFragmentManager().executePendingTransactions();
         assertTrue(activity.getFragmentManager().findFragmentById(android.R.id.content) instanceof ChildPage);
         activity.getFragmentManager().popBackStackImmediate();
-        assertSame(hub,activity.getFragmentManager().findFragmentById(android.R.id.content));
-        hub.getView().findViewWithTag("collections_addon.settings").performClick();
+        assertSame(host,activity.getFragmentManager().findFragmentById(android.R.id.content));
+        assertTrue(root.isExpanded());
+        Preference collection=root.findPreference("collections_addon.settings");
+        collection.getOnPreferenceClickListener().onPreferenceClick(collection);
         activity.getFragmentManager().executePendingTransactions();
         assertTrue(activity.getFragmentManager().findFragmentById(android.R.id.content) instanceof ChildPage);
     }
-    @Test public void restoredHubDiscoversModulesWithoutRootInstallation() {
+    @Test public void restoredSectionKeepsExpansionAndModuleSummaries() {
         org.robolectric.android.controller.ActivityController<Activity> controller=Robolectric.buildActivity(Activity.class).setup();
         Activity activity=controller.get();
         activity.getSharedPreferences("hub-test",0).edit().putInt("collection",2).putInt("sound",1).commit();
-        activity.getFragmentManager().beginTransaction().add(android.R.id.content,new SettingsHub.Page(),"hub").commit();
+        Host host = new Host();
+        activity.getFragmentManager().beginTransaction().add(android.R.id.content,host,"hub").commit();
         activity.getFragmentManager().executePendingTransactions();
+        SettingsMenuPreference menu = (SettingsMenuPreference) host.findPreference(SettingsHub.KEY);
+        menu.setExpanded(true);
         assertEquals(3,SettingsHub.changedCount(activity));
         controller.recreate();
         activity=controller.get();
-        Fragment hub=activity.getFragmentManager().findFragmentByTag("hub");
-        assertNotNull(hub.getView().findViewWithTag("sound_actions_addon.settings"));
-        assertTrue(((TextView)hub.getView().findViewWithTag("collections_addon.settings.summary")).getText().toString().contains("2 changed"));
+        host=(Host) activity.getFragmentManager().findFragmentByTag("hub");
+        menu=(SettingsMenuPreference) host.findPreference(SettingsHub.KEY);
+        assertTrue(menu.isExpanded());
+        assertNotNull(menu.findPreference("sound_actions_addon.settings"));
+        assertTrue(menu.findPreference("collections_addon.settings").getSummary().toString().contains("2 changed"));
         assertEquals(2,activity.getSharedPreferences("hub-test",0).getInt("collection",0));
+    }
+    @Test public void listViewKeepsChildrenVisibleAndReturnsToCollapsibleSections() {
+        Activity activity=Robolectric.buildActivity(Activity.class).setup().get();
+        Host host=new Host();
+        activity.getFragmentManager().beginTransaction().add(android.R.id.content,host).commit();
+        activity.getFragmentManager().executePendingTransactions();
+        PreferenceScreen screen=host.getPreferenceManager().createPreferenceScreen(activity);
+        host.setPreferenceScreen(screen);
+        SettingsHub.install(host, activity, screen, true);
+        SettingsMenuPreference menu=(SettingsMenuPreference) host.findPreference(SettingsHub.KEY);
+        assertFalse(menu.isExpandable());
+        assertFalse(menu.isSelectable());
+        assertEquals(4, screen.getRootAdapter().getCount());
+        SettingsHub.showAsList(host, false);
+        org.robolectric.Shadows.shadowOf(android.os.Looper.getMainLooper()).idle();
+        assertTrue(menu.isExpandable());
+        assertTrue(menu.isSelectable());
+        assertEquals(2, screen.getRootAdapter().getCount());
+        menu.getOnPreferenceClickListener().onPreferenceClick(menu);
+        org.robolectric.Shadows.shadowOf(android.os.Looper.getMainLooper()).idle();
+        assertEquals(4, screen.getRootAdapter().getCount());
+        menu.getOnPreferenceClickListener().onPreferenceClick(menu);
+        org.robolectric.Shadows.shadowOf(android.os.Looper.getMainLooper()).idle();
+        assertEquals(2, screen.getRootAdapter().getCount());
     }
     @Test public void flatHomeInsertsAfterInterfaceWithoutOldHeadingsOrDuplicates() {
         Activity activity=Robolectric.buildActivity(Activity.class).setup().get();

@@ -18,7 +18,7 @@ import org.robolectric.shadow.api.Shadow;
 import org.robolectric.util.ReflectionHelpers.ClassParameter;
 import static org.junit.Assert.*;
 
-/** The two real 47.7.3 sheet attribute and historical orange token, reproduced from the original APK resource table. */
+/** The real 47.8.3 sheet attribute and historical orange token, reproduced from the original APK resource table. */
 @RunWith(RobolectricTestRunner.class)
 @Config(sdk=28, manifest=Config.NONE, shadows=PopupThemeRegressionTest.HostTheme.class)
 public class PopupThemeRegressionTest {

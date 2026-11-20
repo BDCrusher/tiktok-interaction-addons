@@ -57,11 +57,10 @@ public class SettingsPageTest {
     }
     private CollectionSettingsFragment page(Activity activity, Host host) {
         host.findPreference(SettingsEntry.KEY).getOnPreferenceClickListener().onPreferenceClick(host.findPreference(SettingsEntry.KEY));
-        activity.getFragmentManager().executePendingTransactions();
-        Fragment hub = activity.getFragmentManager().findFragmentById(1234);
-        assertTrue(hub instanceof app.bdcrusher.runtime.SettingsHub.Page);
-        assertNull(hub.getView().findViewWithTag("sound_actions_addon.settings"));
-        hub.getView().findViewWithTag("collections_addon.settings").performClick();
+        assertSame(host, activity.getFragmentManager().findFragmentById(1234));
+        assertNull(host.findPreference("sound_actions_addon.settings"));
+        Preference collection = host.findPreference("collections_addon.settings");
+        collection.getOnPreferenceClickListener().onPreferenceClick(collection);
         activity.getFragmentManager().executePendingTransactions();
         return (CollectionSettingsFragment) activity.getFragmentManager().findFragmentById(1234);
     }
@@ -76,14 +75,13 @@ public class SettingsPageTest {
     @Test public void opensFullPageAndBackRefreshesSummary() {
         Activity activity = activity(); Host host = host(activity); CollectionSettingsFragment page = page(activity, host);
         assertNotNull(page.getView().findViewWithTag("hushfeed_page_header"));
-        assertEquals(2, activity.getFragmentManager().getBackStackEntryCount());
+        assertEquals(1, activity.getFragmentManager().getBackStackEntryCount());
         page.getView().findViewWithTag("collections_addon.enabled").performClick();
         assertFalse(Preferences.enabled(activity));
         assertFalse(page.getView().findViewWithTag("collections_addon.count").isEnabled());
         activity.getFragmentManager().popBackStackImmediate();
-        assertTrue(activity.getFragmentManager().findFragmentById(1234) instanceof app.bdcrusher.runtime.SettingsHub.Page);
-        activity.getFragmentManager().popBackStackImmediate();
         assertSame(host, activity.getFragmentManager().findFragmentById(1234));
+        assertTrue(((SettingsMenuPreference) host.findPreference(SettingsEntry.KEY)).isExpanded());
         assertTrue(host.findPreference(SettingsEntry.KEY).getSummary().toString().contains("1 changed"));
     }
     @Test public void resetNeedsConfirmationAndNeverClearsHostPreferences() {
