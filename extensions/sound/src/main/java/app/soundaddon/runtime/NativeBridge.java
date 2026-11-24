@@ -14,5 +14,9 @@ public final class NativeBridge {
     public static String musicId(Object music) { throw new UnsupportedOperationException(); }
     public static long holdDelayMillis() { throw new UnsupportedOperationException(); }
     public static void collect(Activity activity, Object music) { throw new UnsupportedOperationException(); }
+    static void launchSave(Activity activity, Object music, Object viewModel) { throw new UnsupportedOperationException(); }
+    static boolean isCollected(Object music) { throw new UnsupportedOperationException(); }
+    static void clearSave(Object viewModel) { throw new UnsupportedOperationException(); }
+    static Object completionValue() { throw new UnsupportedOperationException(); }
     private NativeBridge() {}
 }

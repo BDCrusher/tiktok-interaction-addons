@@ -4,7 +4,8 @@ import android.preference.PreferenceGroup;
 /** Compile-only signature and test stand-in; NEVER shipped in the payload. */
 @SuppressWarnings("deprecation")
 public class SettingsMenuPreference extends PreferenceGroup {
-    public enum Icon { LAYOUT }
+    public enum Icon { LAYOUT, PLAYBACK }
+    public static android.graphics.drawable.Drawable lineIconDrawable(Context context, Icon icon) { return null; }
     private boolean expandable;
     private boolean expanded;
     public SettingsMenuPreference(Context context, String title, String summary, Icon icon,

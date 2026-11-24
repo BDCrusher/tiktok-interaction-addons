@@ -1,0 +1,164 @@
+{
+  "date": "2026-11-24",
+  "version": "0.10.0-beta.1",
+  "androidDeviceTested": false,
+  "originalTikTok": {
+    "version": "47.9.3",
+    "versionCode": 2024709030,
+    "sha256": "7321ae3537572004956e2308c7eb5b1d82e6eb536c2c2fac432f3d8a1801ff70",
+    "bytes": 483027063,
+    "source": "User-supplied APKMirror APK",
+    "verifiedSignatureSchemes": [
+      1,
+      2,
+      3
+    ],
+    "signerSha256": "9041803e91bcb814b4b4399fb5c85a91640b755e5e8ba76813814bf4cf2ab5ba"
+  },
+  "hushFeed": {
+    "version": "0.84.0",
+    "sourceCommit": "d0543d2cbb1d7216cf7d01a6e3a94a1561d2aacc",
+    "sha256": "ad41e505daf4c47277461598b9e11ae3e47031f0f92040c18330fc73a9988b41",
+    "source": "https://github.com/SysAdminDoc/HushFeed/releases/tag/v0.84.0"
+  },
+  "artifacts": {
+    "apkSha256": {
+      "sha256": "7321ae3537572004956e2308c7eb5b1d82e6eb536c2c2fac432f3d8a1801ff70",
+      "bytes": 483027063
+    },
+    "hushBundleSha256": {
+      "sha256": "ad41e505daf4c47277461598b9e11ae3e47031f0f92040c18330fc73a9988b41",
+      "bytes": 9145487
+    },
+    "addonSha256": {
+      "sha256": "5af8cfeeb736f57d88e8eb6ec2ad3cd7b1dcaedf00d6d9ee5dfd1083cc7dd94c",
+      "bytes": 137195
+    }
+  },
+  "patcherCommit": "5003d688333c40317703d45a091a496d831dd27e",
+  "managerBetaWithSamePatcher": "2.8.0-dev.2",
+  "unitAndSimulatedTestsPassed": 74,
+  "publicationHelperTestsPassed": 7,
+  "lintTasksPassed": [
+    ":extensions:collections:lintDebug",
+    ":extensions:sound:lintDebug",
+    ":extensions:settings:lintDebug"
+  ],
+  "payloadOwnClassCount": 61,
+  "selectablePatches": 2,
+  "paletteAudit": [
+    {
+      "order": "hush-first",
+      "values": [
+        "a26(0x7f0603e7)=?attr/aif",
+        "a26(0x7f0603e7)=?attr/axq",
+        "aif(0x7f060666)=#ff000000",
+        "aif(0x7f060666)=?attr/hushfeed_amoled_stock_7",
+        "axq(0x7f06089b)=#ffffffff"
+      ],
+      "result": "PASS"
+    },
+    {
+      "order": "addon-first",
+      "values": [
+        "a26(0x7f0603e7)=?attr/aif",
+        "a26(0x7f0603e7)=?attr/axq",
+        "aif(0x7f060666)=#ff000000",
+        "aif(0x7f060666)=?attr/hushfeed_amoled_stock_7",
+        "axq(0x7f06089b)=#ffffffff"
+      ],
+      "result": "PASS"
+    }
+  ],
+  "reportLineEndings": "LF",
+  "combinations": [
+    {
+      "selection": "both-all",
+      "order": "addon-first",
+      "result": "PASS: patch execution and compiled DEX/resources",
+      "verifiedPatcher": "2.5.0",
+      "patcherJarSha256": "c7b2ee2e863142a7ace0ef955c377e23eb91fe43a58931dc4b04c170a11fb147",
+      "nativeHookAuditPassed": true,
+      "hushPatchCount": 155,
+      "report": "port13-patches-0.84.0-both-all-addon-first.json",
+      "reportSha256": "67cd838463ce870ca42b70979e92fa20668e51f1f3ede756ba2f1307cf4a220a"
+    },
+    {
+      "selection": "both-all",
+      "order": "hush-first",
+      "result": "PASS: patch execution and compiled DEX/resources",
+      "verifiedPatcher": "2.5.0",
+      "patcherJarSha256": "c7b2ee2e863142a7ace0ef955c377e23eb91fe43a58931dc4b04c170a11fb147",
+      "nativeHookAuditPassed": true,
+      "hushPatchCount": 155,
+      "report": "port13-patches-0.84.0-both-all-hush-first.json",
+      "reportSha256": "bee6dd6717a50fe1eb0ddadb09e62c5707347185458bdf5ef9f5d1b78a1fb66b"
+    },
+    {
+      "selection": "collections-minimal",
+      "order": "hush-first",
+      "result": "PASS: patch execution and compiled DEX/resources",
+      "verifiedPatcher": "2.5.0",
+      "patcherJarSha256": "c7b2ee2e863142a7ace0ef955c377e23eb91fe43a58931dc4b04c170a11fb147",
+      "nativeHookAuditPassed": false,
+      "hushPatchCount": 1,
+      "report": "port13-patches-0.84.0-collections-minimal-hush-first.json",
+      "reportSha256": "7358d363f86680807ed70037893f08554c616e3518ff84792f7bc3c43fe707a4"
+    },
+    {
+      "selection": "duplicate",
+      "order": "hush-first",
+      "result": "PASS: duplicate add-on rejected",
+      "verifiedPatcher": "2.5.0",
+      "patcherJarSha256": "c7b2ee2e863142a7ace0ef955c377e23eb91fe43a58931dc4b04c170a11fb147",
+      "nativeHookAuditPassed": false,
+      "hushPatchCount": 4,
+      "report": "port13-patches-0.84.0-duplicate-hush-first.json",
+      "reportSha256": "b3e00326f9d2a0fb35faa8584e36a932543f6e18641d052c392b188772ea2000"
+    },
+    {
+      "selection": "missing",
+      "order": "hush-first",
+      "result": "PASS: missing dependency rejected",
+      "verifiedPatcher": "2.5.0",
+      "patcherJarSha256": "c7b2ee2e863142a7ace0ef955c377e23eb91fe43a58931dc4b04c170a11fb147",
+      "nativeHookAuditPassed": false,
+      "hushPatchCount": 0,
+      "report": "port13-patches-0.84.0-missing-hush-first.json",
+      "reportSha256": "31b6136f5ebf3275a4d560934d0157d1dbef85f9c93d9118fea7a24e9d69d6a9"
+    },
+    {
+      "selection": "sound-duplicate",
+      "order": "addon-first",
+      "result": "PASS: duplicate add-on rejected",
+      "verifiedPatcher": "2.5.0",
+      "patcherJarSha256": "c7b2ee2e863142a7ace0ef955c377e23eb91fe43a58931dc4b04c170a11fb147",
+      "nativeHookAuditPassed": false,
+      "hushPatchCount": 4,
+      "report": "port13-patches-0.84.0-sound-duplicate-addon-first.json",
+      "reportSha256": "4f068e402514aba155c8a4bb2e51b76a1f21be45e462c2a86e952f92d4bfb59d"
+    },
+    {
+      "selection": "sound-minimal",
+      "order": "addon-first",
+      "result": "PASS: patch execution and compiled DEX/resources",
+      "verifiedPatcher": "2.5.0",
+      "patcherJarSha256": "c7b2ee2e863142a7ace0ef955c377e23eb91fe43a58931dc4b04c170a11fb147",
+      "nativeHookAuditPassed": true,
+      "hushPatchCount": 1,
+      "report": "port13-patches-0.84.0-sound-minimal-addon-first.json",
+      "reportSha256": "19f9d17c5e87e36b672867930b7ce8c6147b7e191e3ba5d717bdc28e3c2c05a7"
+    },
+    {
+      "selection": "sound-missing",
+      "order": "addon-first",
+      "result": "PASS: missing dependency rejected",
+      "verifiedPatcher": "2.5.0",
+      "patcherJarSha256": "c7b2ee2e863142a7ace0ef955c377e23eb91fe43a58931dc4b04c170a11fb147",
+      "nativeHookAuditPassed": false,
+      "hushPatchCount": 0,
+      "report": "port13-patches-0.84.0-sound-missing-addon-first.json",
+      "reportSha256": "fb54bee0d1a13129d14b1ebe91c195dfff4b50950b8be2cf64cefa45b044d90f"
+    }
+  ]
+}

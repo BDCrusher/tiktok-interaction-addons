@@ -28,6 +28,8 @@ public class SoundGestureTest {
     @Implements(value=NativeBridge.class,isInAndroidSdk=false)
     public static class NativeFixture {
         static int saves;
+        static boolean collected;
+        static Object cleared;
         static View primary, alternate;
         static Object boundData;
         static long delay;
@@ -39,6 +41,9 @@ public class SoundGestureTest {
         @Implementation public static String musicId(Object music) {return "sound";}
         @Implementation public static long holdDelayMillis() {return delay;}
         @Implementation public static void collect(Activity activity,Object music) {saves++;}
+        @Implementation protected static boolean isCollected(Object music) {return collected;}
+        @Implementation protected static void clearSave(Object viewModel) {cleared=viewModel;}
+        @Implementation protected static Object completionValue() {return "completed";}
     }
     static class FeedRoot extends FrameLayout {
         int events; boolean speedStarted;
@@ -55,6 +60,7 @@ public class SoundGestureTest {
     @Before public void setup() {
         SoundRuntime.DISCS.clear(); HushfeedPause.paused=false; NativeFixture.saves=0; NativeFixture.delay=200; Feedback.pulses=0;
         NativeFixture.primary=null; NativeFixture.alternate=null; NativeFixture.boundData=data;
+        NativeFixture.collected=false; NativeFixture.cleared=null;
         activity=Robolectric.buildActivity(Activity.class).setup().visible().get();
         root=new FeedRoot(activity); activity.setContentView(root);
         disc=new View(activity); FrameLayout.LayoutParams layout=new FrameLayout.LayoutParams(60,60);
@@ -71,6 +77,27 @@ public class SoundGestureTest {
         SoundPreferences.enabled(activity,true);
     }
     @After public void teardown() { SoundRuntime.DISCS.clear(); HushfeedPause.paused=false; }
+
+    @Test public void soundSaveCompletionWaitsForNativeConfirmationAndClearsTheTemporaryViewModel() {
+        Object rejected = new Object();
+        assertEquals("completed", new SoundSaveCompletion(activity, "music", rejected).invoke(null));
+        shadowOf(Looper.getMainLooper()).idle();
+        assertSame(rejected, NativeFixture.cleared);
+        assertTrue(SoundRuntime.diagnosticStatus().contains("Sound save was not confirmed"));
+
+        NativeFixture.collected = true;
+        Object saved = new Object();
+        new SoundSaveCompletion(activity, "music", saved).invoke(null);
+        shadowOf(Looper.getMainLooper()).idle();
+        assertSame(saved, NativeFixture.cleared);
+        assertTrue(SoundRuntime.diagnosticStatus().contains("TikTok reported sound saved"));
+
+        Object interrupted = new Object();
+        new SoundSaveCompletion(activity, "music", interrupted).invoke(new RuntimeException());
+        shadowOf(Looper.getMainLooper()).idle();
+        assertSame(interrupted, NativeFixture.cleared);
+        assertTrue(SoundRuntime.diagnosticStatus().contains("Sound save was not confirmed"));
+    }
     boolean window(long down,int action,boolean onDisc) {
         MotionEvent event=event(down,action,onDisc);
         try {

@@ -92,6 +92,31 @@ public final class SoundRuntime {
         finally { directDispatchDepth--; local.recycle(); }
     }
 
+    public static void alreadySaved(Activity activity) {
+        showSaveStatus(activity, "This sound is already in Favorites.");
+    }
+
+    public static void startSave(Activity activity, Object music, Object viewModel) {
+        try {
+            NativeBridge.launchSave(activity, music, viewModel);
+        } catch (RuntimeException | LinkageError failure) {
+            NativeBridge.clearSave(viewModel);
+            throw failure;
+        }
+    }
+
+    static void saveFinished(Activity activity, boolean saved) {
+        lastStage = saved ? "TikTok reported sound saved" : "Sound save was not confirmed";
+        showSaveStatus(activity, saved ? "Sound saved to Favorites."
+            : "Could not confirm the save. Try again from the sound page.");
+    }
+
+    private static void showSaveStatus(Activity activity, String message) {
+        if (activity != null && !activity.isFinishing() && !activity.isDestroyed()) {
+            Toast.makeText(activity, message, Toast.LENGTH_SHORT).show();
+        }
+    }
+
     private static final class DiscPress {
         final Binding binding;
         final long downTime;

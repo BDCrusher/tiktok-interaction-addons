@@ -1,5 +1,11 @@
 # Compatibility report
 
+## 0.10.0-beta.1 — TikTok 47.9.3 and HushFeed 0.84.0
+
+Target: original global TikTok `com.zhiliaoapp.musically` 47.9.3 / 2024709030, with HushFeed 0.84.0 Settings. Requires Morphe Manager 2.7.0 or newer with Patcher 2.5.0. Manager 2.8.0-dev.2 pins the same patcher engine.
+
+The feature pages use HushFeed's native preference renderer and selected settings theme. The Sound bridge initializes the native collection ViewModel and runs TikTok's add action with completion feedback. [Exact verification and limitations](verification/reports/tiktok-4793-port-verification.md).
+
 ## 0.9.0-beta.1 — TikTok 47.8.3 and HushFeed 0.83.0
 
 The target is original global `com.zhiliaoapp.musically` **47.8.3 / 2024708030** with **HushFeed 0.83.0 Settings**. Manager 2.6.0 and Patcher 2.4.0 are the upstream minimums. The beta check uses Patcher 2.5.0-dev.4 from Manager 2.7.0-dev.6.

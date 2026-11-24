@@ -17,7 +17,7 @@ def main():
     env.update(TEMP=str(STATE / 'temp'), TMP=str(STATE / 'temp'))
     env.pop('JAVA_TOOL_OPTIONS', None)
     env.pop('JDK_JAVA_OPTIONS', None)
-    java = Path(env.get('JAVA_HOME', 'C:/Program Files/Microsoft/jdk-17.0.21.21-hotspot')) / 'bin/java.exe'
+    java = Path(env.get('JAVA_HOME', 'C:/Program Files/Microsoft/jdk-17.0.21.102-hotspot')) / 'bin/java.exe'
     results = []
     for module, task in MODULES:
         config = json.loads((ROOT / module / 'build' / (task + '-runtime.json')).read_text())

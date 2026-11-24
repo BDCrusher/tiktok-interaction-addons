@@ -64,7 +64,9 @@ public class RuntimeTest {
         CollectionSettingsFragment page = new CollectionSettingsFragment();
         activity.getFragmentManager().beginTransaction().add(1234, page).commit();
         activity.getFragmentManager().executePendingTransactions();
-        CountSlider slider = page.getView().findViewWithTag("collections_addon.count.slider");
+        android.widget.ListView list = page.getView().findViewById(android.R.id.list);
+        CountSlider slider = page.findPreference("collections_addon.count").getView(null, list)
+            .findViewWithTag("collections_addon.count.slider");
         slider.value(21); assertEquals(20, slider.value()); assertEquals(5, Preferences.count(activity));
         for(int i=0;i<19;i++) slider.onKeyDown(android.view.KeyEvent.KEYCODE_DPAD_LEFT,new android.view.KeyEvent(android.view.KeyEvent.ACTION_DOWN,android.view.KeyEvent.KEYCODE_DPAD_LEFT));
         assertEquals(1, Preferences.count(activity));

@@ -12,9 +12,9 @@ import app.morphe.patcher.util.proxy.mutableTypes.MutableMethod
 internal val settingsHubPatch = bytecodePatch {
     extendWith("extensions/settings.mpe")
     execute {
-        if (packageMetadata.versionName != "47.8.3" || packageMetadata.versionCode != "2024708030")
-            throw PatchException("TikTok Interaction Add-ons requires original TikTok 47.8.3 (2024708030).")
-        val native="LX/0kS2;"
+        if (packageMetadata.versionName != "47.9.3" || packageMetadata.versionCode != "2024709030")
+            throw PatchException("TikTok Interaction Add-ons requires original TikTok 47.9.3 (2024709030).")
+        val native="LX/1825;"
         val haptic=classDefByOrNull(native) ?: throw PatchException("Native Favorites feedback class missing")
         if(haptic.methods.none {it.name=="<init>" && it.parameterTypes==listOf("Landroid/content/Context;")}
             || haptic.methods.none {it.name=="LIZ" && it.parameterTypes==listOf("I") && it.returnType=="V"})
@@ -36,13 +36,26 @@ internal val settingsHubPatch = bytecodePatch {
         val host="Lapp/morphe/extension/tiktok/settings/preference/TikTokPreferenceFragment;"
         val hub="Lapp/bdcrusher/runtime/SettingsHub;"
         val clazz=mutableClassDefByOrNull(host) ?: throw PatchException("BDCrusher's Settings requires compatible HushFeed Settings selected in the same run.")
-        for(method in classDefBy(hub).methods) for(insn in method.implementation?.instructions ?: emptyList()) {
+        val adapterType = "Lapp/morphe/extension/tiktok/settings/preference/SettingsListAdapter;"
+        val adapter = mutableClassDefByOrNull(adapterType)
+            ?: throw PatchException("HushFeed settings list renderer is missing.")
+        if (adapter.superclass != "Landroid/widget/BaseAdapter;" ||
+            adapter.methods.none { it.name == "<init>" && it.accessFlags and 1 != 0 &&
+                it.parameterTypes == listOf("Landroid/widget/ListAdapter;", "Ljava/util/List;") && it.returnType == "V" } ||
+            adapter.methods.none { it.name == "dispose" && it.accessFlags and 1 != 0 &&
+                it.parameterTypes.isEmpty() && it.returnType == "V" })
+            throw PatchException("Unsupported HushFeed settings list renderer.")
+        // The released adapter has public entry points but package-private class visibility.
+        adapter.setAccessFlags(adapter.accessFlags or 1)
+        for (type in listOf(hub, "Lapp/bdcrusher/runtime/SettingsPage;")) {
+            for (method in classDefBy(type).methods) for (insn in method.implementation?.instructions ?: emptyList()) {
                 val ref=(insn as? ReferenceInstruction)?.reference as? MethodReference ?: continue
                 if(!ref.definingClass.startsWith("Lapp/morphe/")) continue
                 val target=classDefByOrNull(ref.definingClass)?.methods?.singleOrNull {
                     it.name==ref.name && it.parameterTypes==ref.parameterTypes && it.returnType==ref.returnType
                 }
-                if(target==null || target.accessFlags and 1==0) throw PatchException("Unsupported public HushFeed settings hub contract: $ref")
+                if(target==null || target.accessFlags and 1==0) throw PatchException("Unsupported public HushFeed settings contract: $ref")
+            }
         }
         if (clazz.methods.none { it.name == "settingsAsList" && it.parameterTypes.isEmpty() &&
                 it.returnType == "Z" && it.accessFlags and 8 != 0 })

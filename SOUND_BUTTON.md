@@ -1,6 +1,6 @@
 # Sound button actions — development beta
 
-**0.9.0-beta.1** is a separately selectable patch for original global TikTok **47.8.3 / 2024708030** with external **HushFeed 0.83.0 Settings**. Select it explicitly in Morphe. Its runtime switch defaults on once selected.
+**0.10.0-beta.1** is a separately selectable patch for original global TikTok **47.9.3 / 2024709030** with external **HushFeed 0.84.0 Settings**. Select it explicitly in Morphe. Its runtime switch defaults on once selected.
 
 ## Behavior and settings
 
@@ -10,7 +10,7 @@ An ordinary music-disc tap opens TikTok's native sound page. Hold a visible elig
 
 The record uses the same native delay choice as the feed Favorites button: normally 200 ms, or 500 ms when TikTok enables its longer-hold experiment. The menu is ready without a song-detail lookup. If you are signed out, TikTok prompts you to sign in; open the menu again afterward.
 
-This port invokes TikTok's own authenticated add-to-favorites action. The menu offers TikTok saving only. Older versions exposed external provider destinations; this build has no provider lookup, title-context hook or cross-service save action. Sending the native request is not proof that the sound was saved.
+The save action initializes TikTok's music collection ViewModel, then runs its authenticated add-to-favorites job. A success message follows confirmation from the native music object. An unconfirmed or interrupted job shows a failure message. If TikTok already marks the sound as collected, the add-on reports that state.
 
 The popup uses Favorites' measured width when available and a bounded fallback otherwise. It follows the live host sheet palette, including HushFeed's AMOLED switch and standard dark/light colors. Selection compares clipped visible row bounds in screen coordinates. Haptics use TikTok's native Favorites feedback and remain subject to HushFeed and device settings.
 
@@ -28,4 +28,4 @@ See [COMPATIBILITY.md](COMPATIBILITY.md) for automated and compiled checks again
 
 ## Build and install
 
-Use the pinned toolchain and confined launchers in [BUILDING.md](BUILDING.md). In Morphe Expert mode select **HushFeed 0.83.0 Settings** and **Sound button actions** in the same run against original 47.8.3. Collections is optional. Enable **Pre-release patches** and **Experimental app versions** for the beta source. Keep your existing signing key. The HushFeed bundle requires Manager **2.6.0+** and Patcher **2.4.0+**. Source updates require repatching; they do not change an already installed app. No APK is distributed or installed automatically.
+Use the pinned toolchain and confined launchers in [BUILDING.md](BUILDING.md). In Morphe Expert mode select **HushFeed 0.84.0 Settings** and **Sound button actions** in the same run against original 47.9.3. Collections is optional. Enable **Pre-release patches** and **Experimental app versions** for the beta source. Keep your existing signing key. The HushFeed bundle requires Manager **2.7.0+** and Patcher **2.5.0+**. Source updates require repatching; they do not change an already installed app. No APK is distributed or installed automatically.

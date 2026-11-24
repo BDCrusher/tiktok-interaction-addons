@@ -2,19 +2,19 @@
 
 ## Current toolchain
 
-The 0.9.0-beta.1 port targets original global TikTok 47.8.3 / 2024708030 and external HushFeed 0.83.0. The published HushFeed bundle requires Morphe Manager 2.6.0 or newer, with Patcher 2.4.0 or newer. Build the add-on against 2.4.0 for that floor. See [COMPATIBILITY.md](COMPATIBILITY.md) for the exact tested versions. No device installation is performed by these diagnostics.
+The 0.10.0-beta.1 port targets original global TikTok 47.9.3 / 2024709030 and external HushFeed 0.84.0. The published HushFeed bundle requires Morphe Manager 2.7.0 or newer, with Patcher 2.5.0 or newer. Build the add-on against 2.5.0 for that floor. See [COMPATIBILITY.md](COMPATIBILITY.md) for the exact tested versions. No device installation is performed by these diagnostics.
 
-Use JDK 17 (local pin Microsoft 17.0.21.21), Android SDK platform 36/build-tools 36.0.0 and the included checksum-pinned Gradle 9.7.1 wrapper. Set `JAVA_HOME` explicitly if your shell defaults to a different JDK. Initial dependency resolution needs network access. No provider or API keys are used.
+Use JDK 17 (local pin Microsoft 17.0.21.102), Android SDK platform 36/build-tools 36.0.0 and the included checksum-pinned Gradle 9.7.1 wrapper. Set `JAVA_HOME` explicitly if your shell defaults to a different JDK. Initial dependency resolution needs network access. No provider or API keys are used.
 
 | Dependency | Exact pin |
 | --- | --- |
 | Morphe patches Gradle plugin 1.3.4 | `a230c33f7eca1e18b07bf1114ca850421520f98d` |
-| Morphe Patcher v2.4.0 | `0aed87c4e3264cf9233feab7ed26cf2543a08b96` |
+| Morphe Patcher v2.5.0 | `5003d688333c40317703d45a091a496d831dd27e` |
 | Smali | `5eaff5a2c9` |
 | ARSCLib | `50418a07a8` |
 | Scaffold/wrapper origin | template `5ec391b94cc6cb099a638576db0ba72fb0a921ae` |
 
-Composite checkouts are ignored `build-tools/morphe-patches-gradle-plugin` and `build-tools/morphe-patcher-2.4.0`. The historical 1.15.0 and 2.0.0 checkouts are retained unchanged. Fresh checkouts must use the pins above. `-PmorphePluginDir=...` and `-PmorphePatcherDir=...` override their locations; match the Smali dependency to the selected Patcher. Manager v2.7.0-dev.6 (`d1173b0686f9d093d3afaa66497a2e59ced5ade1`) bundles Patcher v2.5.0-dev.4 (`cc2842fdef15267d7727ab7aaefe845e02bde604`, Smali `5eaff5a2c9`), the separate beta verification engine. Use `-Paddon=<absolute path to built .mpp>` to verify the exact stable-built bundle with a different test engine and `-PverificationLabel=<label>` to keep those reports distinct. The local Maven placeholders are not credentials; do not put private tokens in this project.
+Composite checkouts are ignored `build-tools/morphe-patches-gradle-plugin` and `build-tools/morphe-patcher-2.5.0`. The historical 1.15.0 and 2.0.0 checkouts are retained unchanged. Fresh checkouts must use the pins above. `-PmorphePluginDir=...` and `-PmorphePatcherDir=...` override their locations; match the Smali dependency to the selected Patcher. Manager v2.8.0-dev.2 pins the same Patcher 2.5.0 as HushFeed 0.84.0. Use `-Paddon=<absolute path to built .mpp>` to verify the exact stable-built bundle with a different test engine and `-PverificationLabel=<label>` to keep those reports distinct. The local Maven placeholders are not credentials; do not put private tokens in this project.
 
 ## Local build and tests
 
@@ -34,13 +34,13 @@ Gradle 9.7.1's Windows test-worker argument file mishandles the apostrophe in th
 
 ## Exact combination verification
 
-Acquire the external [HushFeed v0.83.0 release](https://github.com/SysAdminDoc/HushFeed/releases/tag/v0.83.0) separately, verify its published checksums, and keep it in ignored inputs. Supply the original TikTok 47.8.3 APK. See [COMPATIBILITY.md](COMPATIBILITY.md) for exact artifact identities and results. Never distribute vendor or prepatched APKs with this add-on.
+Acquire the external [HushFeed v0.84.0 release](https://github.com/SysAdminDoc/HushFeed/releases/tag/v0.84.0) separately, verify its published checksums, and keep it in ignored inputs. Supply the original TikTok 47.9.3 APK. See [COMPATIBILITY.md](COMPATIBILITY.md) for exact artifact identities and results. Never distribute vendor or prepatched APKs with this add-on.
 
 ```powershell
-python -B scripts/local_build.py :patches:verifyCombination "-Papk=C:\path\to\original-47.8.3.apk" "-Phushfeed=C:\path\to\patches-0.83.0.mpp" -Pselection=both-all -Porder=hush-first
+python -B scripts/local_build.py :patches:verifyCombination "-Papk=C:\path\to\original-47.9.3.apk" "-Phushfeed=C:\path\to\patches-0.84.0.mpp" -Pselection=both-all -Porder=hush-first
 ```
 
-Collections selections: `core`, `amoled`, `extended`, `defaults`, `collections-minimal`, `missing`, `duplicate`. Sound selections: `sound-minimal`, `sound-extended`, `sound-defaults`, `sound-missing`, `sound-duplicate`. Both: `both-extended`, `both-defaults`, `both-all`. `both-all` selects every compatible public HushFeed 0.83.0 patch with default options as a stress check. `defaults` selects the external defaults. Orders are `hush-first` and `addon-first`.
+Collections selections: `core`, `amoled`, `extended`, `defaults`, `collections-minimal`, `missing`, `duplicate`. Sound selections: `sound-minimal`, `sound-extended`, `sound-defaults`, `sound-missing`, `sound-duplicate`. Both: `both-extended`, `both-defaults`, `both-all`. `both-all` selects every compatible public HushFeed 0.84.0 patch with default options as a stress check. `defaults` selects the external defaults. Orders are `hush-first` and `addon-first`.
 
 The four negative selections must explicitly reject missing Settings or duplicate add-on selection. Positive checks compile DEX/resources, check duplicate classes and injected references, and audit settings arguments and native bindings. The verification harness supplies a DEX verifier so STRIP_FAST materializes the complete DEX directory, including unchanged original entries held in memory by Patcher 2.4. No signing or installation is performed.
 

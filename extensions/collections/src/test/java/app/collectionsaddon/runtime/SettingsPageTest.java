@@ -8,9 +8,10 @@ import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceScreen;
 import android.widget.FrameLayout;
-import android.widget.LinearLayout;
-import android.widget.Switch;
+import android.widget.ListView;
+import android.preference.SwitchPreference;
 import app.morphe.extension.tiktok.settings.preference.SectionHeadingPreference;
+import app.morphe.extension.tiktok.settings.preference.SettingsListAdapter;
 import app.morphe.extension.tiktok.settings.preference.SettingsMenuPreference;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -64,6 +65,27 @@ public class SettingsPageTest {
         activity.getFragmentManager().executePendingTransactions();
         return (CollectionSettingsFragment) activity.getFragmentManager().findFragmentById(1234);
     }
+    private ListView list(CollectionSettingsFragment page) {
+        org.robolectric.Shadows.shadowOf(android.os.Looper.getMainLooper()).idle();
+        return page.getView().findViewById(android.R.id.list);
+    }
+    private int position(ListView list, Preference preference) {
+        for (int index = 0; index < list.getAdapter().getCount(); index++) {
+            if (list.getAdapter().getItem(index) == preference) return index;
+        }
+        throw new AssertionError("Missing row " + preference.getKey());
+    }
+    private void click(CollectionSettingsFragment page, String key) {
+        ListView list = list(page);
+        int index = position(list, page.findPreference(key));
+        assertTrue(list.performItemClick(list.getAdapter().getView(index, null, list),
+            index, list.getAdapter().getItemId(index)));
+    }
+    private CountSlider slider(CollectionSettingsFragment page) {
+        ListView list = list(page);
+        int index = position(list, page.findPreference("collections_addon.count"));
+        return list.getAdapter().getView(index, null, list).findViewWithTag("collections_addon.count.slider");
+    }
     @Test public void placedInFeedWithNoDefaultChangedBadge() {
         Activity activity = activity(); Host host = host(activity); PreferenceScreen screen = host.getPreferenceScreen();
         assertEquals("Feed screen", screen.getPreference(1).getTitle());
@@ -76,9 +98,9 @@ public class SettingsPageTest {
         Activity activity = activity(); Host host = host(activity); CollectionSettingsFragment page = page(activity, host);
         assertNotNull(page.getView().findViewWithTag("hushfeed_page_header"));
         assertEquals(1, activity.getFragmentManager().getBackStackEntryCount());
-        page.getView().findViewWithTag("collections_addon.enabled").performClick();
+        click(page, "collections_addon.enabled");
         assertFalse(Preferences.enabled(activity));
-        assertFalse(page.getView().findViewWithTag("collections_addon.count").isEnabled());
+        assertFalse(page.findPreference("collections_addon.count").isEnabled());
         activity.getFragmentManager().popBackStackImmediate();
         assertSame(host, activity.getFragmentManager().findFragmentById(1234));
         assertTrue(((SettingsMenuPreference) host.findPreference(SettingsEntry.KEY)).isExpanded());
@@ -88,20 +110,21 @@ public class SettingsPageTest {
         Activity activity = activity(); Host host = host(activity); Preferences.save(activity, false, 12);
         activity.getSharedPreferences("host", 0).edit().putInt("sentinel", 77).commit();
         CollectionSettingsFragment page = page(activity, host);
-        page.getView().findViewWithTag("collections_addon.reset").performClick(); activity.getFragmentManager().executePendingTransactions();
+        click(page, "collections_addon.reset");
+        activity.getFragmentManager().executePendingTransactions();
         AlertDialog dialog = (AlertDialog) ((android.app.DialogFragment) activity.getFragmentManager().findFragmentByTag(CollectionSettingsFragment.DIALOG_TAG)).getDialog();
         assertEquals(12, Preferences.count(activity));
         dialog.getButton(AlertDialog.BUTTON_POSITIVE).performClick();
         org.robolectric.Shadows.shadowOf(android.os.Looper.getMainLooper()).idle();
         assertTrue(Preferences.enabled(activity)); assertEquals(5, Preferences.count(activity));
         assertEquals(77, activity.getSharedPreferences("host", 0).getInt("sentinel", 0));
-        assertTrue(page.getView().findViewWithTag("collections_addon.count").isEnabled());
+        assertTrue(page.findPreference("collections_addon.count").isEnabled());
     }
     @Test public void sliderIsInlineAndKeyboardChangesSaveWithoutOpeningDialog() {
         Activity activity = activity(); CollectionSettingsFragment page = page(activity, host(activity));
-        page.getView().findViewWithTag("collections_addon.count").performClick(); activity.getFragmentManager().executePendingTransactions();
+        assertFalse(page.findPreference("collections_addon.count").isSelectable());
         assertNull(activity.getFragmentManager().findFragmentByTag(CollectionSettingsFragment.DIALOG_TAG));
-        CountSlider slider=page.getView().findViewWithTag("collections_addon.count.slider"); assertNotNull(slider);
+        CountSlider slider=slider(page); assertNotNull(slider);
         assertTrue(slider.onKeyDown(android.view.KeyEvent.KEYCODE_DPAD_RIGHT,new android.view.KeyEvent(android.view.KeyEvent.ACTION_DOWN,android.view.KeyEvent.KEYCODE_DPAD_RIGHT)));
         assertEquals(6,Preferences.count(activity)); assertEquals(6,slider.value());
         assertTrue(slider.getContentDescription().toString().contains("6"));
@@ -109,13 +132,14 @@ public class SettingsPageTest {
         slider.onKeyDown(android.view.KeyEvent.KEYCODE_DPAD_RIGHT,new android.view.KeyEvent(android.view.KeyEvent.ACTION_DOWN,android.view.KeyEvent.KEYCODE_DPAD_RIGHT));
         assertEquals(2,Feedback.pulses); slider.value(8); assertEquals(2,Feedback.pulses); // Programmatic refresh is silent.
     }
-    @Test public void narrowLargeFontPageStacksSwitchAndKeepsScrolling() {
+    @Test public void pageUsesHostListRendererAndPlatformSwitchPreference() {
         Activity activity = activity(); activity.getResources().getConfiguration().fontScale = 2;
         CollectionSettingsFragment page = page(activity, host(activity));
-        assertTrue(page.getView() instanceof android.widget.ScrollView);
-        LinearLayout row = page.getView().findViewWithTag("collections_addon.enabled");
-        assertEquals(LinearLayout.VERTICAL, row.getOrientation());
-        assertTrue(row.getChildAt(1) instanceof Switch);
+        ListView list = list(page);
+        assertTrue(list.getAdapter() instanceof SettingsListAdapter);
+        assertTrue(list.getItemsCanFocus());
+        assertTrue(page.findPreference("collections_addon.enabled") instanceof SwitchPreference);
+        assertNotNull(slider(page));
     }
     @Test public void changedCountTracksBothSettingsNotEnabledState() {
         Activity activity = activity(); assertEquals(0, SettingsEntry.changedCount(activity));
@@ -127,13 +151,13 @@ public class SettingsPageTest {
         org.robolectric.android.controller.ActivityController<PageActivity> controller = Robolectric.buildActivity(PageActivity.class).setup();
         PageActivity activity = controller.get(); Preferences.reset(activity);
         CollectionSettingsFragment page = page(activity, host(activity));
-        CountSlider slider=page.getView().findViewWithTag("collections_addon.count.slider");
+        CountSlider slider=slider(page);
         for(int i=0;i<9;i++) slider.onKeyDown(android.view.KeyEvent.KEYCODE_DPAD_RIGHT,new android.view.KeyEvent(android.view.KeyEvent.ACTION_DOWN,android.view.KeyEvent.KEYCODE_DPAD_RIGHT));
         controller.recreate(); activity = controller.get();
         activity.getFragmentManager().executePendingTransactions();
         assertTrue(activity.getFragmentManager().findFragmentById(1234) instanceof CollectionSettingsFragment);
         page=(CollectionSettingsFragment)activity.getFragmentManager().findFragmentById(1234);
-        slider=page.getView().findViewWithTag("collections_addon.count.slider");
+        slider=slider(page);
         assertEquals(14,slider.value()); assertNull(activity.getFragmentManager().findFragmentByTag(CollectionSettingsFragment.DIALOG_TAG));
         assertEquals(14, Preferences.count(activity));
     }

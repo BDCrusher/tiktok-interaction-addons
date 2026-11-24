@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.10.0-beta.1] - 2026-11-24
+
+- Port Collections and Sound to global TikTok 47.9.3 and HushFeed 0.84.0.
+- Use HushFeed's native renderer and pinned header inside the Collection popup and Sound settings pages. Keep the inline 1–20 collection slider.
+- Initialize TikTok's music collection state before dispatching the native add action, and surface the result when TikTok's save job completes.
+
 ## [0.9.0-beta.1] - 2026-11-19
 
 - Port Favorites and Sound to original global TikTok 47.8.3 and HushFeed 0.83.0.

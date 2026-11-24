@@ -15,13 +15,13 @@ public final class NativeHookAudit {
     private static final String SOUND = "Lapp/soundaddon/runtime/SoundRuntime;";
     private static final String COVER = "Lcom/ss/android/ugc/aweme/feed/assem/music/VideoMusicCoverAssem;";
     private static final Map<String, String> HOOKS = Map.of(
-        COVER + "->n4", "bindDisc",
+        COVER + "->A4", "bindDisc",
         COVER + "->unBind", "unbindDisc",
         COVER + "->onViewCreated", "viewsCreated",
-        "LX/09f1;->onTouch", "touch",
-        "LX/04LH;->dispatchTouchEvent", "dispatchDiscTouch",
-        "LX/0wHU;->accept", "observeFavorites",
-        "LX/0wHU;->bdcrusherRenderResponse", "observeFavorites");
+        "LX/073R;->onTouch", "touch",
+        "LX/04Ft;->dispatchTouchEvent", "dispatchDiscTouch",
+        "LX/0hl9;->accept", "observeFavorites",
+        "LX/0hl9;->bdcrusherRenderResponse", "observeFavorites");
 
     public static void main(String[] args) throws Exception {
         if (args.length != 1) throw new IllegalArgumentException("Expected compiled DEX directory");

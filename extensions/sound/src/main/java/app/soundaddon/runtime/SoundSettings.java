@@ -2,80 +2,74 @@ package app.soundaddon.runtime;
 
 import android.app.Fragment;
 import android.content.Context;
-import android.os.Bundle;
 import android.preference.Preference;
-import android.preference.PreferenceFragment;
 import android.preference.PreferenceScreen;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.LinearLayout;
-import android.widget.ScrollView;
-import android.widget.Switch;
-import android.widget.TextView;
+import android.preference.SwitchPreference;
 import app.bdcrusher.runtime.SettingsHub;
+import app.bdcrusher.runtime.SettingsPage;
 import app.morphe.extension.shared.settings.HushfeedPause;
-import app.morphe.extension.tiktok.settings.preference.SectionHeadingPreference;
-import app.morphe.extension.tiktok.settings.preference.SettingsHeaderPreference;
 import app.morphe.extension.tiktok.settings.preference.SettingsMenuPreference;
-import app.morphe.extension.tiktok.settings.preference.SettingsUi;
 
 @SuppressWarnings("deprecation")
 public final class SoundSettings implements SettingsHub.Feature {
     static final String KEY = SettingsHub.KEY;
     public SoundSettings() {}
-    public static void install(Fragment host,Context context,PreferenceScreen screen) { SettingsHub.install(host,context,screen); }
+    public static void install(Fragment host, Context context, PreferenceScreen screen) {
+        SettingsHub.install(host, context, screen);
+    }
     public static void refresh(Fragment host) { SettingsHub.refresh(host); }
     @Override public Fragment page() { return new Page(); }
-    @Override public int changes(Context context) { return SoundPreferences.enabled(context)?0:1; }
+    @Override public int changes(Context context) { return SoundPreferences.enabled(context) ? 0 : 1; }
     @Override public String summary() { return "Hold the music disc to save a sound in TikTok"; }
-    /** Restorable full page; no crowded multi-purpose Save/Cancel dialog. */
-    public static final class Page extends Fragment {
-        private ScrollView scroll;
-        @Override public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saved) {
-            Context context = getActivity(); SettingsUi.syncDarkMode(context);
-            scroll = new ScrollView(context); scroll.setFillViewport(true); scroll.setBackgroundColor(SettingsUi.background());
-            LinearLayout body = new LinearLayout(context); body.setOrientation(LinearLayout.VERTICAL);
-            int pad = SettingsUi.dp(context, 16); body.setPaddingRelative(pad, 0, pad, pad * 2); scroll.addView(body);
-            body.addView(SettingsHeaderPreference.createHeader(context, "Sound button", () -> getFragmentManager().popBackStack()));
-            body.addView(SettingsUi.sectionTitle(context, "Long press"));
-            LinearLayout row = new LinearLayout(context); row.setOrientation(LinearLayout.VERTICAL); row.setPadding(pad,pad,pad,pad);
-            row.setBackground(SettingsUi.groupedRow(context, true, true));
-            row.addView(SettingsUi.text(context, "Sound button actions", 17, SettingsUi.textPrimary(), 1));
-            TextView summary = SettingsUi.text(context, "Hold the spinning music disc for Save sound to TikTok. It uses the same hold delay as Favorites. Tap the disc normally to open the sound page.", 15, SettingsUi.textSecondary(), 0);
-            row.addView(summary);
-            Switch toggle = new Switch(context); toggle.setContentDescription("Sound button actions");
-            toggle.setChecked(SoundPreferences.enabled(context)); SettingsUi.styleSwitch(toggle);
-            toggle.setOnCheckedChangeListener((button,value) -> { SoundPreferences.enabled(context,value); refreshDiagnostics(); });
-            row.addView(toggle); row.setOnClickListener(view -> toggle.setChecked(!toggle.isChecked())); body.addView(row);
-            body.addView(SettingsUi.sectionTitle(context, "Availability and privacy"));
-            TextView help = SettingsUi.text(context,
-                (HushfeedPause.isPaused() ? "HushFeed is paused: stock gestures are used.\n\n" : "")
-                + "Drag onto a row and release, or release on the disc and tap a row. Releasing outside a row never saves. Hidden music discs stay hidden.\n\n"
-                + "The visible disc owns its touch area before feed speed-up gestures. Holding elsewhere keeps HushFeed's usual behavior.\n\n"
-                + "TikTok handles saving and sign-in. If asked to sign in, open the menu again afterward. These settings are separate from HushFeed backup/reset.\n\n"
-                + "Experimental beta: phone validation is still required, including saving, drag gestures and accessibility.", 15, SettingsUi.textSecondary(), 0);
-            help.setPadding(pad,pad,pad,pad); body.addView(help);
-            body.addView(SettingsUi.sectionTitle(context, "Gesture status"));
-            TextView diagnostics = SettingsUi.text(context, SoundRuntime.diagnosticStatus(), 14, SettingsUi.textSecondary(), 0);
-            diagnostics.setTag("sound_actions_addon.diagnostics"); diagnostics.setPadding(pad,pad,pad,pad);
-            body.addView(diagnostics);
-            body.addView(SettingsUi.sectionTitle(context, "Add-on"));
-            TextView reset = SettingsUi.text(context, "Reset sound settings", 17, SettingsUi.textPrimary(), 1);
-            reset.setPadding(pad,pad,pad,pad); reset.setBackground(SettingsUi.groupedRow(context,true,true));
-            reset.setOnClickListener(view -> { SoundPreferences.reset(context); toggle.setChecked(true); }); body.addView(reset);
-            TextView about = SettingsUi.text(context, "Sound button actions · 0.9.0-beta.1\nGPL-3.0 · Morphe template and HushFeed UI integration. HushFeed is an external requirement, not bundled.", 14, SettingsUi.textSecondary(), 0);
-            about.setPadding(pad,pad,pad,pad); body.addView(about);
-            if(saved != null) scroll.post(() -> { if(scroll != null) scroll.scrollTo(0,saved.getInt("scrollY")); });
-            return scroll;
+
+    public static final class Page extends SettingsPage {
+        private SwitchPreference toggle;
+        private Preference help;
+        private Preference diagnostics;
+
+        @Override protected String pageTitle() { return "Sound button actions"; }
+
+        @Override protected void addControls(Context context, PreferenceScreen screen) {
+            heading(screen, "Long press");
+            toggle = toggle(context, "sound_actions_addon.enabled", "Sound button actions",
+                "Hold the record to open Save sound to TikTok.", SoundPreferences.enabled(context),
+                SettingsMenuPreference.Icon.PLAYBACK);
+            toggle.setOnPreferenceChangeListener((preference, value) -> {
+                SoundPreferences.enabled(context, (Boolean) value);
+                refreshStatus();
+                return true;
+            });
+            screen.addPreference(toggle);
+
+            heading(screen, "How it works");
+            help = row(context, "sound_actions_addon.help", "Record gestures", "", false);
+            screen.addPreference(help);
+            diagnostics = row(context, "sound_actions_addon.diagnostics", "Gesture status", "", false);
+            screen.addPreference(diagnostics);
+
+            heading(screen, "Add-on");
+            Preference reset = row(context, "sound_actions_addon.reset", "Reset sound settings",
+                "Turn sound button actions back on.", true);
+            reset.setOnPreferenceClickListener(preference -> {
+                SoundPreferences.reset(context);
+                toggle.setChecked(true);
+                refreshStatus();
+                return true;
+            });
+            screen.addPreference(reset);
+            screen.addPreference(row(context, "sound_actions_addon.about", "Sound button actions · 0.10.0-beta.1",
+                "GPL-3.0 · Morphe template and HushFeed settings integration", false));
+            refreshStatus();
         }
-        @Override public void onSaveInstanceState(Bundle state) { super.onSaveInstanceState(state); if(scroll != null) state.putInt("scrollY",scroll.getScrollY()); }
-        private void refreshDiagnostics() {
-            if(scroll == null) return;
-            TextView diagnostics = scroll.findViewWithTag("sound_actions_addon.diagnostics");
-            if(diagnostics != null) diagnostics.setText(SoundRuntime.diagnosticStatus());
+
+        private void refreshStatus() {
+            if (help == null) return;
+            help.setSummary((HushfeedPause.isPaused() ? "HushFeed is paused. TikTok’s stock gestures are active.\n\n" : "")
+                + "Tap the record to open the sound page. Hold it, then tap or drag onto Save sound to TikTok "
+                + "to add it to Favorites. Sign in to TikTok if prompted.");
+            diagnostics.setSummary(SoundRuntime.diagnosticStatus());
         }
-        @Override public void onResume() { super.onResume(); refreshDiagnostics(); }
-        @Override public void onDestroyView() { scroll = null; super.onDestroyView(); }
+
+        @Override public void onResume() { super.onResume(); refreshStatus(); }
     }
 }

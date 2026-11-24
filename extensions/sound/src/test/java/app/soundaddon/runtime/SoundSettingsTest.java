@@ -2,6 +2,9 @@ package app.soundaddon.runtime;
 import android.app.Activity;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceScreen;
+import android.preference.SwitchPreference;
+import android.widget.ListView;
+import app.morphe.extension.tiktok.settings.preference.SettingsListAdapter;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
@@ -41,7 +44,11 @@ public class SoundSettingsTest {
         Activity activity = controller.get();
         activity.getFragmentManager().beginTransaction().add(android.R.id.content,new SoundSettings.Page(),"sound").commit();
         activity.getFragmentManager().executePendingTransactions();
-        assertNotNull(activity.getFragmentManager().findFragmentByTag("sound").getView());
+        SoundSettings.Page page = (SoundSettings.Page) activity.getFragmentManager().findFragmentByTag("sound");
+        assertNotNull(page.getView().findViewWithTag("hushfeed_page_header"));
+        ListView list = page.getView().findViewById(android.R.id.list);
+        assertTrue(list.getAdapter() instanceof SettingsListAdapter);
+        assertTrue(page.findPreference("sound_actions_addon.enabled") instanceof SwitchPreference);
         controller.recreate(); assertTrue(controller.get().getFragmentManager().findFragmentByTag("sound") instanceof SoundSettings.Page);
     }
 }

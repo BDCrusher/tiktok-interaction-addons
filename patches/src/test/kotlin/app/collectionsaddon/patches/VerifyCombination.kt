@@ -28,7 +28,7 @@ fun main(args: Array<String>) = runBlocking {
     val mode = args[4]; val order = args[5]; val label = args[6]
     require(label.matches(Regex("[A-Za-z0-9_-]+"))) { "Invalid verification label" }
     val loadedHushPatches = loadPatchesFromJar(setOf(hush))
-    // External bundles can include PineDrama-only patches. This diagnostic targets
+        // External bundles can include patches exclusive to other apps. This diagnostic targets
     // the original global TikTok fixture; do not select patches for another app.
     val hushPatches = loadedHushPatches.filter { patch ->
         patch.compatibility?.any { it.packageName == null || it.packageName == "com.zhiliaoapp.musically" } ?: true
@@ -173,7 +173,7 @@ fun main(args: Array<String>) = runBlocking {
         }
         if (mode.startsWith("sound")) check(classes.keys.none { it.startsWith("Lapp/collectionsaddon/") })
         if (!mode.startsWith("sound") && !mode.startsWith("both")) check(classes.keys.none { it.startsWith("Lapp/soundaddon/") })
-        if (!mode.startsWith("sound")) check(classes["Lapp/collectionsaddon/runtime/NativeCallback;"]!!.interfaces.contains("LX/02uC;"))
+        if (!mode.startsWith("sound")) check(classes["Lapp/collectionsaddon/runtime/NativeCallback;"]!!.interfaces.contains("LX/031Y;"))
         val hostMenu = classes["Lapp/morphe/extension/tiktok/settings/preference/TikTokPreferenceFragment;"]!!.methods.single { it.name == "createMasterMenu" }
         val entryCalls = hostMenu.implementation!!.instructions.count {
             ((it as? ReferenceInstruction)?.reference as? MethodReference)?.definingClass == "Lapp/bdcrusher/runtime/SettingsHub;"
@@ -231,17 +231,34 @@ fun main(args: Array<String>) = runBlocking {
             hubRefs.any { it.definingClass==menuType && it.name==name }
         })
         report["nativeExpandableSettingsBound"]=true
+        val realPage = classes.getValue("Lapp/bdcrusher/runtime/SettingsPage;")
+        val listAdapter = classes.getValue("Lapp/morphe/extension/tiktok/settings/preference/SettingsListAdapter;")
+        check(listAdapter.accessFlags and 1 != 0)
+        val pageCalls = realPage.methods.flatMap { method ->
+            method.implementation?.instructions?.mapNotNull {
+                (it as? ReferenceInstruction)?.reference as? MethodReference
+            }?.toList().orEmpty()
+        }
+        check(pageCalls.any { it.definingClass == listAdapter.type && it.name == "<init>" &&
+            it.parameterTypes == listOf("Landroid/widget/ListAdapter;", "Ljava/util/List;") })
+        check(pageCalls.any { it.definingClass == listAdapter.type && it.name == "dispose" })
+        check(pageCalls.any { it.definingClass.endsWith("/SettingsHeaderPreference;") && it.name == "section" })
+        if (!mode.startsWith("sound"))
+            check(classes.getValue("Lapp/collectionsaddon/runtime/CollectionSettingsFragment;").superclass == realPage.type)
+        if (mode.startsWith("sound") || mode.startsWith("both"))
+            check(classes.getValue("Lapp/soundaddon/runtime/SoundSettings\$Page;").superclass == realPage.type)
+        report["nativeSettingsPageRendererBound"]=true
         check(hubRefs.none {it.definingClass==menuType && it.name=="setActiveCount"})
         report["fiveArgumentMenuConstructorBound"]=true
         report["removedBadgeApiNotReferenced"]=true
         fun references(type:String,name:String):List<Any> = classes[type]!!.methods.single {it.name==name}
             .implementation!!.instructions.mapNotNull {(it as? ReferenceInstruction)?.reference}.toList()
         val haptic=references("Lapp/bdcrusher/runtime/NativeUiBridge;","haptic").filterIsInstance<MethodReference>()
-        check(haptic.any {it.definingClass=="LX/0kS2;" && it.name=="<init>" && it.parameterTypes==listOf("Landroid/content/Context;")})
-        check(haptic.any {it.definingClass=="LX/0kS2;" && it.name=="LIZ" && it.parameterTypes==listOf("I")})
+        check(haptic.any {it.definingClass=="LX/1825;" && it.name=="<init>" && it.parameterTypes==listOf("Landroid/content/Context;")})
+        check(haptic.any {it.definingClass=="LX/1825;" && it.name=="LIZ" && it.parameterTypes==listOf("I")})
         report["nativeFavoritesHapticBound"]=true
         if(mode.startsWith("sound") || mode.startsWith("both")) {
-            wrapper("Lcom/ss/android/ugc/aweme/feed/assem/music/VideoMusicCoverAssem;","n4","bdcrusherNativeBind",2)
+            wrapper("Lcom/ss/android/ugc/aweme/feed/assem/music/VideoMusicCoverAssem;","A4","bdcrusherNativeBind",2)
             val guarded=classes.values.flatMap {clazz->clazz.methods.toList()}.filter {method->
                 method.implementation?.instructions?.any {
                     ((it as? ReferenceInstruction)?.reference as? MethodReference)?.let {ref->
@@ -259,7 +276,7 @@ fun main(args: Array<String>) = runBlocking {
             report["soundBindingsArgumentsPreserved"]=true
             report["soundDiscPriorityBeforeNativeTimer"]=true
             report["soundEdgeListener"]=guarded.single().definingClass
-            val window=classes["LX/04LH;"]!!.methods.single {it.name=="dispatchTouchEvent"}
+            val window=classes["LX/04Ft;"]!!.methods.single {it.name=="dispatchTouchEvent"}
             val windowCode=window.implementation!!.instructions.toList()
             check(windowCode.take(5).map {it.opcode}==listOf(com.android.tools.smali.dexlib2.Opcode.INVOKE_STATIC_RANGE,
                 com.android.tools.smali.dexlib2.Opcode.MOVE_RESULT,com.android.tools.smali.dexlib2.Opcode.IF_EQZ,
@@ -272,7 +289,7 @@ fun main(args: Array<String>) = runBlocking {
             })
             val alternate=classes["Lapp/soundaddon/runtime/NativeBridge;"]!!.methods.single {it.name=="alternateDisc"}
             check(alternate.implementation!!.instructions.any {
-                ((it as? ReferenceInstruction)?.reference as? FieldReference)?.name=="LLLJL"
+                ((it as? ReferenceInstruction)?.reference as? FieldReference)?.name=="LLLL"
             })
             report["soundWindowDispatchBeforeFeedParents"]=true
             report["soundAlternateDiscBound"]=true
@@ -284,7 +301,7 @@ fun main(args: Array<String>) = runBlocking {
             check(((creationCode[1] as ReferenceInstruction).reference as MethodReference).name=="viewsCreated")
             check((creationCode[1] as RegisterRangeInstruction).registerCount==1)
             report["soundBindBeforeInflationCovered"]=true
-            val favorites=classes["LX/0wHU;"]!!.methods.single {it.name==if(mode.startsWith("both")) "bdcrusherRenderResponse" else "accept"}
+            val favorites=classes["LX/0hl9;"]!!.methods.single {it.name==if(mode.startsWith("both")) "bdcrusherRenderResponse" else "accept"}
             val favoriteCode=favorites.implementation!!.instructions.toList()
             val observer=favoriteCode.indexOfFirst {
                 ((it as? ReferenceInstruction)?.reference as? MethodReference)?.let {ref->
@@ -294,16 +311,22 @@ fun main(args: Array<String>) = runBlocking {
             check(observer>0)
             val install=(favoriteCode[observer-1] as ReferenceInstruction).reference as MethodReference
             check(install.name=="setContentView" || install.name=="install")
-            check((favoriteCode[observer] as com.android.tools.smali.dexlib2.iface.instruction.FiveRegisterInstruction).registerC==7)
+            check((favoriteCode[observer] as com.android.tools.smali.dexlib2.iface.instruction.FiveRegisterInstruction).registerC==8)
             val bridge="Lapp/soundaddon/runtime/NativeBridge;"
             val delay=references(bridge,"holdDelayMillis").filterIsInstance<MethodReference>()
-            check(delay.any { it.definingClass=="LX/1W01;" && it.name=="LJ" && it.returnType=="Z" })
+            check(delay.any { it.definingClass=="LX/079Y;" && it.name=="LJ" && it.returnType=="Z" })
             val delayMethod=classes[bridge]!!.methods.single { it.name=="holdDelayMillis" }
             val delays=delayMethod.implementation!!.instructions.filterIsInstance<com.android.tools.smali.dexlib2.iface.instruction.WideLiteralInstruction>().map { it.wideLiteral }.toSet()
             check(delays.containsAll(setOf(200L,500L)))
+            val launchRefs=references(bridge,"launchSave").filterIsInstance<MethodReference>()
+            check(launchRefs.any { it.definingClass=="LX/0a2r;" && it.name=="LIZ" })
+            check(launchRefs.any { it.definingClass=="LX/0r19;" && it.name=="<init>" })
+            check(launchRefs.any { it.definingClass=="LX/03HC;" && it.name=="LIZLLL" })
+            check(launchRefs.any { it.definingClass=="Lkotlinx/coroutines/JobSupport;" && it.name=="LIZLLL" })
+            check(classes.getValue("Lapp/soundaddon/runtime/SoundSaveCompletion;").interfaces.contains("Lkotlin/jvm/functions/Function1;"))
             val saveRefs=references(bridge,"collect").filterIsInstance<MethodReference>()
-            check(saveRefs.any { it.definingClass.endsWith("/MusicCollectViewModel;") && it.name=="PQ2" })
-            check(saveRefs.any { it.name=="isLogin" } && saveRefs.any { it.definingClass=="LX/057u;" && it.name=="LIZIZ" })
+            check(saveRefs.any { it.name=="isLogin" } &&
+                saveRefs.any { it.definingClass=="LX/0r2o;" && it.name=="LIZIZ" })
             val soundClasses=own.filter { it.type.startsWith("Lapp/soundaddon/") }
             check(soundClasses.none { "SongLookup" in it.type })
             val removedNames=setOf("bindTitle","unbindTitle","destinations","beginLookup","queryMusic","platform","provider","addProviders")
@@ -313,9 +336,9 @@ fun main(args: Array<String>) = runBlocking {
             report["nativeFavoritesWidthObservedWithoutReplacingMenu"]=true
         }
         if (!mode.startsWith("sound")) {
-            val consumer=classes["LX/0wHU;"]!!.methods.single {it.name=="accept"}
+            val consumer=classes["LX/0hl9;"]!!.methods.single {it.name=="accept"}
             check(consumer.implementation!!.registerCount==2)
-            val native=classes["LX/0wHU;"]!!.methods.single {it.name=="bdcrusherRenderResponse"}
+            val native=classes["LX/0hl9;"]!!.methods.single {it.name=="bdcrusherRenderResponse"}
             check(native.accessFlags and 1 != 0 && native.implementation!!.registerCount==31)
             val nativeRefs=native.implementation!!.instructions.mapNotNull {(it as? ReferenceInstruction)?.reference as? MethodReference}.toList()
             check(listOf("count","thresholdForResponse","install").all {name->nativeRefs.count {

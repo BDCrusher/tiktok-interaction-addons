@@ -14,7 +14,7 @@ The flat home entry goes immediately after section_interface. If absent, it foll
 
 `CollectionSettingsFragment` uses HushFeed's existing fragment container/back stack and public header/card/palette helpers. CountSlider lives directly inside its Popup card, saves each user change immediately and pulses native Favorites feedback. Silent refresh/reset does not pulse. Reset/About remain restorable DialogFragments; a legacy count-dialog branch can restore an already-open old dialog but no current setting opens it. View references are released on destruction; preference names and defaults are unchanged.
 
-## Native hooks for 47.8.3
+## Native hooks for 47.9.3
 
 | Host boundary | Change |
 | --- | --- |
@@ -40,7 +40,7 @@ More uses both list size and native `hasMore`; a bounded weak identity record av
 
 ## Theme, space and gestures
 
-The live host Activity or Dialog theme supplies `UISheetFlat1`, the 47.8.3 APK's `attr/a26` token (`0x7f0603e7`). HushFeed's AMOLED patch changes dark `aif` and restores stock values when its switch is off. The shared resolver verifies the entry name and accepts only opaque colors. It deliberately does not reapply a build-time AMOLED color from `hushfeed-build-v1.txt`, since that would override the live switch. A missing or unsuitable token falls back using the host context's night configuration. Text, native icons, separators and pressed overlays follow the same palette; cover images keep their original colors. A fixed-count popup may contain More or Create as an additional action row.
+The live host Activity or Dialog theme supplies `UISheetFlat1`, the 47.9.3 APK's `attr/a26` token (`0x7f0603e7`). HushFeed's AMOLED patch changes dark `aif` and restores stock values when its switch is off. The shared resolver verifies the entry name and accepts only opaque colors. It deliberately does not reapply a build-time AMOLED color from `hushfeed-build-v1.txt`, since that would override the live switch. A missing or unsuitable token falls back using the host context's night configuration. Text, native icons, separators and pressed overlays follow the same palette; cover images keep their original colors. A fixed-count popup may contain More or Create as an additional action row.
 
 The content is measured against usable window space and capped at 60% height. Long content is wrapped in a ScrollView; anchors are clamped inside the screen. Moving beyond touch slop sends native ACTION_CANCEL before consuming scroll/release, so the native pressed row cannot be saved on that release. Offscreen clipped rows cannot be selected by screen-coordinate hit testing. Native callbacks, thumbnail construction and short-list selection remain in TikTok.
 
@@ -62,7 +62,7 @@ Production identity delegates to native track and music getters; the injectable 
 
 `PopupStyle` centralizes the live `a26` sheet background, a 15% contrasting row highlight, text contrast and native Favorites feedback. A weak Resources-keyed width sample records actual Favorites sizing and is invalidated by screen, density, font and RTL changes. Sound observes native Favorites rendering with an argument-preserving wrapper; Collections records its enhanced measured width. Neither feature requires the other's payload.
 
-The 47.8.3 Sound menu offers only **Save sound to TikTok** for the currently bound eligible track. It does not perform the external provider lookup or native detail enrichment used by older releases. The menu validates its current binding before dispatching the native save action and closes on invalidation.
+The 47.9.3 Sound menu offers only **Save sound to TikTok** for the currently bound eligible track. It does not perform the external provider lookup or native detail enrichment used by older releases. The menu validates its current binding before dispatching the native save action and closes on invalidation.
 
 Sound rows use native-equivalent width/highlight/haptics. Hover offsets clipped root-local rectangles by the PopupWindow root screen origin before comparing raw touch coordinates. Programmatic state refresh and repeated hovering within one row do not emit number/row-change haptics. Real vibration remains subject to native HushFeed/device settings.
 

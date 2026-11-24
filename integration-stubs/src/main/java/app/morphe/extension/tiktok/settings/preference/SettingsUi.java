@@ -7,6 +7,7 @@ public final class SettingsUi {
     public static void styleStandardAlertDialog(AlertDialog dialog) {}
     public static int dp(Context context, int value) { return Math.round(value * context.getResources().getDisplayMetrics().density); }
     public static int background() { return 0xff000000; }
+    public static void styleScrollableList(android.widget.AbsListView list) {}
     public static int textPrimary() { return 0xfff5f5f7; }
     public static int textSecondary() { return 0xffa8a8b3; }
     public static void styleSwitch(android.widget.Switch control) {}
